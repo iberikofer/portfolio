@@ -1,0 +1,98 @@
+@use "../styles/variables" as *;
+
+.footer {
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0 60px;
+  background-color: $bg-dark;
+  text-align: center;
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  width: 1200px;
+  height: 600px;
+  bottom: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: radial-gradient(
+    circle,
+    rgba($mint-neon, 0.15) 0%,
+    rgba($mint-neon, 0.05) 50%,
+    transparent 75%
+  );
+
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(40px);
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.heading {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  a {
+    color: $text-dim;
+    font-family: "Courier New", monospace;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $mint-neon;
+      text-shadow: $neon-shadow;
+      transform: translateY(-3px);
+    }
+  }
+}
+
+.subtext {
+  color: $text-dim;
+  max-width: 500px;
+  margin: 0 auto 50px;
+  line-height: 1.6;
+}
+
+.divider {
+  width: 80%;
+  max-width: 800px;
+  height: 1px;
+  margin: 60px auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($mint-neon, 0.4),
+    transparent
+  );
+  border: none;
+}
+
+.copyright {
+  color: $text-dim;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.highlight {
+  color: $mint-neon;
+}

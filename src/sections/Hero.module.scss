@@ -1,0 +1,114 @@
+@use "../styles/variables" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 5%;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: $bg-dark;
+}
+
+.intro {
+  color: $mint-neon;
+  font-family: "Courier New", monospace;
+  margin-bottom: 1rem;
+}
+
+.name {
+  font-size: clamp(40px, 8vw, 80px);
+  color: $text-main;
+  margin: 0;
+}
+
+.title {
+  font-size: clamp(30px, 6vw, 60px);
+  color: $text-dim;
+  margin-top: 5px;
+}
+
+.bio {
+  max-width: 540px;
+  margin-top: 20px;
+  color: $text-dim;
+}
+
+.button {
+  display: inline-block;
+  margin-top: 50px;
+  padding: 1.25rem 1.75rem;
+  border: 1px solid $mint-neon;
+  border-radius: 4px;
+  color: $mint-neon;
+  font-weight: bold;
+  box-shadow: $neon-shadow;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(100, 255, 218, 0.1);
+    transform: translateY(-3px);
+  }
+}
+
+.blob {
+  position: relative;
+  width: 450px;
+  height: 450px;
+  background-color: $bg-light;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 50%;
+  transition:
+    border-radius 0.6s ease-in-out,
+    transform 0.4s ease-in-out,
+    box-shadow 0.4s ease-in-out;
+  animation: morph 6s ease-in-out infinite;
+  z-index: 1;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    background: $mint-neon;
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(40px);
+    opacity: 0.25;
+    transition: all 0.3s ease-in-out;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 50%;
+  }
+  20% {
+    border-radius: 59% 41% 36% 64% / 33% 64% 36% 67%;
+  }
+  40% {
+    border-radius: 48% 52% 52% 48% / 56% 40% 60% 44%;
+  }
+  60% {
+    border-radius: 42% 58% 28% 72% / 65% 33% 67% 35%;
+  }
+  80% {
+    border-radius: 75% 25% 71% 29% / 35% 72% 28% 65%;
+  }
+}

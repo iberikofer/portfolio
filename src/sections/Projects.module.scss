@@ -1,0 +1,192 @@
+@use "../styles/variables" as *;
+
+.githubIntro {
+  margin: 40px auto 0px auto;
+  padding: 30px;
+  background: rgba($bg-light, 0.3);
+  border-bottom: 3px solid $mint-neon;
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+}
+
+.githubLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $mint-neon;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  width: fit-content;
+  transform: translateY(0);
+
+  &:hover {
+    text-shadow: $neon-shadow;
+    .linkIcon {
+      transform: translate(2px, -2px);
+    }
+  }
+}
+
+.githubLink {
+  margin: 0 auto;
+}
+
+.linkIcon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.introDescription {
+  color: $text-dim;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.projects {
+  padding: 100px 10%;
+  background-color: $bg-dark;
+  scroll-margin-top: -25px;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.mainDivider {
+  width: 80%;
+  max-width: 800px;
+  height: 1px;
+  margin: 30px auto 60px auto;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($mint-neon, 0.4),
+    transparent
+  );
+  border: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.card {
+  background-color: $bg-light;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba($mint-neon, 0.1);
+  transition: transform 0.3s ease;
+  transform: translateY(0);
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: $mint-neon;
+  }
+}
+
+.imageContainer {
+  aspect-ratio: 1 / 1;
+  background: $bg-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid rgba($mint-neon, 0.2);
+  text-align: center;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.buttonActionRow {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba($mint-neon, 0.2);
+}
+
+.actionBtn {
+  flex: 1;
+  text-align: center;
+  color: $mint-neon;
+  font-weight: 500;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+
+  &:hover {
+    background: rgba($mint-neon, 0.05);
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 70%;
+  background: rgba($mint-neon, 0.2);
+}
+
+.pagesWrapper {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statusNote {
+  position: absolute;
+  bottom: 2px;
+  font-size: 10px;
+  color: #ff4d4d;
+  white-space: nowrap;
+}
+
+.disabledBtn {
+  color: $text-dim;
+  cursor: not-allowed;
+}
+
+.content {
+  padding: 20px;
+}
+
+.projectTitle {
+  margin-bottom: 10px;
+  color: $text-main;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.tag {
+  font-size: 12px;
+  color: $mint-neon;
+  background: rgba($mint-neon, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.description {
+  font-size: 14px;
+  color: $text-dim;
+}
