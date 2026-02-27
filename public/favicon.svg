@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#0A192F" stroke="#64FFDA" stroke-width="4"/>
+  <text x="50" y="65" text-anchor="middle" fill="#64FFDA" 
+        style="font-family: 'Courier New', monospace; font-weight: bold; font-size: 70px;">
+    Y
+  </text>
+</svg>

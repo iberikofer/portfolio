@@ -6,17 +6,30 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  useEffect(() => {
-    const updateProgress = () => {
-      const scrollHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / scrollHeight) * 100;
-      setScrollProgress(progress);
-    };
+useEffect(() => {
+  let requestRunning = null;
 
-    window.addEventListener("scroll", updateProgress);
-    return () => window.removeEventListener("scroll", updateProgress);
-  }, []);
+  const updateProgress = () => {
+    const scrollHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (window.scrollY / scrollHeight) * 100;
+    setScrollProgress(progress);
+    requestRunning = null;
+  };
+
+  const handleScroll = () => {
+    if (!requestRunning) {
+      requestRunning = window.requestAnimationFrame(updateProgress);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+    if (requestRunning) window.cancelAnimationFrame(requestRunning);
+  };
+}, []);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
