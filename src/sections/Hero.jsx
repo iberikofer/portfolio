@@ -14,7 +14,7 @@ const Hero = () => {
           <p className={styles.bio}>{DATA.profile.bio}</p>
           <div className={styles.cta}>
             <a
-              href="/resume.pdf"
+              href={`resume.pdf`}
               target="_blank"
               rel="noreferrer"
               className={styles.button}>
