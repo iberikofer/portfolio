@@ -57,16 +57,34 @@ const About = () => {
                 <div className={styles.item}>
                   <span className={styles.date}>2025 — 2029</span>
                   <h4>
-                    <a href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37">
+                    <a
+                      href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37"
+                      target="_blank"
+                      rel="noreferrer">
                       Vinnytsia National Technical University
                     </a>
                   </h4>
                   <p>Software Engineering</p>
                 </div>
                 <div className={styles.item}>
+                  <span className={styles.date}>2022 — 2024</span>
+                  <h4>
+                    <a
+                      href="https://goit.global/et/"
+                      target="_blank"
+                      rel="noreferrer">
+                      GoIT
+                    </a>
+                  </h4>
+                  <p>FullStack development</p>
+                </div>
+                <div className={styles.item}>
                   <span className={styles.date}>2021 — 2024</span>
                   <h4>
-                    <a href="https://maps.app.goo.gl/iNhCe66bAWo7mfTe8">
+                    <a
+                      href="https://maps.app.goo.gl/iNhCe66bAWo7mfTe8"
+                      target="_blank"
+                      rel="noreferrer">
                       Vinnytsia Trade and Economics College
                     </a>
                   </h4>
@@ -75,7 +93,10 @@ const About = () => {
                 <div className={styles.item}>
                   <span className={styles.date}>2021</span>
                   <h4>
-                    <a href="https://maps.app.goo.gl/A4iwefxeDXjC4wWNA">
+                    <a
+                      href="https://maps.app.goo.gl/A4iwefxeDXjC4wWNA"
+                      target="_blank"
+                      rel="noreferrer">
                       Humanities Lyceum of Vinnytsia №1
                     </a>
                   </h4>
@@ -98,7 +119,14 @@ const About = () => {
               <div className={styles.timeline}>
                 <div className={styles.item}>
                   <span className={styles.date}>2024 — 2025</span>
-                  <h4>Tour Agency "GOU-Travel"</h4>
+                  <h4>
+                    <a
+                      href="https://maps.app.goo.gl/1k8WnDjq2m5nZvxh9"
+                      target="_blank"
+                      rel="noreferrer">
+                      Tour Agency "GOU-Travel"
+                    </a>
+                  </h4>
                   <p>Tour agent / Tourism manager</p>
                 </div>
               </div>

@@ -1,5 +1,9 @@
 import webStudioImg from '../assets/WebStudio.png';
 import NodePhonebookImg from '../assets/NodePhonebook.jpg';
+import ImageFinder from '../assets/ImageFinder.png';
+import FeedbackPage from '../assets/FeedbackPage.png';
+import MovieFinder from '../assets/MovieFinder.png';
+import CarRent from '../assets/CarRent.png';
 
 export const DATA = {
 	profile: {
@@ -19,6 +23,26 @@ export const DATA = {
 	projects: [
 		{
 			id: 1,
+			title: "react-movie-finder",
+			photo: MovieFinder,
+			description: "React page for searching movies. Each movie page contains the actors from the movie and the reviews.",
+			tags: ["HTML", "CSS", "JS", "REACT"],
+			link: "https://github.com/iberikofer/react-movie-finder",
+			pages: "https://iberikofer.github.io/react-movie-finder",
+			status: "Open",
+		},
+		{
+			id: 2,
+			title: "react-image-finder",
+			photo: ImageFinder,
+			description: "Website for searching images based on react.",
+			tags: ["HTML", "CSS", "JS", "REACT"],
+			link: "https://github.com/iberikofer/react-image-finder",
+			pages: "https://iberikofer.github.io/react-image-finder",
+			status: "Open",
+		},
+		{
+			id: 3,
 			title: "Web-Studio",
 			photo: webStudioImg,
 			description: "Simple web page, my first project.",
@@ -28,31 +52,10 @@ export const DATA = {
 			status: "Open",
 		},
 		{
-			id: 2,
-			title: "react-image-finder",
-			photo: "",
-			description: "Website for searching images based on react",
-			tags: ["HTML", "CSS", "JS", "REACT"],
-			link: "https://github.com/iberikofer/react-image-finder",
-			pages: "https://iberikofer.github.io/react-image-finder",
-			status: "Closed",
-
-		},
-		{
-			id: 3,
-			title: "react-image-finder",
-			photo: "",
-			description: "Website for searching images based on react",
-			tags: ["HTML", "CSS", "JS", "REACT"],
-			link: "https://github.com/iberikofer/react-phonebook",
-			pages: "https://iberikofer.github.io/react-phonebook",
-			status: "Closed",
-		},
-		{
 			id: 4,
 			title: "react-feedback-page",
-			photo: "",
-			description: "Feedback page built with personal hooks",
+			photo: FeedbackPage,
+			description: "Feedback page built with personal hooks.",
 			tags: ["HTML", "CSS", "JS", "REACT", "HOOKS"],
 			link: "https://github.com/iberikofer/react-feedback-page",
 			pages: "https://iberikofer.github.io/react-feedback-page",
@@ -60,36 +63,16 @@ export const DATA = {
 		},
 		{
 			id: 5,
-			title: "react-image-finder",
-			photo: "",
-			description: "Website for searching images based on react",
-			tags: ["HTML", "CSS", "JS", "REACT"],
-			link: "https://github.com/iberikofer/react-feedback-page",
-			pages: "https://iberikofer.github.io/react-feedback-page",
-			status: "Open",
-		},
-		{
-			id: 6,
-			title: "react-movie-finder",
-			photo: "",
-			description: "React page for searching movies. Each movie page contains the actors from the movie and the reviews.",
-			tags: ["HTML", "CSS", "JS", "REACT"],
-			link: "https://github.com/iberikofer/react-movie-finder",
-			pages: "https://iberikofer.github.io/react-movie-finder",
-			status: "Closed",
-		},
-		{
-			id: 7,
 			title: "car-rent-react-node",
-			photo: "",
-			description: "Car rent web page.",
+			photo: CarRent,
+			description: "Car rent web page. Catalog/Favorite page included.",
 			tags: ["HTML", "CSS", "JS", "REACT"],
 			link: "https://github.com/iberikofer/car-rent-react-node",
 			pages: "https://iberikofer.github.io/car-rent-react-node",
 			status: "Closed",
 		},
 		{
-			id: 8,
+			id: 6,
 			title: "node-phonebook",
 			photo: NodePhonebookImg,
 			description: "Introducing a Node.js and MongoDB phonebook application featuring user registration and email verification!",
@@ -97,14 +80,14 @@ export const DATA = {
 			link: "https://github.com/iberikofer/node-phonebook",
 			status: "Open",
 		},
-		{
-			id: 999999,
-			title: "SFML Game",
-			photo: "",
-			description: "A logic/action game developed using C++ and SFML library during university studies.",
-			tags: ["C++", "SFML", "OOP"],
-			link: "https://github.com/iberikofer/",
-			status: "Open",
-		},
+		// {
+		// 	id: 999999,
+		// 	title: "SFML Game",
+		// 	photo: "",
+		// 	description: "A logic/action game developed using C++ and SFML library during university studies.",
+		// 	tags: ["C++", "SFML", "OOP"],
+		// 	link: "https://github.com/iberikofer/",
+		// 	status: "Open",
+		// },
 	],
 };

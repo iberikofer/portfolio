@@ -1,6 +1,6 @@
 import React from "react";
 import { DATA } from "../data/config";
-import styles from "./Projects.module.scss";
+import styles from "./Projects.module.scss"; 
 
 const Projects = () => {
   return (
@@ -38,7 +38,7 @@ const Projects = () => {
                       target="_blank"
                       rel="noreferrer"
                       className={styles.actionBtn}>
-                      Pages
+                      Page
                     </a>
                     {project.status === "Closed" && (
                       <span className={styles.statusNote}>
