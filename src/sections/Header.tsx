@@ -2,45 +2,40 @@ import React, { useState, useEffect } from "react";
 import { DATA } from "../data/config";
 import styles from "./Header.module.scss";
 
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-
-useEffect(() => {
-  let requestRunning = null;
-
-  const updateProgress = () => {
-    const scrollHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
-    const progress = (window.scrollY / scrollHeight) * 100;
-    setScrollProgress(progress);
-    requestRunning = null;
-  };
-
-  const handleScroll = () => {
-    if (!requestRunning) {
-      requestRunning = window.requestAnimationFrame(updateProgress);
-    }
-  };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-    if (requestRunning) window.cancelAnimationFrame(requestRunning);
-  };
-}, []);
+const Header: React.FC = () => {
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
 
   useEffect(() => {
+    let requestRunning: number | null = null;
+
+    const updateProgress = () => {
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / scrollHeight) * 100;
+      setScrollProgress(progress);
+      requestRunning = null;
+    };
+
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      if (!requestRunning) {
+        requestRunning = window.requestAnimationFrame(updateProgress);
       }
     };
 
-    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (requestRunning) window.cancelAnimationFrame(requestRunning);
+    };
+  }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

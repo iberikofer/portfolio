@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ScrollToTop.module.scss";
 
-const ScrollToTop = () => {
-  const [isVisible, setIsVisible] = useState(false);
+const ScrollToTop: React.FC = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) setIsVisible(true);
-      else setIsVisible(false);
+      setIsVisible(window.pageYOffset > 300);
     };
 
     toggleVisibility();
-
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
@@ -23,7 +21,11 @@ const ScrollToTop = () => {
   return (
     <div
       className={`${styles.scrollToTop} ${isVisible ? styles.show : ""}`}
-      onClick={scrollToTop}>
+      onClick={scrollToTop}
+      role="button"
+      aria-label="Scroll to top"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && scrollToTop()}>
       <svg
         viewBox="0 0 24 24"
         width="24"

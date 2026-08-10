@@ -1,6 +1,8 @@
 @use "variables" as *;
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -10,6 +12,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Prevent layout shifts caused by scrollbar appearing */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -19,6 +23,8 @@ body {
   color: $text-main;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  /* Better text rendering on all screens */
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -38,15 +44,34 @@ ul {
   list-style: none;
 }
 
+/* Global container — adapts from mobile to 4K */
 .container {
   max-width: $container-width;
   margin: 0 auto;
   padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 14px;
+  }
+
+  /* 2K / 4K: more breathing room */
+  @media (min-width: 1920px) {
+    max-width: 1600px;
+  }
+
+  @media (min-width: 2560px) {
+    max-width: 2000px;
+    padding: 0 40px;
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -56,10 +81,11 @@ ul {
 ::-webkit-scrollbar-thumb {
   background: $mint-neon;
   border-radius: 10px;
-  border: 3px solid $bg-dark;
+  border: 2px solid $bg-dark;
 
   &:hover {
     cursor: pointer;
+    background: rgba($mint-neon, 0.8);
   }
 }
 
@@ -69,4 +95,19 @@ img {
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+}
+
+/* ───────────────────────────────────────────────
+   Global font-size scaling for larger displays
+─────────────────────────────────────────────── */
+@media (min-width: 1920px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 2560px) {
+  html {
+    font-size: 19px;
+  }
 }

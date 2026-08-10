@@ -6,6 +6,14 @@
   padding: 120px 0 60px;
   background-color: $bg-dark;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 80px 0 40px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 60px 0 30px;
+  }
 }
 
 .footer::before {
@@ -28,6 +36,10 @@
   pointer-events: none;
   z-index: 0;
   filter: blur(40px);
+
+  @media (max-width: 480px) {
+    width: 700px;
+  }
 }
 
 .container {
@@ -36,41 +48,43 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
 }
 
 .heading {
   margin-top: 30px;
   margin-bottom: 30px;
-}
 
-.socials {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-
-  a {
-    color: $text-dim;
-    font-family: "Courier New", monospace;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    transform: translateY(0);
-    transition: all 0.3s ease;
-
-    &:hover {
-      color: $mint-neon;
-      text-shadow: $neon-shadow;
-      transform: translateY(-3px);
-    }
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
   }
 }
 
 .subtext {
   color: $text-dim;
-  max-width: 500px;
+  max-width: 750px;
   margin: 0 auto 50px;
-  line-height: 1.6;
+  line-height: 1.7;
+  text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 0.92rem;
+    max-width: 100%;
+  }
+}
+
+/* Second sentence on its own line */
+.subtextBreak {
+  display: block;
+  margin-top: 6px;
+  white-space: nowrap;
+
+  @media (max-width: 740px) {
+    white-space: normal;
+  }
 }
 
 .divider {
@@ -85,6 +99,10 @@
     transparent
   );
   border: none;
+
+  @media (max-width: 480px) {
+    margin: 40px auto;
+  }
 }
 
 .copyright {

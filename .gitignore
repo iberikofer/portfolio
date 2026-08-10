@@ -1,5 +1,19 @@
-# Logs
-logs
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build
+dist/
+dist-ssr/
+build/
+
+# Debug and temporary files
+*.mp4
+*.mov
+*.avi
+*.webm
+*.mkv
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,17 +21,30 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.local
 
+# IDE and Editor configs
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Cache & tools
+.eslintcache
+.vite/
+.temp/
+.cache/

@@ -17,7 +17,7 @@
   color: $mint-neon;
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
   width: fit-content;
   transform: translateY(0);
 
@@ -27,10 +27,10 @@
       transform: translate(2px, -2px);
     }
   }
-}
 
-.githubLink {
-  margin: 0 auto;
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 }
 
 .linkIcon {
@@ -44,17 +44,55 @@
   font-size: 1.05rem;
   line-height: 1.6;
   margin-bottom: 10px;
+  text-align: justify;
+  text-align-last: center;
+  hyphens: auto;
+
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+  }
 }
 
 .projects {
   padding: 100px 10%;
   background-color: $bg-dark;
   scroll-margin-top: -25px;
+
+  @media (max-width: 1024px) {
+    padding: 80px 5%;
+  }
+
+  @media (max-width: 768px) {
+    padding: 60px 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 50px 16px;
+  }
+
+  /* 4K / 2K scaling */
+  @media (min-width: 1920px) {
+    padding: 120px 12%;
+  }
+
+  @media (min-width: 2560px) {
+    padding: 140px 15%;
+    max-width: 2400px;
+    margin: 0 auto;
+  }
 }
 
 .sectionTitle {
   font-size: 2rem;
   text-align: center;
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 2560px) {
+    font-size: 2.5rem;
+  }
 }
 
 .mainDivider {
@@ -75,6 +113,16 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  @media (min-width: 2560px) {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 40px;
+  }
 }
 
 .card {
@@ -83,13 +131,19 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba($mint-neon, 0.1);
-  transition: transform 0.3s ease;
+  border: 2px solid rgba($mint-neon, 0.1);
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
   transform: translateY(0);
 
   &:hover {
-    transform: translateY(-5px);
-    border-color: $mint-neon;
+    transform: translateY(-8px);
+    border-color: rgba($mint-neon, 0.85);
+    box-shadow:
+      0 16px 32px -10px rgba(2, 12, 27, 0.8),
+      0 0 20px rgba(100, 255, 188, 0.3);
   }
 }
 
@@ -189,4 +243,6 @@
 .description {
   font-size: 14px;
   color: $text-dim;
+  text-align: justify;
+  hyphens: auto;
 }

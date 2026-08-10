@@ -1,8 +1,8 @@
 import React from "react";
 import { DATA } from "../data/config";
-import styles from "./Projects.module.scss"; 
+import styles from "./Projects.module.scss";
 
-const Projects = () => {
+const Projects: React.FC = () => {
   return (
     <section id="projects" className={styles.projects}>
       <h2 className={styles.sectionTitle}>My Projects</h2>
@@ -14,8 +14,8 @@ const Projects = () => {
               <img
                 src={project.photo}
                 alt="Project photo"
-                width="500px"
-                height="380px"
+                width={500}
+                height={380}
               />
             </div>
 

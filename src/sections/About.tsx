@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./About.module.scss";
 import { DATA } from "../data/config";
 
-const About = () => {
+const About: React.FC = () => {
   return (
     <section id="about" className={styles.container}>
       <div className={styles.wrapper}>
@@ -37,6 +37,44 @@ const About = () => {
                   </ul>
                 </div>
               ))}
+            </div>
+
+            {/* Academic Archive */}
+            <div className={styles.accentBox}>
+              <div className={styles.boxHeader}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+                <span>Academic Archive</span>
+              </div>
+              <p className={styles.archiveDescription}>
+                A curated collection of university coursework, lab assignments
+                and projects spanning multiple languages — Java, C#, Python,
+                C++ and JavaScript. These works document my academic journey and
+                reflect hands-on experience across different programming
+                paradigms.
+              </p>
+              <a
+                href="https://github.com/iberikofer/academic-archive"
+                target="_blank"
+                rel="noreferrer"
+                className={styles.archiveLink}>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg>
+                iberikofer/academic-archive
+              </a>
             </div>
           </div>
 
@@ -104,7 +142,7 @@ const About = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.accentBox}>
+            {/* <div className={styles.accentBox}>
               <div className={styles.boxHeader}>
                 <svg
                   viewBox="0 0 24 24"
@@ -130,7 +168,7 @@ const About = () => {
                   <p>Tour agent / Tourism manager</p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,32 +1,71 @@
 @use "../styles/variables" as *;
 
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-dark;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.heroInner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 70px; /* Space for wave at bottom */
+}
+
 .container {
   display: flex;
   align-items: center;
   gap: 5%;
+  width: 100%;
+
+  @media (max-width: 900px) {
+    flex-direction: column-reverse;
+    gap: 40px;
+    text-align: center;
+    padding-top: 100px;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 90px;
+    padding-bottom: 20px;
+  }
 }
 
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  background-color: $bg-dark;
+.message {
+  flex: 1;
+
+  @media (max-width: 900px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .intro {
   color: $mint-neon;
   font-family: "Courier New", monospace;
   margin-bottom: 1rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
 
 .name {
-  font-size: clamp(40px, 8vw, 80px);
+  font-size: clamp(32px, 8vw, 80px);
   color: $text-main;
   margin: 0;
 }
 
 .title {
-  font-size: clamp(30px, 6vw, 60px);
+  font-size: clamp(22px, 6vw, 60px);
   color: $text-dim;
   margin-top: 5px;
 }
@@ -35,6 +74,25 @@
   max-width: 540px;
   margin-top: 20px;
   color: $text-dim;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+
+  @media (max-width: 900px) {
+    text-align: center;
+    text-align-last: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
+}
+
+.cta {
+  @media (max-width: 900px) {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .button {
@@ -48,6 +106,11 @@
   box-shadow: $neon-shadow;
   transition: all 0.3s ease;
 
+  @media (max-width: 480px) {
+    margin-top: 30px;
+    padding: 1rem 1.5rem;
+  }
+
   &:hover {
     background-color: rgba(100, 255, 218, 0.1);
     transform: translateY(-3px);
@@ -56,8 +119,8 @@
 
 .blob {
   position: relative;
-  width: 450px;
-  height: 450px;
+  width: clamp(220px, 35vw, 450px);
+  height: clamp(220px, 35vw, 450px);
   background-color: $bg-light;
   display: flex;
   align-items: flex-end;
@@ -69,6 +132,17 @@
     box-shadow 0.4s ease-in-out;
   animation: morph 6s ease-in-out infinite;
   z-index: 1;
+  flex-shrink: 0;
+
+  @media (max-width: 900px) {
+    width: clamp(160px, 45vw, 280px);
+    height: clamp(160px, 45vw, 280px);
+  }
+
+  @media (max-width: 480px) {
+    width: 160px;
+    height: 160px;
+  }
 
   &::before {
     content: "";
@@ -91,6 +165,71 @@
     object-fit: cover;
     pointer-events: none;
     border-radius: inherit;
+  }
+}
+
+/* ───────────────────────────────────────────────
+   Full-width Animated Wave Divider
+─────────────────────────────────────────────── */
+.heroDivider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(45px, 6vw, 80px);
+  overflow: hidden;
+  line-height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.waveTrack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+}
+
+.waveSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.waveTrack1 {
+  animation: waveMove1 12s linear infinite;
+  z-index: 3;
+}
+
+.waveTrack2 {
+  animation: waveMove2 18s linear infinite;
+  z-index: 2;
+  opacity: 0.85;
+}
+
+.waveTrack3 {
+  animation: waveMove1 26s linear infinite;
+  z-index: 1;
+  opacity: 0.65;
+}
+
+@keyframes waveMove1 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes waveMove2 {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
   }
 }
 
