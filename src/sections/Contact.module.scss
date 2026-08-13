@@ -169,11 +169,14 @@ textarea:invalid {
 
   .socials {
     display: flex;
+    align-items: center;
     gap: 15px;
-    margin-top: 5px;
 
     a {
       color: $text-dim;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.3s ease;
 
       &:hover {
@@ -192,7 +195,7 @@ textarea:invalid {
 .formSide {
   flex: 1.2;
   background: $bg-light;
-  padding: 30px;
+  padding: 26px 28px;
   border-radius: 8px;
   box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
   display: flex;
@@ -203,41 +206,40 @@ textarea:invalid {
   }
 }
 
+.formTitle {
+  color: $text-main;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  font-weight: bold;
+  text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+}
+
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 
   @media (max-width: 600px) {
-    gap: 16px;
+    gap: 10px;
   }
 }
 
 .inputRow {
   display: flex;
-  gap: 20px;
+  gap: 10px;
 
   @media (max-width: 600px) {
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
   }
 }
 
 .field {
   flex: 1;
-
-  textarea {
-    resize: none;
-    min-height: 75px;
-    max-height: 400px;
-    overflow: hidden;
-    transition:
-      height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-      background-color 0.3s ease,
-      border-color 0.3s ease,
-      box-shadow 0.3s ease,
-      color 0.3s ease;
-  }
 
   input,
   textarea {
@@ -259,6 +261,19 @@ textarea:invalid {
 
   input {
     transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      color 0.3s ease;
+  }
+
+  textarea {
+    resize: none;
+    min-height: 90px;
+    max-height: 400px;
+    overflow: hidden;
+    transition:
+      height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
       background-color 0.3s ease,
       border-color 0.3s ease,
       box-shadow 0.3s ease,
@@ -307,7 +322,7 @@ textarea:invalid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 5px 0 10px 0;
+  margin: 10px 0 0 0;
 }
 
 .spinner {

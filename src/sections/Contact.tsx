@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, FormEvent } from "react";
 import emailjs from "@emailjs/browser";
 import styles from "./Contact.module.scss";
+import { DATA } from "../data/config";
 
 const Contact: React.FC = () => {
   const form = useRef<HTMLFormElement>(null);
@@ -138,14 +139,18 @@ const Contact: React.FC = () => {
           <ul className={styles.contactList}>
             <li>
               <span>Email:</span>
-              <a href="mailto:sych521@gmail.com">sych521@gmail.com</a>
+              <a href={`mailto:${DATA.profile.email}`}>{DATA.profile.email}</a>
+            </li>
+            <li>
+              <span>Phone:</span>
+              <a href="tel:+380687127975">{DATA.profile.phone}</a>
             </li>
             <li>
               <span>Location:</span>
               Vinnytsia, Ukraine (GMT+2)
             </li>
             <li>
-              <span style={{ marginBottom: "5px" }}>Socials:</span>
+              <span>Socials:</span>
               <div className={styles.socials}>
                 <a
                   href="https://www.linkedin.com/in/yaroslav-sych"
@@ -196,6 +201,7 @@ const Contact: React.FC = () => {
         </div>
 
         <div className={styles.formSide}>
+          <h3 className={styles.formTitle}>...or fill out the form</h3>
           <form ref={form} className={styles.form} onSubmit={sendEmail}>
             <div className={styles.inputRow}>
               <div className={styles.field}>
@@ -234,8 +240,7 @@ const Contact: React.FC = () => {
                 placeholder="Your message..."
                 required
                 disabled={isSending}
-                onInput={handleTextareaInput}
-                style={{ height: "75px" }}></textarea>
+                onInput={handleTextareaInput}></textarea>
             </div>
 
             <div className={styles.formFooter}>

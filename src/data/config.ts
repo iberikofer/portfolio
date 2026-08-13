@@ -22,6 +22,7 @@ export interface Profile {
   location: string;
   bio: string;
   email: string;
+  phone: string;
   github: string;
   linkedin: string;
 }
@@ -43,6 +44,7 @@ export const DATA: AppData = {
     location: "Ukraine",
     bio: "Passionate developer with a focus on the React/Node.js ecosystem. Currently expanding my horizons with C++, Java and Python at university.",
     email: "sych521@gmail.com",
+    phone: "+38 (068) 712-79-75",
     github: "https://github.com/iberikofer",
     linkedin: "https://www.linkedin.com/in/yaroslav-sych/",
   },
@@ -50,6 +52,7 @@ export const DATA: AppData = {
     frontend: ["React", "JavaScript (ES6+)", "HTML5/CSS3", "SCSS", "Vite"],
     backend: ["Node.js", "MongoDB", "REST API", "Express"],
     other: ["C++", "Java", "Python", "Git", "VScode"],
+    languages: ["English (B2)", "Ukrainian (Native)", "Russian (Fluent)"],
   },
   projects: [
     {

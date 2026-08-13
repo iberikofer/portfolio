@@ -25,17 +25,22 @@ const About: React.FC = () => {
             </p>
 
             <div className={styles.skillsGrid}>
-              {Object.entries(DATA.skills).map(([category, items]) => (
-                <div key={category} className={styles.skillGroup}>
-                  <h4 className={styles.skillTitle}>{category}</h4>
-                  <ul className={styles.skillList}>
-                    {items.map((item) => (
-                      <li key={item} className={styles.skillItem}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {Object.entries(DATA.skills).map(([category, items], index, arr) => (
+                <React.Fragment key={category}>
+                  <div className={styles.skillGroup}>
+                    <h4 className={styles.skillTitle}>{category}</h4>
+                    <ul className={styles.skillList}>
+                      {items.map((item) => (
+                        <li key={item} className={styles.skillItem}>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  {index < arr.length - 1 && (
+                    <div className={styles.skillDivider} />
+                  )}
+                </React.Fragment>
               ))}
             </div>
 
@@ -93,7 +98,9 @@ const About: React.FC = () => {
               </div>
               <div className={styles.timeline}>
                 <div className={styles.item}>
-                  <span className={styles.date}>2025 — 2029</span>
+                  <span className={styles.date}>
+                    2025 — Present (Expected 2029)
+                  </span>
                   <h4>
                     <a
                       href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37"
@@ -102,7 +109,10 @@ const About: React.FC = () => {
                       Vinnytsia National Technical University
                     </a>
                   </h4>
-                  <p>Software Engineering</p>
+                  <p>
+                    Bachelor’s in Software Engineering (Flexible schedule
+                    available if needed)
+                  </p>
                 </div>
                 <div className={styles.item}>
                   <span className={styles.date}>2022 — 2024</span>
@@ -114,7 +124,7 @@ const About: React.FC = () => {
                       GoIT
                     </a>
                   </h4>
-                  <p>FullStack development</p>
+                  <p>Full-Stack development</p>
                 </div>
                 <div className={styles.item}>
                   <span className={styles.date}>2021 — 2024</span>
@@ -126,7 +136,7 @@ const About: React.FC = () => {
                       Vinnytsia Trade and Economics College
                     </a>
                   </h4>
-                  <p>Tourism and recreation</p>
+                  <p>Associate Degree in Tourism and Recreation</p>
                 </div>
                 <div className={styles.item}>
                   <span className={styles.date}>2021</span>
