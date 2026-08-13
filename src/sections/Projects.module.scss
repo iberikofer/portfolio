@@ -13,19 +13,31 @@
 .githubLink {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   color: $mint-neon;
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0 auto 15px;
   width: fit-content;
   transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     text-shadow: $neon-shadow;
     .linkIcon {
       transform: translate(2px, -2px);
     }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $mint-neon;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 
   @media (max-width: 480px) {
@@ -124,26 +136,32 @@
   }
 }
 
-.card {
-  background-color: $bg-light;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  border: 2px solid rgba($mint-neon, 0.1);
-  transition:
-    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform: translateY(0);
+.cardWrapper {
+  height: 100%;
 
-  &:hover {
+  &:hover .card,
+  &:has(.actionBtn:focus-visible) .card {
     transform: translateY(-8px);
     border-color: rgba($mint-neon, 0.85);
     box-shadow:
       0 16px 32px -10px rgba(2, 12, 27, 0.8),
       0 0 20px rgba(100, 255, 188, 0.3);
   }
+}
+
+.card {
+  background-color: $bg-light;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 2px solid rgba($mint-neon, 0.1);
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(0);
 }
 
 .imageContainer {
@@ -181,9 +199,21 @@
   align-items: center;
   justify-content: center;
   transform: translateY(0);
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba($mint-neon, 0.05);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $mint-neon;
+    outline-offset: -2px;
+  }
+
+  &:active {
+    background: rgba($mint-neon, 0.1);
+    transform: translateY(2px);
   }
 }
 

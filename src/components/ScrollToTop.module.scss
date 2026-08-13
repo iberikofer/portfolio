@@ -1,25 +1,13 @@
 @use '../styles/variables' as *;
 
-.scrollToTop {
+.scrollToTopWrapper {
   position: fixed;
   bottom: 40px;
   right: 40px;
   z-index: 999;
-  background: rgba($bg-light, 0.85);
-  border: 1px solid $mint-neon;
-  color: $mint-neon;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(0);
-  transition: all 0.3s ease;
-  box-shadow: $neon-shadow;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
   &.show {
     opacity: 1;
@@ -27,23 +15,63 @@
     pointer-events: auto;
   }
 
-  &:hover {
+  &:hover .scrollToTop {
     transform: translateY(-5px);
     background: $mint-neon;
     color: $bg-dark;
   }
 
+  &:active .scrollToTop,
+  .scrollToTop:active {
+    transform: translateY(0);
+    background: rgba(100, 255, 218, 0.8);
+  }
+
   @media (max-width: 768px) {
     bottom: 25px;
     right: 25px;
+  }
+
+  @media (max-width: 480px) {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+.scrollToTop {
+  background: rgba($bg-light, 0.85);
+  border: 1px solid $mint-neon;
+  color: $mint-neon;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  box-shadow: $neon-shadow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:focus-visible {
+    transform: translateY(-5px);
+    background: $mint-neon;
+    color: $bg-dark;
+    outline: 2px solid $mint-neon;
+    outline-offset: 4px;
+  }
+
+  &:active {
+    transform: translateY(0);
+    background: rgba(100, 255, 218, 0.8);
+  }
+
+  @media (max-width: 768px) {
     width: 44px;
     height: 44px;
     padding: 8px;
   }
 
   @media (max-width: 480px) {
-    bottom: 20px;
-    right: 20px;
     width: 42px;
     height: 42px;
     padding: 6px;

@@ -122,6 +122,28 @@ textarea:invalid {
       span {
         color: $mint-neon;
       }
+
+      a {
+        color: $text-main;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+
+        &:hover,
+        &:focus-visible {
+          color: $mint-neon;
+        }
+
+        &:focus-visible {
+          outline: 2px solid $mint-neon;
+          outline-offset: 4px;
+          border-radius: 2px;
+        }
+
+        &:active {
+          transform: translateY(1px);
+        }
+      }
     }
   }
 
@@ -159,11 +181,23 @@ textarea:invalid {
       text-decoration: none;
       font-size: 16px;
       margin: 0;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      display: inline-block;
     }
 
-    a:hover {
+    a:hover,
+    a:focus-visible {
       color: $mint-neon;
+    }
+
+    a:focus-visible {
+      outline: 2px solid $mint-neon;
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    a:active {
+      transform: translateY(1px);
     }
   }
 
@@ -182,6 +216,13 @@ textarea:invalid {
       &:hover {
         color: $mint-neon;
         transform: translateY(-3px);
+      }
+
+      &:focus-visible {
+        outline: 2px solid $mint-neon;
+        outline-offset: 4px;
+        border-radius: 4px;
+        color: $mint-neon;
       }
 
       svg {
@@ -240,6 +281,7 @@ textarea:invalid {
 
 .field {
   flex: 1;
+  position: relative;
 
   input,
   textarea {
@@ -252,6 +294,10 @@ textarea:invalid {
     font-family: inherit;
     line-height: 1.5;
 
+    &::placeholder {
+      color: transparent;
+    }
+
     &:focus {
       outline: none;
       border-color: $mint-neon;
@@ -259,11 +305,36 @@ textarea:invalid {
     }
   }
 
+  label {
+    position: absolute;
+    left: 11px;
+    top: 15px;
+    color: rgba($text-dim, 0.7);
+    pointer-events: none;
+    transition: transform 0.25s ease, color 0.25s ease;
+    padding: 0 4px;
+    background-color: $bg-dark;
+    line-height: 1.5;
+    font-size: 16px;
+    transform-origin: left top;
+    will-change: transform, color;
+  }
+
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label,
+  textarea:focus ~ label,
+  textarea:not(:placeholder-shown) ~ label {
+    transform: translate(0, -24px) scale(0.75);
+    color: $mint-neon;
+    line-height: 1;
+    border-radius: 2px;
+  }
+
   input {
     transition:
       background-color 0.3s ease,
-      border-color 0.3s ease,
-      box-shadow 0.3s ease,
+      border-color 0.1s ease,
+      box-shadow 0.1s ease,
       color 0.3s ease;
   }
 
@@ -273,10 +344,9 @@ textarea:invalid {
     max-height: 400px;
     overflow: hidden;
     transition:
-      height 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
       background-color 0.3s ease,
-      border-color 0.3s ease,
-      box-shadow 0.3s ease,
+      border-color 0.1s ease,
+      box-shadow 0.1s ease,
       color 0.3s ease;
   }
 }
@@ -291,7 +361,8 @@ textarea:invalid {
   font-family: $font-main;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(0);
   position: relative;
   display: flex;
   justify-content: center;
@@ -304,10 +375,12 @@ textarea:invalid {
     transition: opacity 0.3s ease;
   }
 
-  &:hover {
+  &:focus-visible {
     background: rgba($mint-neon, 0.1);
     box-shadow: 0 0 15px rgba($mint-neon, 0.3);
     transform: translateY(-3px);
+    outline: 2px solid $mint-neon;
+    outline-offset: 4px;
   }
 
   &.loading {
@@ -322,7 +395,22 @@ textarea:invalid {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: center;
+  width: fit-content;
   margin: 10px 0 0 0;
+
+  &:hover .submitBtn {
+    background: rgba($mint-neon, 0.1);
+    box-shadow: 0 0 15px rgba($mint-neon, 0.3);
+    transform: translateY(-3px);
+  }
+
+  &:active .submitBtn,
+  .submitBtn:active {
+    transform: translateY(1px);
+    background: rgba($mint-neon, 0.25);
+    box-shadow: 0 0 5px rgba($mint-neon, 0.2);
+  }
 }
 
 .spinner {

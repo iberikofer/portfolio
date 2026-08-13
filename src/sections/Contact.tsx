@@ -208,19 +208,23 @@ const Contact: React.FC = () => {
                 <input
                   type="text"
                   name="user_name"
-                  placeholder="Name"
+                  id="user_name"
+                  placeholder=" "
                   required
                   disabled={isSending}
                 />
+                <label htmlFor="user_name">Name</label>
               </div>
               <div className={styles.field}>
                 <input
                   type="email"
                   name="user_email"
-                  placeholder="Email"
+                  id="user_email"
+                  placeholder=" "
                   required
                   disabled={isSending}
                 />
+                <label htmlFor="user_email">Email</label>
               </div>
             </div>
 
@@ -228,19 +232,34 @@ const Contact: React.FC = () => {
               <input
                 type="text"
                 name="subject"
-                placeholder="Subject"
+                id="subject"
+                placeholder=" "
                 disabled={isSending}
+                autoComplete="off"
+                data-lpignore="true"
+                data-bwignore="true"
+                data-1p-ignore="true"
               />
+              <label htmlFor="subject">Subject</label>
             </div>
 
             <div className={styles.field}>
               <textarea
                 ref={textareaRef}
                 name="message"
-                placeholder="Your message..."
+                id="message"
+                placeholder=" "
                 required
                 disabled={isSending}
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                autoComplete="off"
+                spellCheck="false"
+                data-bwignore="true"
+                data-1p-ignore="true"
                 onInput={handleTextareaInput}></textarea>
+              <label htmlFor="message">Your message...</label>
             </div>
 
             <div className={styles.formFooter}>

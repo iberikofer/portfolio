@@ -21,23 +21,26 @@ const ScrollToTop: React.FC = () => {
   };
 
   return (
-    <button
-      type="button"
-      className={`${styles.scrollToTop} ${isVisible ? styles.show : ""}`}
-      onClick={scrollToTop}
-      aria-label="Scroll to top">
-      <svg
-        viewBox="0 0 24 24"
-        width="24"
-        height="24"
-        stroke="currentColor"
-        strokeWidth="2.5"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-      </svg>
-    </button>
+    <div
+      className={`${styles.scrollToTopWrapper} ${isVisible ? styles.show : ""}`}>
+      <button
+        type="button"
+        className={styles.scrollToTop}
+        onClick={scrollToTop}
+        aria-label="Scroll to top">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+    </div>
   );
 };
 

@@ -19,7 +19,7 @@ const Hero: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
                 className={styles.button}>
-                REVIEW RESUME
+                DOWNLOAD RESUME
               </a>
             </div>
           </div>
@@ -29,7 +29,6 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Full-width multi-layer animated wave divider */}
       <div className={styles.heroDivider} aria-hidden="true">
         <div className={`${styles.waveTrack} ${styles.waveTrack3}`}>
           <svg

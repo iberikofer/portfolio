@@ -88,6 +88,20 @@
 }
 
 .cta {
+  display: inline-block;
+
+  &:hover .button {
+    background-color: rgba(100, 255, 218, 0.1);
+    transform: translateY(-3px);
+  }
+
+  &:active .button,
+  .button:active {
+    transform: translateY(1px);
+    background-color: rgba(100, 255, 218, 0.25);
+    box-shadow: 0 0 5px rgba($mint-neon, 0.2);
+  }
+
   @media (max-width: 900px) {
     display: flex;
     justify-content: center;
@@ -103,16 +117,23 @@
   color: $mint-neon;
   font-weight: bold;
   box-shadow: $neon-shadow;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   @media (max-width: 480px) {
     margin-top: 30px;
     padding: 1rem 1.5rem;
   }
 
-  &:hover {
+  &:focus-visible {
     background-color: rgba(100, 255, 218, 0.1);
     transform: translateY(-3px);
+    outline: 2px solid $mint-neon;
+    outline-offset: 4px;
+  }
+
+  &:active {
+    transform: translateY(1px);
+    background-color: rgba(100, 255, 218, 0.2);
   }
 }
 

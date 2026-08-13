@@ -151,7 +151,8 @@ const About: React.FC = () => {
                   <p>English and German languages</p>
                 </div>
               </div>
-            </div>
+          </div>
+            {/* In progress =) */}
             {/* <div className={styles.accentBox}>
               <div className={styles.boxHeader}>
                 <svg

@@ -9,57 +9,59 @@ const Projects: React.FC = () => {
       <div className={styles.mainDivider}></div>
       <div className={styles.grid}>
         {DATA.projects.map((project) => (
-          <div key={project.id} className={styles.card}>
-            <div className={styles.imageContainer}>
-              <img
-                src={project.photo}
-                alt="Project photo"
-                width={500}
-                height={380}
-              />
-            </div>
-
-            <div
-              className={`${styles.buttonActionRow} ${!project.pages ? styles.singleButton : ""}`}>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-                className={styles.actionBtn}>
-                Repo
-              </a>
-
-              {project.pages && (
-                <>
-                  <div className={styles.divider}></div>
-                  <div className={styles.pagesWrapper}>
-                    <a
-                      href={project.pages}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.actionBtn}>
-                      Page
-                    </a>
-                    {project.status === "Closed" && (
-                      <span className={styles.statusNote}>
-                        temporarily unavailable
-                      </span>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-
-            <div className={styles.content}>
-              <h3 className={styles.projectTitle}>{project.title}</h3>
-              <div className={styles.tags}>
-                {project.tags.map((tag) => (
-                  <span key={tag} className={styles.tag}>
-                    {tag}
-                  </span>
-                ))}
+          <div key={project.id} className={styles.cardWrapper}>
+            <div className={styles.card}>
+              <div className={styles.imageContainer}>
+                <img
+                  src={project.photo}
+                  alt="Project photo"
+                  width={500}
+                  height={380}
+                />
               </div>
-              <p className={styles.description}>{project.description}</p>
+
+              <div
+                className={`${styles.buttonActionRow} ${!project.pages ? styles.singleButton : ""}`}>
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.actionBtn}>
+                  Repo
+                </a>
+
+                {project.pages && (
+                  <>
+                    <div className={styles.divider}></div>
+                    <div className={styles.pagesWrapper}>
+                      <a
+                        href={project.pages}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={styles.actionBtn}>
+                        Page
+                      </a>
+                      {project.status === "Closed" && (
+                        <span className={styles.statusNote}>
+                          temporarily unavailable
+                        </span>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className={styles.content}>
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <div className={styles.tags}>
+                  {project.tags.map((tag) => (
+                    <span key={tag} className={styles.tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <p className={styles.description}>{project.description}</p>
+              </div>
             </div>
           </div>
         ))}

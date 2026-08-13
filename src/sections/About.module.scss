@@ -196,7 +196,8 @@
     transition: transform 0.2s ease;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: #a0ffd6;
     border-bottom-color: $mint-neon;
     text-shadow: 0 0 6px rgba($mint-neon, 0.4);
@@ -204,6 +205,16 @@
     svg {
       transform: translateX(3px);
     }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $mint-neon;
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 }
 
@@ -303,7 +314,32 @@
     color: $text-main;
     font-size: 16px;
     margin: 4px 0;
-    text-decoration: underline;
+    
+    a {
+      color: inherit;
+      text-decoration: underline;
+      transition: all 0.45s ease-in-out;
+      outline: none;
+
+      &:hover,
+      &:focus-visible {
+        color: $mint-neon;
+      }
+
+      &:focus-visible {
+        outline: 2px solid $mint-neon;
+        outline-offset: 4px;
+        border-radius: 2px;
+        text-decoration: none;
+      }
+
+      &:active {
+        color: rgba(100, 255, 218, 0.7);
+        background-color: rgba(100, 255, 218, 0.1);
+        border-radius: 2px;
+        text-decoration: none;
+      }
+    }
   }
 
   p {
