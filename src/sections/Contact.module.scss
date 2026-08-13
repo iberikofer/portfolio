@@ -102,8 +102,7 @@ textarea:invalid {
     color: $text-dim;
     line-height: 1.7;
     margin-bottom: 30px;
-    text-align: justify;
-    text-align-last: left;
+    text-align: left;
   }
 
   .contactList {
@@ -208,15 +207,19 @@ textarea:invalid {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (max-width: 600px) {
+    gap: 16px;
+  }
 }
 
 .inputRow {
   display: flex;
   gap: 20px;
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     flex-direction: column;
-    gap: 0;
+    gap: 16px;
   }
 }
 
@@ -260,10 +263,6 @@ textarea:invalid {
       border-color 0.3s ease,
       box-shadow 0.3s ease,
       color 0.3s ease;
-  }
-
-  @media (max-width: 480px) {
-    margin-bottom: 16px;
   }
 }
 

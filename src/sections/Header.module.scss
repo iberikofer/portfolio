@@ -27,16 +27,28 @@
   }
 }
 
-.progressBar {
+.progressTrack {
   position: absolute;
   bottom: 0;
   left: 0;
+  width: 100%;
   height: 2px;
+  background: rgba($mint-neon, 0.08);
+  z-index: 1001;
+}
+
+.progressBar {
+  height: 100%;
   background: $mint-neon;
   box-shadow:
     0 0 10px $mint-neon,
     0 0 5px $mint-neon;
-  z-index: 1001;
+
+  @media (max-width: 425px) {
+    box-shadow:
+      0 0 4px rgba($mint-neon, 0.6),
+      0 0 2px rgba($mint-neon, 0.4);
+  }
 }
 
 .nav {
@@ -51,43 +63,47 @@
   font-size: 1.2rem;
   text-shadow: $neon-shadow;
   font-family: "Courier New", monospace;
-  display: inline-block;
-  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
-  border-right: 3px solid $mint-neon;
-  width: 0;
-  letter-spacing: 0.5ch;
-  animation:
-    typing 12s steps(13) infinite,
-    blink 0.75s step-end infinite;
+  letter-spacing: 0.3ch;
+  min-height: 1.5em;
 
   @media (max-width: 480px) {
-    font-size: 1rem;
+    font-size: 0.84rem;
+    letter-spacing: 0.1ch;
+  }
+
+  @media (max-width: 425px) {
+    text-shadow: 0 0 4px rgba(100, 255, 218, 0.2);
+  }
+
+  @media (max-width: 360px) {
+    font-size: 0.78rem;
+    letter-spacing: 0.05ch;
   }
 }
 
-@keyframes typing {
-  0% {
-    width: 0;
-  }
-  54% {
-    width: 19.5ch;
-  }
-  79% {
-    width: 19.5ch;
-  }
-  100% {
-    width: 0;
+.cursor {
+  display: inline-block;
+  color: $mint-neon;
+  margin-left: 2px;
+  font-weight: bold;
+  text-shadow: $neon-shadow;
+  animation: blink 0.75s step-end infinite;
+
+  @media (max-width: 425px) {
+    text-shadow: 0 0 4px rgba(100, 255, 218, 0.2);
   }
 }
 
 @keyframes blink {
   from,
   to {
-    border-color: transparent;
+    opacity: 1;
   }
   50% {
-    border-color: $mint-neon;
+    opacity: 0;
   }
 }
 
@@ -97,7 +113,12 @@
   gap: 28px;
 
   @media (max-width: 480px) {
-    gap: 12px;
+    gap: 4px;
+    margin-right: -2px;
+  }
+
+  @media (max-width: 360px) {
+    gap: 2px;
   }
 
   li {
@@ -118,8 +139,13 @@
     transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     @media (max-width: 480px) {
-      font-size: 0.78rem;
-      padding: 8px 4px;
+      font-size: 0.74rem;
+      padding: 6px 3px;
+    }
+
+    @media (max-width: 360px) {
+      font-size: 0.68rem;
+      padding: 5px 2px;
     }
 
     &::after {

@@ -83,8 +83,7 @@
     line-height: 1.7;
     margin-bottom: 20px;
     font-size: 18px;
-    text-align: justify;
-    text-align-last: left;
+    text-align: left;
 
     strong,
     b {
@@ -150,8 +149,7 @@
   font-size: 14px;
   line-height: 1.65;
   margin-bottom: 16px;
-  text-align: justify;
-  text-align-last: left;
+  text-align: left;
 }
 
 .archiveLink {
@@ -161,21 +159,28 @@
   color: $mint-neon;
   font-size: 13px;
   font-family: "Courier New", monospace;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba($mint-neon, 0.3);
+  border-bottom: 1px solid rgba($mint-neon, 0.4);
   padding-bottom: 2px;
   width: fit-content;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 
   svg {
     width: 15px;
     height: 15px;
     flex-shrink: 0;
+    transition: transform 0.2s ease;
   }
 
   &:hover {
-    text-shadow: $neon-shadow;
+    color: #a0ffd6;
     border-bottom-color: $mint-neon;
-    transform: translateX(2px);
+    text-shadow: 0 0 6px rgba($mint-neon, 0.4);
+
+    svg {
+      transform: translateX(3px);
+    }
   }
 }
 

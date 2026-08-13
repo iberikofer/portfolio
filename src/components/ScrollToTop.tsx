@@ -6,11 +6,13 @@ const ScrollToTop: React.FC = () => {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      setIsVisible(window.pageYOffset > 300);
+      const scrollPos =
+        window.scrollY || document.documentElement.scrollTop || 0;
+      setIsVisible(scrollPos > 300);
     };
 
     toggleVisibility();
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
@@ -19,13 +21,11 @@ const ScrollToTop: React.FC = () => {
   };
 
   return (
-    <div
+    <button
+      type="button"
       className={`${styles.scrollToTop} ${isVisible ? styles.show : ""}`}
       onClick={scrollToTop}
-      role="button"
-      aria-label="Scroll to top"
-      tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && scrollToTop()}>
+      aria-label="Scroll to top">
       <svg
         viewBox="0 0 24 24"
         width="24"
@@ -37,7 +37,7 @@ const ScrollToTop: React.FC = () => {
         strokeLinejoin="round">
         <polyline points="18 15 12 9 6 15"></polyline>
       </svg>
-    </div>
+    </button>
   );
 };
 

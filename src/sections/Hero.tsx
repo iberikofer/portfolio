@@ -19,7 +19,7 @@ const Hero: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
                 className={styles.button}>
-                Review CV
+                REVIEW RESUME
               </a>
             </div>
           </div>

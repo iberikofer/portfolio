@@ -108,7 +108,7 @@ const About: React.FC = () => {
                   <span className={styles.date}>2022 — 2024</span>
                   <h4>
                     <a
-                      href="https://goit.global/et/"
+                      href="https://goit.global/et/courses/fullstack/"
                       target="_blank"
                       rel="noreferrer">
                       GoIT

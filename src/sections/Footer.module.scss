@@ -40,6 +40,18 @@
   @media (max-width: 480px) {
     width: 700px;
   }
+
+  @media (max-width: 425px) {
+    width: 700px;
+    height: 400px;
+    bottom: -100px;
+    background: radial-gradient(
+      circle,
+      rgba($mint-neon, 0.09) 0%,
+      rgba($mint-neon, 0.03) 50%,
+      transparent 75%
+    );
+  }
 }
 
 .container {

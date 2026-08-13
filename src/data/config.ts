@@ -91,7 +91,7 @@ export const DATA: AppData = {
       tags: ["HTML", "CSS", "JS", "REACT"],
       link: "https://github.com/iberikofer/car-rent-react-node",
       pages: "https://iberikofer.github.io/car-rent-react-node",
-      status: "Closed",
+      status: "Open",
     },
     {
       id: 5,
