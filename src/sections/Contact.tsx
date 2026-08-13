@@ -4,6 +4,7 @@ import styles from "./Contact.module.scss";
 
 const Contact: React.FC = () => {
   const form = useRef<HTMLFormElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [formStatus, formSetStatus] = useState<string>("");
   const [isSending, setIsSending] = useState<boolean>(false);
   const [displayMsg, setDisplayMsg] = useState<string>("");
@@ -17,6 +18,66 @@ const Contact: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [formStatus]);
+
+  const mirrorRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (mirrorRef.current && mirrorRef.current.parentNode) {
+        mirrorRef.current.parentNode.removeChild(mirrorRef.current);
+        mirrorRef.current = null;
+      }
+    };
+  }, []);
+
+  const adjustTextareaHeight = (element: HTMLTextAreaElement) => {
+    if (!mirrorRef.current) {
+      const mirror = document.createElement("div");
+      mirror.style.position = "absolute";
+      mirror.style.top = "-9999px";
+      mirror.style.left = "-9999px";
+      mirror.style.visibility = "hidden";
+      mirror.style.pointerEvents = "none";
+      mirror.style.whiteSpace = "pre-wrap";
+      mirror.style.wordWrap = "break-word";
+      mirror.style.overflowWrap = "break-word";
+      document.body.appendChild(mirror);
+      mirrorRef.current = mirror;
+    }
+
+    const mirror = mirrorRef.current;
+    const style = window.getComputedStyle(element);
+
+    mirror.style.width = `${element.clientWidth}px`;
+    mirror.style.fontFamily = style.fontFamily;
+    mirror.style.fontSize = style.fontSize;
+    mirror.style.fontWeight = style.fontWeight;
+    mirror.style.lineHeight = style.lineHeight;
+    mirror.style.letterSpacing = style.letterSpacing;
+    mirror.style.padding = style.padding;
+    mirror.style.boxSizing = style.boxSizing;
+
+    mirror.textContent =
+      element.value + (element.value.endsWith("\n") ? " " : "");
+
+    const minH = 75;
+    const maxH = 400;
+    const borderOffset = element.offsetHeight - element.clientHeight;
+    const rawHeight = mirror.scrollHeight + borderOffset;
+    const nextHeight = Math.min(Math.max(rawHeight, minH), maxH);
+    element.style.height = `${nextHeight}px`;
+
+    // Only show scrollbar when text genuinely exceeds the maximum allowed height (400px)
+    if (rawHeight > maxH) {
+      element.style.overflowY = "auto";
+    } else {
+      element.style.overflowY = "hidden";
+    }
+  };
+
+  const handleTextareaInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    adjustTextareaHeight(e.currentTarget);
+  };
 
   const sendEmail = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,6 +107,10 @@ const Contact: React.FC = () => {
           formSetStatus("success");
           setIsSending(false);
           form.current?.reset();
+          if (textareaRef.current) {
+            textareaRef.current.style.height = "75px";
+            textareaRef.current.style.overflowY = "hidden";
+          }
         },
         (error: { text?: string }) => {
           formSetStatus("error");
@@ -164,11 +229,13 @@ const Contact: React.FC = () => {
 
             <div className={styles.field}>
               <textarea
+                ref={textareaRef}
                 name="message"
                 placeholder="Your message..."
-                rows={6}
                 required
-                disabled={isSending}></textarea>
+                disabled={isSending}
+                onInput={handleTextareaInput}
+                style={{ height: "75px" }}></textarea>
             </div>
 
             <div className={styles.formFooter}>

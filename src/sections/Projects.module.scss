@@ -46,7 +46,6 @@
   margin-bottom: 10px;
   text-align: justify;
   text-align-last: center;
-  hyphens: auto;
 
   @media (max-width: 600px) {
     font-size: 0.95rem;
@@ -244,5 +243,4 @@
   font-size: 14px;
   color: $text-dim;
   text-align: justify;
-  hyphens: auto;
 }

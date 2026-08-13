@@ -85,7 +85,6 @@
     font-size: 18px;
     text-align: justify;
     text-align-last: left;
-    hyphens: auto;
 
     strong,
     b {
@@ -153,7 +152,6 @@
   margin-bottom: 16px;
   text-align: justify;
   text-align-last: left;
-  hyphens: auto;
 }
 
 .archiveLink {
@@ -210,14 +208,6 @@
   border-radius: 8px;
   border-left: 3px solid $mint-neon;
   backdrop-filter: blur(5px);
-  transition:
-    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
-    background-color 0.35s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    background: rgba($bg-light, 0.5);
-  }
 
   @media (max-width: 480px) {
     padding: 18px;

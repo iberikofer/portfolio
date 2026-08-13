@@ -1,9 +1,9 @@
-import webStudioImg from '../assets/WebStudio.png';
-import NodePhonebookImg from '../assets/NodePhonebook.jpg';
-import ImageFinder from '../assets/ImageFinder.png';
-import FeedbackPage from '../assets/FeedbackPage.png';
-import MovieFinder from '../assets/MovieFinder.png';
-import CarRent from '../assets/CarRent.png';
+import webStudioImg from "../assets/WebStudio.png";
+import NodePhonebookImg from "../assets/NodePhonebook.jpg";
+import ImageFinder from "../assets/ImageFinder.png";
+import FeedbackPage from "../assets/FeedbackPage.png";
+import MovieFinder from "../assets/MovieFinder.png";
+import CarRent from "../assets/CarRent.png";
 
 export interface Project {
   id: number;
@@ -13,7 +13,7 @@ export interface Project {
   tags: string[];
   link: string;
   pages?: string;
-  status: 'Open' | 'Closed';
+  status: "Open" | "Closed";
 }
 
 export interface Profile {
@@ -56,7 +56,8 @@ export const DATA: AppData = {
       id: 1,
       title: "react-movie-finder",
       photo: MovieFinder,
-      description: "React page for searching movies. Each movie page contains the actors from the movie and the reviews.",
+      description:
+        "React page for searching movies. Each movie page contains the actors from the movie and the reviews.",
       tags: ["HTML", "CSS", "JS", "REACT"],
       link: "https://github.com/iberikofer/react-movie-finder",
       pages: "https://iberikofer.github.io/react-movie-finder",
@@ -84,16 +85,6 @@ export const DATA: AppData = {
     },
     {
       id: 4,
-      title: "react-feedback-page",
-      photo: FeedbackPage,
-      description: "Feedback page built with personal hooks.",
-      tags: ["HTML", "CSS", "JS", "REACT", "HOOKS"],
-      link: "https://github.com/iberikofer/react-feedback-page",
-      pages: "https://iberikofer.github.io/react-feedback-page",
-      status: "Open",
-    },
-    {
-      id: 5,
       title: "car-rent-react-node",
       photo: CarRent,
       description: "Car rent web page. Catalog/Favorite page included.",
@@ -103,10 +94,21 @@ export const DATA: AppData = {
       status: "Closed",
     },
     {
+      id: 5,
+      title: "react-feedback-page",
+      photo: FeedbackPage,
+      description: "Feedback page built with personal hooks.",
+      tags: ["HTML", "CSS", "JS", "REACT", "HOOKS"],
+      link: "https://github.com/iberikofer/react-feedback-page",
+      pages: "https://iberikofer.github.io/react-feedback-page",
+      status: "Open",
+    },
+    {
       id: 6,
       title: "node-phonebook",
       photo: NodePhonebookImg,
-      description: "Introducing a Node.js and MongoDB phonebook application featuring user registration and email verification!",
+      description:
+        "Introducing a Node.js and MongoDB phonebook application featuring user registration and email verification!",
       tags: ["NODE", "MONGODB"],
       link: "https://github.com/iberikofer/node-phonebook",
       status: "Open",
