@@ -88,7 +88,7 @@ export const DATA: AppData = {
     },
     {
       id: 4,
-      title: "car-rent-react-node",
+      title: "car-rent-react",
       photo: CarRent,
       description: "Car rent web page. Catalog/Favorite page included.",
       tags: ["HTML", "CSS", "JS", "REACT"],
