@@ -2,8 +2,6 @@
 
 A modern, high-performance personal portfolio website built with **React 19**, **TypeScript**, **Vite**, and **SCSS Modules**. Designed with a futuristic dark neon aesthetic, smooth animations, auto-expanding form controls, and responsive layouts tailored for all screen sizes from 320px mobile devices to 4K displays.
 
-🌐 **Live Demo:** [iberikofer.github.io/portfolio](https://iberikofer.github.io/portfolio/)
-
 ---
 
 ## ✨ Features
