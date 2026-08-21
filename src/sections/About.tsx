@@ -11,11 +11,14 @@ const About: React.FC = () => {
         <div className={styles.content}>
           <div className={styles.textSide}>
             <p>
-              <b>Greetings!</b> I'm an enthusiastic Fullstack Developer with a
-              focus on building clean and efficient digital experiences. My
-              journey into programming started with a curiosity about how things
-              work under the hood, which led me to explore both low-level and
-              high-level technologies.
+              <b tabIndex={0} className={styles.greetings}>
+                Greetings!
+              </b>{" "}
+              I'm an enthusiastic Fullstack Developer with a focus on building
+              clean and efficient digital experiences. My journey into
+              programming started with a curiosity about how things work under
+              the hood, which led me to explore both low-level and high-level
+              technologies.
             </p>
             <p>
               Currently, I'm honing my skills in the React ecosystem while also

@@ -11,13 +11,27 @@ const Projects: React.FC = () => {
         {DATA.projects.map((project) => (
           <div key={project.id} className={styles.cardWrapper}>
             <div className={styles.card}>
-              <div className={styles.imageContainer}>
+              <div
+                className={styles.imageContainer}
+                style={
+                  project.containerBg
+                    ? { backgroundColor: project.containerBg }
+                    : undefined
+                }>
                 {project.photo ? (
                   <img
                     src={project.photo}
                     alt={project.title}
                     width={500}
                     height={380}
+                    style={{
+                      ...(project.objectPosition && {
+                        objectPosition: project.objectPosition,
+                      }),
+                      ...(project.objectFit && {
+                        objectFit: project.objectFit,
+                      }),
+                    }}
                   />
                 ) : (
                   <div className={styles.placeholderImage}>

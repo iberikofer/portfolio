@@ -1,7 +1,7 @@
 import React from "react";
 import { DATA } from "../data/config";
 import styles from "./Hero.module.scss";
-import developer from "../assets/Yaroslav.png";
+import developer from "../assets/yaroslav.png";
 
 const Hero: React.FC = () => {
   return (
