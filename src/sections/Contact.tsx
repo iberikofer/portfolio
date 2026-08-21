@@ -8,11 +8,9 @@ const Contact: React.FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [formStatus, formSetStatus] = useState<string>("");
   const [isSending, setIsSending] = useState<boolean>(false);
-  const [displayMsg, setDisplayMsg] = useState<string>("");
 
   useEffect(() => {
     if (formStatus !== "") {
-      setDisplayMsg(formStatus);
       const timer = setTimeout(() => {
         formSetStatus("");
       }, 5000);
@@ -271,13 +269,18 @@ const Contact: React.FC = () => {
                 {isSending && <span className={styles.spinner}></span>}
               </button>
               <div
-                className={`${styles.statusMessage} ${formStatus === "success" ? styles.showSuccess : ""
-                  } ${formStatus === "error" || formStatus === "spaceError" ? styles.showError : ""}`}>
-                {displayMsg === "success" &&
+                className={`${styles.statusMessage} ${
+                  formStatus === "success" ? styles.showSuccess : ""
+                } ${
+                  formStatus === "error" || formStatus === "spaceError"
+                    ? styles.showError
+                    : ""
+                }`}>
+                {formStatus === "success" &&
                   "Thank you! Your message was sent successfully. ✨"}
-                {displayMsg === "error" &&
+                {formStatus === "error" &&
                   "Something went wrong, please try again. 🔄"}
-                {displayMsg === "spaceError" &&
+                {formStatus === "spaceError" &&
                   "Empty fields or only spaces are not acceptable. ❌"}
               </div>
             </div>

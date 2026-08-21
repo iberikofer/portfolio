@@ -12,16 +12,36 @@ const Projects: React.FC = () => {
           <div key={project.id} className={styles.cardWrapper}>
             <div className={styles.card}>
               <div className={styles.imageContainer}>
-                <img
-                  src={project.photo}
-                  alt="Project photo"
-                  width={500}
-                  height={380}
-                />
+                {project.photo ? (
+                  <img
+                    src={project.photo}
+                    alt={project.title}
+                    width={500}
+                    height={380}
+                  />
+                ) : (
+                  <div className={styles.placeholderImage}>
+                    <svg
+                      className={styles.placeholderIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                    <span className={styles.placeholderText}>
+                      Preview coming soon
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div
-                className={`${styles.buttonActionRow} ${!project.pages ? styles.singleButton : ""}`}>
+                className={`${styles.buttonActionRow} ${
+                  !project.pages && !project.mockup ? styles.singleButton : ""
+                }`}>
                 <a
                   href={project.link}
                   target="_blank"
@@ -30,17 +50,39 @@ const Projects: React.FC = () => {
                   Repo
                 </a>
 
+                {project.mockup && (
+                  <>
+                    <div className={styles.divider}></div>
+                    <a
+                      href={project.mockup}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.actionBtn}>
+                      Mockup
+                    </a>
+                  </>
+                )}
+
                 {project.pages && (
                   <>
                     <div className={styles.divider}></div>
                     <div className={styles.pagesWrapper}>
-                      <a
-                        href={project.pages}
-                        target="_blank"
-                        rel="noreferrer"
-                        className={styles.actionBtn}>
-                        Page
-                      </a>
+                      {project.status === "Closed" ? (
+                        <span
+                          className={`${styles.actionBtn} ${styles.disabledBtn}`}
+                          title="Page temporarily unavailable"
+                          aria-disabled="true">
+                          Page
+                        </span>
+                      ) : (
+                        <a
+                          href={project.pages}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={styles.actionBtn}>
+                          Page
+                        </a>
+                      )}
                       {project.status === "Closed" && (
                         <span className={styles.statusNote}>
                           temporarily unavailable

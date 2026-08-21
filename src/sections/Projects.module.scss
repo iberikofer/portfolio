@@ -181,6 +181,31 @@
   }
 }
 
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba($bg-light, 0.9), rgba(0, 0, 0, 0.4));
+  color: $text-dim;
+
+  .placeholderIcon {
+    width: 48px;
+    height: 48px;
+    color: rgba($mint-neon, 0.5);
+  }
+
+  .placeholderText {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: rgba($text-dim, 0.7);
+  }
+}
+
 .buttonActionRow {
   height: 60px;
   display: flex;
@@ -241,8 +266,18 @@
 }
 
 .disabledBtn {
-  color: $text-dim;
+  color: rgba($text-dim, 0.4);
   cursor: not-allowed;
+  user-select: none;
+
+  &:hover,
+  &:focus-visible,
+  &:active {
+    background: transparent;
+    text-shadow: none;
+    outline: none;
+    transform: none;
+  }
 }
 
 .content {
