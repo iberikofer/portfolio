@@ -91,15 +91,6 @@ In the project directory, you can run:
 
 ---
 
-## 👤 Author
-
-**Yaroslav Sych** — Fullstack JS Developer
-- **GitHub:** [@iberikofer](https://github.com/iberikofer)
-- **LinkedIn:** [Yaroslav Sych](https://www.linkedin.com/in/yaroslav-sych/)
-- **Email:** sych521@gmail.com
-
----
-
 ## 📄 License
 
 This project is open-source and available under the MIT License.
