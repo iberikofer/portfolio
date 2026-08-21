@@ -1,11 +1,4 @@
-# 🚀 Yaroslav Sych — Developer Portfolio
-
-[![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-v5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-v7-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Sass](https://img.shields.io/badge/Styling-SCSS-CC6699?logo=sass&logoColor=white)](https://sass-lang.com/)
-[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222?logo=github-pages&logoColor=white)](https://iberikofer.github.io/portfolio/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+# 👨‍💻 Yaroslav Sych — Developer Portfolio
 
 A modern, high-performance personal portfolio website built with **React 19**, **TypeScript**, **Vite**, and **SCSS Modules**. Designed with a futuristic dark neon aesthetic, smooth animations, auto-expanding form controls, and responsive layouts tailored for all screen sizes from 320px mobile devices to 4K displays.
 
@@ -109,4 +102,4 @@ In the project directory, you can run:
 
 ## 📄 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and available under the MIT License.
