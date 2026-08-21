@@ -19,7 +19,7 @@ export interface Project {
   pages?: string;
   status: "Open" | "Closed";
   objectPosition?: string;
-  objectFit?: "cover" | "contain";
+  objectFit?: "cover" | "contain" | "fill";
   containerBg?: string;
 }
 
@@ -127,8 +127,7 @@ export const DATA: AppData = {
       link: "https://github.com/iberikofer/node-phonebook",
       status: "Open",
       objectPosition: "center",
-      objectFit: "contain",
-      containerBg: "#ffffff",
+      objectFit: "fill",
     },
     {
       id: 7,
