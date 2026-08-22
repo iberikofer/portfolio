@@ -1,6 +1,6 @@
-import React from "react";
-import { DATA } from "../data/config";
-import styles from "./Footer.module.scss";
+import React from 'react';
+import { DATA } from '../data/config';
+import styles from './Footer.module.scss';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -13,13 +13,14 @@ const Footer: React.FC = () => {
         <p className={styles.subtext}>
           I'm currently looking for new opportunities.
           <span className={styles.subtextBreak}>
-            Whether you have a question or just want to say hi, my inbox is always open!
+            Whether you have a question or just want to say hi, my inbox is
+            always open!
           </span>
         </p>
         <div className={styles.divider}></div>
 
         <p className={styles.copyright}>
-          Designed &amp; Built by{" "}
+          Designed &amp; Built by{' '}
           <span className={styles.highlight}>{DATA.profile.name}</span>
           <br />© {currentYear} — All rights reserved.
         </p>

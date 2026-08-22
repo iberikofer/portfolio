@@ -1,4 +1,4 @@
-@use "../styles/variables" as *;
+@use '../styles/variables' as *;
 
 input:invalid,
 textarea:invalid {
@@ -168,7 +168,7 @@ textarea:invalid {
     span {
       display: block;
       color: $mint-neon;
-      font-family: "Courier New", monospace;
+      font-family: 'Courier New', monospace;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -253,7 +253,7 @@ textarea:invalid {
   margin: 0 0 20px 0;
   font-weight: bold;
   text-align: center;
-  
+
   @media (max-width: 480px) {
     font-size: 18px;
   }
@@ -311,7 +311,9 @@ textarea:invalid {
     top: 15px;
     color: rgba($text-dim, 0.7);
     pointer-events: none;
-    transition: transform 0.25s ease, color 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      color 0.25s ease;
     padding: 0 4px;
     background-color: $bg-dark;
     line-height: 1.5;

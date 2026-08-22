@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "./About.module.scss";
-import { DATA } from "../data/config";
+import React from 'react';
+import styles from './About.module.scss';
+import { DATA } from '../data/config';
 
 const About: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const About: React.FC = () => {
             <p>
               <b tabIndex={0} className={styles.greetings}>
                 Greetings!
-              </b>{" "}
+              </b>{' '}
               I'm an enthusiastic Fullstack Developer with a focus on building
               clean and efficient digital experiences. My journey into
               programming started with a curiosity about how things work under
@@ -28,33 +28,35 @@ const About: React.FC = () => {
             </p>
 
             <div className={styles.skillsGrid}>
-              {Object.entries(DATA.skills).map(([category, items], index, arr) => (
-                <React.Fragment key={category}>
-                  <div className={styles.skillGroup}>
-                    <h4 className={styles.skillTitle}>{category}</h4>
-                    <ul className={styles.skillList}>
-                      {items.map((item) => (
-                        <li key={item} className={styles.skillItem}>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  {index < arr.length - 1 && (
-                    <div className={styles.skillDivider} />
-                  )}
-                </React.Fragment>
-              ))}
+              {Object.entries(DATA.skills).map(
+                ([category, items], index, arr) => (
+                  <React.Fragment key={category}>
+                    <div className={styles.skillGroup}>
+                      <h4 className={styles.skillTitle}>{category}</h4>
+                      <ul className={styles.skillList}>
+                        {items.map((item) => (
+                          <li key={item} className={styles.skillItem}>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    {index < arr.length - 1 && (
+                      <div className={styles.skillDivider} />
+                    )}
+                  </React.Fragment>
+                ),
+              )}
             </div>
 
-            {/* Academic Archive */}
             <div className={styles.accentBox}>
               <div className={styles.boxHeader}>
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2">
+                  strokeWidth="2"
+                >
                   <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                 </svg>
@@ -62,8 +64,8 @@ const About: React.FC = () => {
               </div>
               <p className={styles.archiveDescription}>
                 A curated collection of university coursework, lab assignments
-                and projects spanning multiple languages — Java, C#, Python,
-                C++ and JavaScript. These works document my academic journey and
+                and projects spanning multiple languages — Java, C#, Python, C++
+                and JavaScript. These works document my academic journey and
                 reflect hands-on experience across different programming
                 paradigms.
               </p>
@@ -71,14 +73,16 @@ const About: React.FC = () => {
                 href="https://github.com/iberikofer/academic-archive"
                 target="_blank"
                 rel="noreferrer"
-                className={styles.archiveLink}>
+                className={styles.archiveLink}
+              >
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
-                  strokeLinejoin="round">
+                  strokeLinejoin="round"
+                >
                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                 </svg>
                 iberikofer/academic-archive
@@ -93,7 +97,8 @@ const About: React.FC = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2">
+                  strokeWidth="2"
+                >
                   <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                   <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                 </svg>
@@ -108,7 +113,8 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37"
                       target="_blank"
-                      rel="noreferrer">
+                      rel="noreferrer"
+                    >
                       Vinnytsia National Technical University
                     </a>
                   </h4>
@@ -123,7 +129,8 @@ const About: React.FC = () => {
                     <a
                       href="https://goit.global/et/courses/fullstack/"
                       target="_blank"
-                      rel="noreferrer">
+                      rel="noreferrer"
+                    >
                       GoIT
                     </a>
                   </h4>
@@ -135,7 +142,8 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/iNhCe66bAWo7mfTe8"
                       target="_blank"
-                      rel="noreferrer">
+                      rel="noreferrer"
+                    >
                       Vinnytsia Trade and Economics College
                     </a>
                   </h4>
@@ -147,14 +155,15 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/A4iwefxeDXjC4wWNA"
                       target="_blank"
-                      rel="noreferrer">
+                      rel="noreferrer"
+                    >
                       Humanities Lyceum of Vinnytsia №1
                     </a>
                   </h4>
                   <p>English and German languages</p>
                 </div>
               </div>
-          </div>
+            </div>
             {/* In progress =) */}
             {/* <div className={styles.accentBox}>
               <div className={styles.boxHeader}>

@@ -1,4 +1,4 @@
-@use "../styles/variables" as *;
+@use '../styles/variables' as *;
 
 .hero {
   min-height: 100vh;
@@ -49,7 +49,7 @@
 
 .intro {
   color: $mint-neon;
-  font-family: "Courier New", monospace;
+  font-family: 'Courier New', monospace;
   margin-bottom: 1rem;
 
   @media (max-width: 480px) {
@@ -164,7 +164,7 @@
   }
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 10%;
     left: 10%;
@@ -186,8 +186,6 @@
     border-radius: inherit;
   }
 }
-
-
 
 @keyframes morph {
   0%,

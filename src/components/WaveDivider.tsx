@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./WaveDivider.module.scss";
+import React, { useEffect, useRef } from 'react';
+import styles from './WaveDivider.module.scss';
 
 interface LayerConfig {
   strokeColor: string;
@@ -18,7 +18,7 @@ export const WaveDivider: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -46,48 +46,49 @@ export const WaveDivider: React.FC = () => {
 
     const layers: LayerConfig[] = [
       {
-        strokeColor: "rgba(100, 255, 188, 0.12)",
-        fillColor: "rgba(100, 255, 188, 0.015)",
+        strokeColor: 'rgba(100, 255, 188, 0.12)',
+        fillColor: 'rgba(100, 255, 188, 0.015)',
         lineWidth: 0.9,
         getTopY: (x, t, cy) =>
-          cy - 5 +
+          cy -
+          5 +
           Math.sin(x * 0.0018 + t * 0.3 + 5.0) * 20 +
           Math.sin(x * 0.0042 - t * 0.22) * 8,
-        getThickness: (x, t) =>
-          34 + Math.cos(x * 0.0025 + t * 0.28 + 3.0) * 10,
+        getThickness: (x, t) => 34 + Math.cos(x * 0.0025 + t * 0.28 + 3.0) * 10,
       },
       {
-        strokeColor: "rgba(100, 255, 188, 0.25)",
-        fillColor: "rgba(100, 255, 188, 0.03)",
+        strokeColor: 'rgba(100, 255, 188, 0.25)',
+        fillColor: 'rgba(100, 255, 188, 0.03)',
         lineWidth: 1.2,
         getTopY: (x, t, cy) =>
-          cy - 9 +
+          cy -
+          9 +
           Math.sin(x * 0.0024 + t * 0.45 + 3.8) * 18 +
           Math.sin(x * 0.0055 - t * 0.35) * 8,
-        getThickness: (x, t) =>
-          30 + Math.cos(x * 0.0033 + t * 0.4 + 2.0) * 8,
+        getThickness: (x, t) => 30 + Math.cos(x * 0.0033 + t * 0.4 + 2.0) * 8,
       },
       {
-        strokeColor: "rgba(100, 255, 188, 0.45)",
-        fillColor: "rgba(100, 255, 188, 0.05)",
+        strokeColor: 'rgba(100, 255, 188, 0.45)',
+        fillColor: 'rgba(100, 255, 188, 0.05)',
         lineWidth: 1.5,
-        glowColor: "rgba(100, 255, 188, 0.2)",
+        glowColor: 'rgba(100, 255, 188, 0.2)',
         glowBlur: 4,
         getTopY: (x, t, cy) =>
-          cy - 13 +
+          cy -
+          13 +
           Math.sin(x * 0.0036 - t * 0.68 + 1.8) * 16 +
           Math.cos(x * 0.0022 + t * 0.85) * 9,
-        getThickness: (x, t) =>
-          27 + Math.sin(x * 0.0045 - t * 0.52 + 0.9) * 8,
+        getThickness: (x, t) => 27 + Math.sin(x * 0.0045 - t * 0.52 + 0.9) * 8,
       },
       {
-        strokeColor: "rgba(100, 255, 188, 0.75)",
-        fillColor: "rgba(100, 255, 188, 0.08)",
+        strokeColor: 'rgba(100, 255, 188, 0.75)',
+        fillColor: 'rgba(100, 255, 188, 0.08)',
         lineWidth: 2.0,
-        glowColor: "rgba(100, 255, 188, 0.5)",
+        glowColor: 'rgba(100, 255, 188, 0.5)',
         glowBlur: 8,
         getTopY: (x, t, cy) =>
-          cy - 16 +
+          cy -
+          16 +
           Math.sin(x * 0.0032 + t * 0.92) * 17 +
           Math.sin(x * 0.0068 - t * 0.58) * 9 +
           Math.cos(x * 0.0018 + t * 0.36) * 6,

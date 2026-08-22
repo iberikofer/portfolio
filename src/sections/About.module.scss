@@ -1,4 +1,4 @@
-@use "../styles/variables" as *;
+@use '../styles/variables' as *;
 
 .container {
   padding: 100px 20px;
@@ -164,7 +164,7 @@
       gap: 8px;
 
       &::before {
-        content: "▹";
+        content: '▹';
         color: $mint-neon;
       }
     }
@@ -194,7 +194,7 @@
   gap: 8px;
   color: $mint-neon;
   font-size: 13px;
-  font-family: "Courier New", monospace;
+  font-family: 'Courier New', monospace;
   border-bottom: 1px solid rgba($mint-neon, 0.4);
   padding-bottom: 2px;
   width: fit-content;
@@ -298,7 +298,7 @@
   flex: 1;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 5px;
@@ -312,7 +312,7 @@
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: -19.5px;
     top: 6px;
@@ -327,7 +327,7 @@
     color: $text-main;
     font-size: 16px;
     margin: 4px 0;
-    
+
     a {
       color: inherit;
       text-decoration: underline;

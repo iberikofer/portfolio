@@ -1,4 +1,4 @@
-@use "../styles/variables" as *;
+@use '../styles/variables' as *;
 
 .header {
   position: fixed;
@@ -61,7 +61,7 @@
   font-weight: bold;
   font-size: 1.2rem;
   text-shadow: $neon-shadow;
-  font-family: "Courier New", monospace;
+  font-family: 'Courier New', monospace;
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
@@ -128,7 +128,7 @@
   a {
     color: $text-main;
     font-size: 0.9rem;
-    font-family: "Courier New", monospace;
+    font-family: 'Courier New', monospace;
     position: relative;
     /* Generous vertical and horizontal padding for easy hover from above/below */
     padding: 12px 8px;
@@ -148,7 +148,7 @@
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       width: 100%;
       height: 2px;
@@ -187,7 +187,7 @@
     &:active {
       transform: translateY(2px);
       color: rgba($mint-neon, 0.8);
-      
+
       &::after {
         box-shadow: 0 0 5px rgba($mint-neon, 0.6);
         background-color: rgba($mint-neon, 0.8);

@@ -21,13 +21,13 @@ A modern, high-performance personal portfolio website built with **React 19**, *
 
 ## 🛠️ Tech Stack
 
-| Domain | Technologies |
-|---|---|
-| **Core Framework** | [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
-| **Build Tooling** | [Vite 7](https://vitejs.dev/), SWC Compiler |
-| **Styling** | SCSS Modules, CSS Variables, Flexbox/Grid |
-| **Form & Emailing** | [EmailJS Browser SDK](https://www.emailjs.com/) |
-| **Linting & Code Quality** | ESLint 9, React Hooks Plugin |
+| Domain                     | Technologies                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------- |
+| **Core Framework**         | [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
+| **Build Tooling**          | [Vite 7](https://vitejs.dev/), SWC Compiler                                   |
+| **Styling**                | SCSS Modules, CSS Variables, Flexbox/Grid                                     |
+| **Form & Emailing**        | [EmailJS Browser SDK](https://www.emailjs.com/)                               |
+| **Linting & Code Quality** | ESLint 9, React Hooks Plugin                                                  |
 
 ---
 
@@ -60,12 +60,14 @@ Ensure you have **Node.js** (v18 or higher) and **npm** installed on your machin
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/iberikofer/portfolio.git
    cd portfolio
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```

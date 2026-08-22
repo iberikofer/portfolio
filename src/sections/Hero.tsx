@@ -1,8 +1,8 @@
-import React from "react";
-import { DATA } from "../data/config";
-import styles from "./Hero.module.scss";
-import developer from "../assets/yaroslav.png";
-import { WaveDivider } from "../components/WaveDivider";
+import React from 'react';
+import { DATA } from '../data/config';
+import styles from './Hero.module.scss';
+import developer from '../assets/yaroslav.png';
+import { WaveDivider } from '../components/WaveDivider';
 
 const Hero: React.FC = () => {
   return (
@@ -19,7 +19,8 @@ const Hero: React.FC = () => {
                 href="resume.pdf"
                 target="_blank"
                 rel="noreferrer"
-                className={styles.button}>
+                className={styles.button}
+              >
                 DOWNLOAD RESUME
               </a>
             </div>

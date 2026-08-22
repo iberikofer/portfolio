@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { DATA } from "../data/config";
-import styles from "./Header.module.scss";
+import React, { useState, useEffect } from 'react';
+import { DATA } from '../data/config';
+import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       return window.scrollY > 50;
     }
     return false;
   });
 
   const [scrollProgress, setScrollProgress] = useState<number>(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const scrollHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       return scrollHeight > 0 ? (window.scrollY / scrollHeight) * 100 : 0;
@@ -19,7 +19,7 @@ const Header: React.FC = () => {
     return 0;
   });
 
-  const [displayedText, setDisplayedText] = useState<string>("");
+  const [displayedText, setDisplayedText] = useState<string>('');
   const fullName = DATA.profile.name;
 
   useEffect(() => {
@@ -73,9 +73,9 @@ const Header: React.FC = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
       if (requestRunning) window.cancelAnimationFrame(requestRunning);
     };
   }, []);
@@ -86,12 +86,12 @@ const Header: React.FC = () => {
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ""}`}>
+    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.progressTrack}>
         <div
           className={styles.progressBar}
