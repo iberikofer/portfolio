@@ -68,7 +68,17 @@ export const DATA: AppData = {
       photo: quizImg,
       description:
         "My first full-stack app - Quiz Builder that allows users to create custom quizzes with various question types, interactive dashboard, and question inspection.",
-      tags: ["TS", "TAILWIND", "REACT", "NODE", "SQLITE", "PRISMA"],
+      tags: [
+        "REACT",
+        "NODE.JS",
+        "TS",
+        "EXPRESS",
+        "SQLITE",
+        "PRISMA",
+        "REST API",
+        "AXIOS",
+        "TAILWIND",
+      ],
       link: "https://github.com/iberikofer/quiz-builder",
       pages: "https://iberikofer.github.io/quiz-builder",
       status: "Closed",
@@ -79,7 +89,7 @@ export const DATA: AppData = {
       photo: movieFinder,
       description:
         "A dynamic React web application for discovering movies, searching titles, and viewing detailed cast and reviews via TMDB API.",
-      tags: ["HTML", "CSS", "JS", "REACT"],
+      tags: ["REACT", "JS", "FETCH"],
       link: "https://github.com/iberikofer/react-movie-finder",
       pages: "https://iberikofer.github.io/react-movie-finder",
       status: "Open",
@@ -90,7 +100,7 @@ export const DATA: AppData = {
       photo: imageFinder,
       description:
         "React-based image search application powered by Pixabay API featuring state management, infinite scroll/pagination, and modal views.",
-      tags: ["HTML", "CSS", "JS", "REACT"],
+      tags: ["REACT", "JS", "AXIOS"],
       link: "https://github.com/iberikofer/react-image-finder",
       pages: "https://iberikofer.github.io/react-image-finder",
       status: "Open",
@@ -101,7 +111,7 @@ export const DATA: AppData = {
       photo: carRent,
       description:
         "Interactive car rental platform built with React and modern frontend tools.",
-      tags: ["HTML", "CSS", "JS", "REACT"],
+      tags: ["REACT", "JS", "AXIOS"],
       link: "https://github.com/iberikofer/car-rent-react-node",
       pages: "https://iberikofer.github.io/car-rent-react-node",
       status: "Open",
@@ -112,7 +122,7 @@ export const DATA: AppData = {
       photo: reactPhonebookImg,
       description:
         "React phonebook application with user authentication, Redux state management, and contact filtering.",
-      tags: ["HTML", "CSS", "JS", "REACT", "REDUX"],
+      tags: ["REACT", "REDUX", "JS"],
       link: "https://github.com/iberikofer/react-phonebook",
       pages: "https://iberikofer.github.io/react-phonebook/",
       status: "Open",
@@ -160,7 +170,7 @@ export const DATA: AppData = {
       photo: feedbackPage,
       description:
         "Interactive feedback and statistics web app built with React, featuring state-driven rating metrics and dynamic statistics.",
-      tags: ["HTML", "CSS", "JS", "REACT", "HOOKS"],
+      tags: ["REACT", "HOOKS", "JS"],
       link: "https://github.com/iberikofer/react-feedback-page",
       pages: "https://iberikofer.github.io/react-feedback-page",
       status: "Open",
