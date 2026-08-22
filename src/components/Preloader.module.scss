@@ -1,0 +1,259 @@
+@use '../styles/variables' as *;
+
+.preloaderOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background-color: $bg-dark;
+  cursor: pointer;
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.45s;
+
+  &.exiting {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(8px);
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+.preloaderContainer {
+  position: absolute;
+  top: calc(50vh - 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  max-width: 680px;
+  gap: 14px;
+
+  @media (max-width: 480px) {
+    top: calc(50vh - 140px);
+    width: 94%;
+  }
+}
+
+.skipHintAbove {
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: rgba($mint-neon, 0.7);
+  letter-spacing: 2px;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  animation: pulseHint 2.2s infinite ease-in-out;
+
+  &:hover {
+    color: $mint-neon;
+    text-shadow: 0 0 12px rgba($mint-neon, 0.7);
+  }
+}
+
+.terminalCard {
+  width: 100%;
+  background: rgba(13, 27, 42, 0.92);
+  border: 1px solid rgba(100, 255, 188, 0.25);
+  border-radius: 12px;
+  box-shadow:
+    0 0 35px rgba(100, 255, 188, 0.12),
+    0 10px 40px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+  position: relative;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  transition:
+    height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.3s ease;
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(10, 25, 47, 0.8);
+  border-bottom: 1px solid rgba(100, 255, 188, 0.15);
+}
+
+.windowDots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 50px;
+}
+
+.headerSpacer {
+  width: 50px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+
+  &.red {
+    background: #ff5f56;
+    box-shadow: 0 0 6px rgba(255, 95, 86, 0.4);
+  }
+  &.yellow {
+    background: #ffbd2e;
+    box-shadow: 0 0 6px rgba(255, 189, 46, 0.4);
+  }
+  &.green {
+    background: #27c93f;
+    box-shadow: 0 0 6px rgba(39, 201, 63, 0.4);
+  }
+}
+
+.terminalTitle {
+  font-size: 0.82rem;
+  color: $text-dim;
+  letter-spacing: 0.5px;
+}
+
+.terminalBody {
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  transition: padding 0.3s ease;
+
+  @media (max-width: 600px) {
+    padding: 16px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+.terminalLine {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  animation: lineFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @media (max-width: 480px) {
+    flex-wrap: wrap;
+  }
+}
+
+.prefix {
+  color: #7982a9;
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.arrow {
+  color: $mint-neon;
+  font-weight: bold;
+}
+
+.text {
+  color: $text-main;
+}
+
+.highlight {
+  color: $mint-neon;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba($mint-neon, 0.4);
+}
+
+.status {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: $mint-neon;
+  font-weight: bold;
+  font-size: 0.82rem;
+  background: rgba($mint-neon, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba($mint-neon, 0.2);
+}
+
+.cursorLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.prompt {
+  color: $mint-neon;
+  font-weight: bold;
+}
+
+.cursor {
+  width: 9px;
+  height: 17px;
+  background: $mint-neon;
+  display: inline-block;
+  animation: blink 0.9s steps(2, start) infinite;
+  box-shadow: 0 0 8px rgba($mint-neon, 0.6);
+}
+
+.progressBarWrapper {
+  width: 100%;
+  height: 3px;
+  background: rgba(100, 255, 188, 0.1);
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  width: 0;
+  background: $mint-neon;
+  box-shadow: 0 0 10px $mint-neon;
+  animation: progressFill 2.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes lineFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes progressFill {
+  0% {
+    width: 0%;
+  }
+  35% {
+    width: 40%;
+  }
+  70% {
+    width: 75%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes pulseHint {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}
