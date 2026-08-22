@@ -2,8 +2,6 @@
 
 A modern, high-performance personal portfolio website built with **React 19**, **TypeScript**, **Vite**, and **SCSS Modules**. Designed with a futuristic dark neon aesthetic, smooth animations, auto-expanding form controls, and responsive layouts tailored for all screen sizes from 320px mobile devices to 4K displays.
 
-🌐 **Live Demo:** [iberikofer.github.io/portfolio](https://iberikofer.github.io/portfolio/)
-
 ---
 
 ## ✨ Features
@@ -88,15 +86,6 @@ In the project directory, you can run:
 - `npm run build` — Compiles TypeScript and builds the production-ready assets in the `dist` directory.
 - `npm run preview` — Locally previews the production build.
 - `npm run lint` — Runs ESLint to check for code issues.
-
----
-
-## 👤 Author
-
-**Yaroslav Sych** — Fullstack JS Developer
-- **GitHub:** [@iberikofer](https://github.com/iberikofer)
-- **LinkedIn:** [Yaroslav Sych](https://www.linkedin.com/in/yaroslav-sych/)
-- **Email:** sych521@gmail.com
 
 ---
 
