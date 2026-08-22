@@ -7,7 +7,6 @@
   background-color: $bg-dark;
   position: relative;
   width: 100%;
-  overflow: hidden;
 }
 
 .heroInner {
@@ -15,7 +14,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding-bottom: 70px; /* Space for wave at bottom */
+  padding-bottom: 20px;
 }
 
 .container {
@@ -188,70 +187,7 @@
   }
 }
 
-/* ───────────────────────────────────────────────
-   Full-width Animated Wave Divider
-─────────────────────────────────────────────── */
-.heroDivider {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: clamp(45px, 6vw, 80px);
-  overflow: hidden;
-  line-height: 0;
-  pointer-events: none;
-  z-index: 2;
-}
 
-.waveTrack {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 100%;
-}
-
-.waveSvg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  will-change: transform;
-}
-
-.waveTrack1 {
-  animation: waveMove1 12s linear infinite;
-  z-index: 3;
-}
-
-.waveTrack2 {
-  animation: waveMove2 18s linear infinite;
-  z-index: 2;
-  opacity: 0.85;
-}
-
-.waveTrack3 {
-  animation: waveMove1 26s linear infinite;
-  z-index: 1;
-  opacity: 0.65;
-}
-
-@keyframes waveMove1 {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
-@keyframes waveMove2 {
-  0% {
-    transform: translate3d(-50%, 0, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
 
 @keyframes morph {
   0%,

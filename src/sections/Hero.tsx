@@ -2,6 +2,7 @@ import React from "react";
 import { DATA } from "../data/config";
 import styles from "./Hero.module.scss";
 import developer from "../assets/yaroslav.png";
+import { WaveDivider } from "../components/WaveDivider";
 
 const Hero: React.FC = () => {
   return (
@@ -29,62 +30,7 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.heroDivider} aria-hidden="true">
-        <div className={`${styles.waveTrack} ${styles.waveTrack3}`}>
-          <svg
-            className={styles.waveSvg}
-            viewBox="0 0 2400 100"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M0,35 C400,75 800,15 1200,35 C1600,75 2000,15 2400,35 L2400,100 L0,100 Z"
-              fill="rgba(100, 255, 188, 0.02)"
-            />
-            <path
-              d="M0,35 C400,75 800,15 1200,35 C1600,75 2000,15 2400,35"
-              fill="none"
-              stroke="rgba(100, 255, 188, 0.12)"
-              strokeWidth="1"
-            />
-          </svg>
-        </div>
-        <div className={`${styles.waveTrack} ${styles.waveTrack2}`}>
-          <svg
-            className={styles.waveSvg}
-            viewBox="0 0 2400 100"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M0,60 C350,20 650,95 950,55 C1100,35 1150,35 1200,60 C1550,20 1850,95 2150,55 C2300,35 2350,35 2400,60 L2400,100 L0,100 Z"
-              fill="rgba(100, 255, 188, 0.03)"
-            />
-            <path
-              d="M0,60 C350,20 650,95 950,55 C1100,35 1150,35 1200,60 C1550,20 1850,95 2150,55 C2300,35 2350,35 2400,60"
-              fill="none"
-              stroke="rgba(100, 255, 188, 0.2)"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
-        <div className={`${styles.waveTrack} ${styles.waveTrack1}`}>
-          <svg
-            className={styles.waveSvg}
-            viewBox="0 0 2400 100"
-            preserveAspectRatio="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M0,45 C300,5 600,85 900,45 C1050,25 1150,25 1200,45 C1500,5 1800,85 2100,45 C2250,25 2350,25 2400,45 L2400,100 L0,100 Z"
-              fill="rgba(100, 255, 188, 0.04)"
-            />
-            <path
-              d="M0,45 C300,5 600,85 900,45 C1050,25 1150,25 1200,45 C1500,5 1800,85 2100,45 C2250,25 2350,25 2400,45"
-              fill="none"
-              stroke="rgba(100, 255, 188, 0.35)"
-              strokeWidth="2"
-            />
-          </svg>
-        </div>
-      </div>
+      <WaveDivider />
     </section>
   );
 };
