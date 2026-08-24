@@ -64,10 +64,9 @@ const About: React.FC = () => {
               </div>
               <p className={styles.archiveDescription}>
                 A curated collection of university coursework, lab assignments
-                and projects spanning multiple languages — Java, C#, Python, C++
-                and JavaScript. These works document my academic journey and
-                reflect hands-on experience across different programming
-                paradigms.
+                and projects spanning multiple languages — C++, Java, Python and
+                JavaScript. These works document my academic journey and reflect
+                hands-on experience across different programming paradigms.
               </p>
               <a
                 href="https://github.com/iberikofer/academic-archive"

@@ -56,9 +56,16 @@ export const DATA: AppData = {
     linkedin: 'https://www.linkedin.com/in/yaroslav-sych/',
   },
   skills: {
-    frontend: ['React', 'JavaScript (ES6+)', 'HTML5/CSS3', 'SCSS', 'Vite'],
-    backend: ['Node.js', 'MongoDB', 'REST API', 'Express'],
-    other: ['C++', 'Java', 'Python', 'Git', 'VScode'],
+    frontend: [
+      'React',
+      'TypeScript',
+      'JavaScript',
+      'HTML5/CSS3',
+      'Tailwind',
+      'Vite',
+    ],
+    backend: ['Node.js', 'Express', 'MongoDB', 'SQLite', 'Prisma', 'REST API'],
+    other: ['Git', 'VScode', 'WebStorm'],
     languages: ['English (B2)', 'Ukrainian (Native)', 'Russian (Fluent)'],
   },
   projects: [
