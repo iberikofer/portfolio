@@ -123,7 +123,7 @@ textarea:invalid {
         color: $mint-neon;
       }
 
-      a {
+      > a {
         color: $text-main;
         text-decoration: none;
         transition: all 0.3s ease;
@@ -211,11 +211,26 @@ textarea:invalid {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      width: 22px;
+      height: 22px;
+      line-height: 0;
+      position: relative;
+      transition: color 0.3s ease;
+
+      svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        pointer-events: none;
+      }
 
       &:hover {
         color: $mint-neon;
-        transform: translateY(-3px);
+
+        svg {
+          transform: translateY(-3px);
+        }
       }
 
       &:focus-visible {
@@ -223,11 +238,16 @@ textarea:invalid {
         outline-offset: 4px;
         border-radius: 4px;
         color: $mint-neon;
+
+        svg {
+          transform: translateY(-3px);
+        }
       }
 
-      svg {
-        width: 22px;
-        height: 22px;
+      &:active {
+        svg {
+          transform: translateY(1px);
+        }
       }
     }
   }
