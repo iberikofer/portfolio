@@ -19,42 +19,6 @@ const Header: React.FC = () => {
     return 0;
   });
 
-  const [displayedText, setDisplayedText] = useState<string>('');
-  const fullName = DATA.profile.name;
-
-  useEffect(() => {
-    let index = 0;
-    let isDeleting = false;
-    let timer: ReturnType<typeof setTimeout>;
-
-    const tick = () => {
-      if (!isDeleting) {
-        index++;
-        setDisplayedText(fullName.slice(0, index));
-
-        if (index === fullName.length) {
-          isDeleting = true;
-          timer = setTimeout(tick, 3000);
-          return;
-        }
-        timer = setTimeout(tick, 498);
-      } else {
-        index--;
-        setDisplayedText(fullName.slice(0, index));
-
-        if (index === 0) {
-          isDeleting = false;
-          timer = setTimeout(tick, 0);
-          return;
-        }
-        timer = setTimeout(tick, 194);
-      }
-    };
-
-    timer = setTimeout(tick, 400);
-    return () => clearTimeout(timer);
-  }, [fullName]);
-
   useEffect(() => {
     let requestRunning: number | null = null;
 
@@ -101,7 +65,16 @@ const Header: React.FC = () => {
       <nav className={`${styles.nav} container`}>
         <div className={styles.logo}>
           <span className={styles.logoPrefix}>~/</span>
-          <span className={styles.logoName}>{displayedText}</span>
+          <span className={styles.logoName}>
+            <span className={styles.firstName}>
+              {DATA.profile.name.split(' ')[0]}
+            </span>
+            <span className={styles.lastName}>
+              {DATA.profile.name.includes(' ')
+                ? ` ${DATA.profile.name.split(' ').slice(1).join(' ')}`
+                : ''}
+            </span>
+          </span>
           <span className={styles.cursor} aria-hidden="true">
             _
           </span>

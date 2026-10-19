@@ -12,6 +12,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 75px;
   scrollbar-gutter: stable;
   background-color: $bg-canvas;
   overflow-x: clip;

@@ -70,6 +70,12 @@
 
   .logoName {
     color: $text-primary;
+
+    .lastName {
+      @media (max-width: 425px) {
+        display: none;
+      }
+    }
   }
 
   @media (max-width: 480px) {

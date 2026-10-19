@@ -217,27 +217,54 @@
   z-index: 2;
 
   span {
-    display: inline-block;
-    padding: 3px 9px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
     border-radius: 999px;
     font-family: $font-mono;
     font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.04em;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow:
+      0 4px 14px rgba(0, 0, 0, 0.65),
+      0 0 0 1px rgba(0, 0, 0, 0.5);
+    transition:
+      transform $duration-micro $ease-out-expo,
+      box-shadow $duration-micro $ease-out-expo;
   }
 
   .statusOpen {
-    background: rgba(155, 255, 0, 0.15);
-    border: 1px solid rgba(155, 255, 0, 0.4);
+    background: rgba(4, 9, 4, 0.88);
+    border: 1px solid rgba(155, 255, 0, 0.55);
     color: $accent-lime;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: $accent-lime;
+      box-shadow: 0 0 6px $accent-lime;
+    }
   }
 
   .statusClosed {
-    background: rgba(119, 137, 171, 0.16);
-    border: 1px solid rgba(119, 137, 171, 0.3);
-    color: $accent-slate;
+    background: rgba(9, 13, 19, 0.88);
+    border: 1px solid rgba(119, 137, 171, 0.45);
+    color: #b0c2db;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: $accent-slate;
+    }
   }
 }
 

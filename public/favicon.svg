@@ -1,7 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="48" fill="#0A192F" stroke="#64FFDA" stroke-width="4"/>
-  <text x="50" y="65" text-anchor="middle" fill="#64FFDA" 
-        style="font-family: 'Courier New', monospace; font-weight: bold; font-size: 70px;">
-    Y
-  </text>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0c1017"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+  <!-- Deep Black Disc with Electric Lime Outer Ring -->
+  <circle cx="50" cy="50" r="46" fill="url(#bg)" stroke="#9BFF00" stroke-width="4.5"/>
+  <!-- Steel Slate Cyber Orbit Accent -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#7789AB" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.45"/>
+  <!-- Satellite Orbit Dot -->
+  <circle cx="50" cy="9.5" r="2.5" fill="#9BFF00"/>
+  <!-- High-Contrast Electric Lime Monogram Y -->
+  <text x="50" y="69" text-anchor="middle" fill="#9BFF00" 
+        font-family="system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif" 
+        font-weight="900" font-size="58px">Y</text>
 </svg>
