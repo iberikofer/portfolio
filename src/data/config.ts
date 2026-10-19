@@ -7,11 +7,14 @@ import carRent from '../assets/carRent.png';
 import glyanecImg from '../assets/glyanec.png';
 import quizImg from '../assets/quiz.png';
 import reactPhonebookImg from '../assets/reactPhonebook.png';
+import type { StaticImageData } from 'next/image';
+
+export type ImageSource = string | StaticImageData;
 
 export interface Project {
   id: number;
   title: string;
-  photo?: string;
+  photo?: ImageSource;
   description: string;
   tags: string[];
   link: string;

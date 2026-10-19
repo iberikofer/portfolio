@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { DATA } from '../data/config';
 import styles from './Header.module.scss';

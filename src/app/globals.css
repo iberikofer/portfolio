@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #000000;
+  --color-canvas-subtle: #07090c;
+  --color-card: rgba(12, 15, 20, 0.78);
+  --color-card-hover: rgba(18, 22, 30, 0.92);
+  --color-surface: #0b0e14;
+  --color-surface-elevated: #11151e;
+  --color-glass: rgba(10, 13, 18, 0.75);
+  --color-glass-heavy: rgba(4, 5, 8, 0.88);
+
+  --color-accent-lime: #9bff00;
+  --color-accent-lime-hover: #b4ff33;
+  --color-accent-lime-subtle: rgba(155, 255, 0, 0.1);
+  --color-accent-lime-glow: rgba(155, 255, 0, 0.35);
+  --color-accent-lime-border: rgba(155, 255, 0, 0.3);
+
+  --color-accent-slate: #7789ab;
+  --color-accent-slate-hover: #95a5c5;
+  --color-accent-slate-subtle: rgba(119, 137, 171, 0.12);
+  --color-accent-slate-glow: rgba(119, 137, 171, 0.25);
+  --color-accent-slate-border: rgba(119, 137, 171, 0.22);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a6b4cc;
+  --color-text-muted: #7789ab;
+  --color-text-subtle: #505c73;
+
+  --color-border-hairline: rgba(119, 137, 171, 0.16);
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}

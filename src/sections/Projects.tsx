@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { DATA, Project } from '../data/config';
+import { DATA, Project, ImageSource } from '../data/config';
 import styles from './Projects.module.scss';
 
 type FilterCategory =
@@ -18,6 +20,11 @@ const hasLiveDemo = (project: Project): boolean => {
   return true;
 };
 
+const getImgSrc = (photo?: ImageSource): string => {
+  if (!photo) return '';
+  return typeof photo === 'string' ? photo : (photo as { src: string }).src || '';
+};
+
 const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -34,7 +41,7 @@ const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
   return (
     <img
       ref={imgRef}
-      src={project.photo}
+      src={getImgSrc(project.photo)}
       alt={project.title}
       width={500}
       height={320}

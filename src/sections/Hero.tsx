@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useCallback, useEffect } from 'react';
 import { DATA } from '../data/config';
 import styles from './Hero.module.scss';
@@ -410,7 +412,11 @@ const Hero: React.FC = () => {
                   onMouseLeave={handleBlobMouseLeave}
                 >
                   <img
-                    src={developer}
+                    src={
+                      typeof developer === 'string'
+                        ? developer
+                        : (developer as { src: string }).src
+                    }
                     alt={DATA.profile.name}
                     width={500}
                     height={500}
