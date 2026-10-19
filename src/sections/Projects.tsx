@@ -1,11 +1,34 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react';
 import { DATA, Project, ImageSource } from '../data/config';
 import styles from './Projects.module.scss';
 
 type FilterCategory =
   'all' | 'team' | 'fullstack' | 'frontend' | 'backend' | 'ai-tools' | 'games';
+
+interface FilterTab {
+  id: FilterCategory;
+  label: string;
+  countKey:
+    'all' | 'team' | 'fullstack' | 'frontend' | 'backend' | 'aiTools' | 'games';
+}
+
+const FILTER_TABS: FilterTab[] = [
+  { id: 'all', label: 'All', countKey: 'all' },
+  { id: 'team', label: 'Team projects', countKey: 'team' },
+  { id: 'fullstack', label: 'Fullstack', countKey: 'fullstack' },
+  { id: 'frontend', label: 'Front-end', countKey: 'frontend' },
+  { id: 'backend', label: 'Back-end', countKey: 'backend' },
+  { id: 'ai-tools', label: 'AI & Tools', countKey: 'aiTools' },
+  { id: 'games', label: 'Games/Simulators', countKey: 'games' },
+];
 
 const hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
@@ -22,7 +45,9 @@ const hasLiveDemo = (project: Project): boolean => {
 
 const getImgSrc = (photo?: ImageSource): string => {
   if (!photo) return '';
-  return typeof photo === 'string' ? photo : (photo as { src: string }).src || '';
+  return typeof photo === 'string'
+    ? photo
+    : (photo as { src: string }).src || '';
 };
 
 const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
@@ -63,6 +88,71 @@ const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
 
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
+  const [indicator, setIndicator] = useState<{
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    opacity: number;
+  }>({ x: 0, y: 0, width: 0, height: 0, opacity: 0 });
+  const [hasMounted, setHasMounted] = useState(false);
+  const [isTransitionEnabled, setIsTransitionEnabled] = useState(false);
+
+  const filterBarRef = useRef<HTMLDivElement>(null);
+  const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const updateIndicator = useCallback(
+    (filter: FilterCategory = activeFilter) => {
+      const activeBtn = btnRefs.current[filter];
+      if (!activeBtn) return;
+      setIndicator({
+        x: activeBtn.offsetLeft,
+        y: activeBtn.offsetTop,
+        width: activeBtn.offsetWidth,
+        height: activeBtn.offsetHeight,
+        opacity: 1,
+      });
+    },
+    [activeFilter],
+  );
+
+  const handleFilterSelect = (id: FilterCategory) => {
+    setActiveFilter(id);
+    updateIndicator(id);
+  };
+
+  useEffect(() => {
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+
+    const rafId = requestAnimationFrame(() => {
+      updateIndicator(activeFilter);
+      setHasMounted(true);
+
+      timerId = setTimeout(() => {
+        setIsTransitionEnabled(true);
+      }, 50);
+    });
+
+    const handleResize = () => updateIndicator(activeFilter);
+    window.addEventListener('resize', handleResize);
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => updateIndicator(activeFilter));
+    }
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && filterBarRef.current) {
+      ro = new ResizeObserver(() => updateIndicator(activeFilter));
+      ro.observe(filterBarRef.current);
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      if (timerId) clearTimeout(timerId);
+      window.removeEventListener('resize', handleResize);
+      ro?.disconnect();
+    };
+  }, [activeFilter, updateIndicator]);
 
   const counts = useMemo(() => {
     const list = DATA.projects;
@@ -185,80 +275,46 @@ const Projects: React.FC = () => {
 
         {/* Filter Tabs (frontend-design functional density) */}
         <div
-          className={styles.filterBar}
+          ref={filterBarRef}
+          className={`${styles.filterBar} ${hasMounted ? styles.hasMounted : ''}`}
           role="tablist"
           aria-label="Filter projects"
         >
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'all'}
-            className={`${styles.filterBtn} ${activeFilter === 'all' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('all')}
-          >
-            <span>All</span>
-            <span className={styles.filterCount}>{counts.all}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'team'}
-            className={`${styles.filterBtn} ${activeFilter === 'team' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('team')}
-          >
-            <span>Team projects</span>
-            <span className={styles.filterCount}>{counts.team}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'fullstack'}
-            className={`${styles.filterBtn} ${activeFilter === 'fullstack' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('fullstack')}
-          >
-            <span>Fullstack</span>
-            <span className={styles.filterCount}>{counts.fullstack}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'frontend'}
-            className={`${styles.filterBtn} ${activeFilter === 'frontend' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('frontend')}
-          >
-            <span>Front-end</span>
-            <span className={styles.filterCount}>{counts.frontend}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'backend'}
-            className={`${styles.filterBtn} ${activeFilter === 'backend' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('backend')}
-          >
-            <span>Back-end</span>
-            <span className={styles.filterCount}>{counts.backend}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'ai-tools'}
-            className={`${styles.filterBtn} ${activeFilter === 'ai-tools' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('ai-tools')}
-          >
-            <span>AI &amp; Tools</span>
-            <span className={styles.filterCount}>{counts.aiTools}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeFilter === 'games'}
-            className={`${styles.filterBtn} ${activeFilter === 'games' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('games')}
-          >
-            <span>Games/Simulators</span>
-            <span className={styles.filterCount}>{counts.games}</span>
-          </button>
+          {/* Smooth sliding active indicator pill */}
+          <div
+            className={`${styles.activeIndicator} ${
+              isTransitionEnabled ? '' : styles.noTransition
+            }`}
+            style={{
+              transform: `translate3d(${indicator.x}px, ${indicator.y}px, 0)`,
+              width: `${indicator.width}px`,
+              height: `${indicator.height}px`,
+              opacity: indicator.opacity,
+            }}
+            aria-hidden="true"
+          />
+
+          {FILTER_TABS.map((tab) => {
+            const isActive = activeFilter === tab.id;
+            return (
+              <button
+                key={tab.id}
+                ref={(el) => {
+                  btnRefs.current[tab.id] = el;
+                }}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                className={`${styles.filterBtn} ${isActive ? styles.active : ''}`}
+                onClick={() => handleFilterSelect(tab.id)}
+              >
+                <span>{tab.label}</span>
+                <span className={styles.filterCount}>
+                  {counts[tab.countKey]}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

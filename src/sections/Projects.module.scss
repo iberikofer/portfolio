@@ -57,9 +57,51 @@
   box-shadow: $shadow-bevel;
   flex-wrap: wrap;
   justify-content: center;
+  position: relative;
 
   @media (max-width: 600px) {
     width: 100%;
+  }
+
+  // Fallback before hydration / position measurement
+  &:not(.hasMounted) .filterBtn.active {
+    background: rgba(155, 255, 0, 0.08);
+    border-color: rgba(155, 255, 0, 0.3);
+    box-shadow: $shadow-bevel;
+  }
+}
+
+.activeIndicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  border-radius: 7px;
+  background: linear-gradient(
+    180deg,
+    rgba(155, 255, 0, 0.12) 0%,
+    rgba(155, 255, 0, 0.05) 100%
+  );
+  border: 1px solid rgba(155, 255, 0, 0.32);
+  box-shadow:
+    $shadow-bevel,
+    0 0 16px rgba(155, 255, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, width, height;
+  transition:
+    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease;
+
+  &.noTransition {
+    transition: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
   }
 }
 
@@ -75,10 +117,13 @@
   border-radius: 7px;
   border: 1px solid transparent;
   cursor: pointer;
+  position: relative;
+  z-index: 2;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   transition:
     color $duration-micro $ease-out-expo,
     background-color $duration-micro $ease-out-expo,
-    border-color $duration-micro $ease-out-expo,
     transform $duration-micro $ease-out-expo;
 
   .filterCount {
@@ -88,9 +133,12 @@
     border-radius: 999px;
     background: rgba(119, 137, 171, 0.12);
     color: $text-muted;
+    transition:
+      background-color $duration-micro $ease-out-expo,
+      color $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover:not(.active) {
     color: $text-primary;
     background: rgba(119, 137, 171, 0.08);
   }
@@ -100,10 +148,7 @@
   }
 
   &.active {
-    background: rgba(155, 255, 0, 0.08);
     color: $accent-lime;
-    border-color: rgba(155, 255, 0, 0.3);
-    box-shadow: $shadow-bevel;
 
     .filterCount {
       background: rgba(155, 255, 0, 0.18);

@@ -5,37 +5,27 @@ import { DATA } from '../data/config';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return window.scrollY > 50;
-    }
-    return false;
-  });
-
-  const [scrollProgress, setScrollProgress] = useState<number>(() => {
-    if (typeof window !== 'undefined') {
-      const scrollHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      return scrollHeight > 0 ? (window.scrollY / scrollHeight) * 100 : 0;
-    }
-    return 0;
-  });
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const [scrollProgress, setScrollProgress] = useState<number>(0);
 
   useEffect(() => {
     let requestRunning: number | null = null;
 
-    const updateProgress = () => {
+    const updateScroll = () => {
       const scrollHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       const progress =
         scrollHeight > 0 ? (window.scrollY / scrollHeight) * 100 : 0;
       setScrollProgress(progress);
+      setIsScrolled(window.scrollY > 50);
       requestRunning = null;
     };
 
+    updateScroll();
+
     const handleScroll = () => {
       if (!requestRunning) {
-        requestRunning = window.requestAnimationFrame(updateProgress);
+        requestRunning = window.requestAnimationFrame(updateScroll);
       }
     };
 
@@ -44,16 +34,6 @@ const Header: React.FC = () => {
       window.removeEventListener('scroll', handleScroll);
       if (requestRunning) window.cancelAnimationFrame(requestRunning);
     };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (

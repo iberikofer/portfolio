@@ -23,12 +23,12 @@ A modern, high-performance personal portfolio website built with **Next.js 16 (A
 
 ## 🛠️ Tech Stack
 
-| Domain                   | Technologies                                                                  |
-| ------------------------ | ----------------------------------------------------------------------------- |
+| Domain                   | Technologies                                                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
 | **Core Framework**       | [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
-| **Styling & Design**     | [Tailwind CSS v4](https://tailwindcss.com/), SCSS Modules, CSS Variables, HTML5 Canvas 2D API |
-| **Form & Emailing**      | [EmailJS Browser SDK](https://www.emailjs.com/)                               |
-| **Linting & Formatting** | ESLint 9, [Prettier 3](https://prettier.io/), React Hooks Plugin              |
+| **Styling & Design**     | [Tailwind CSS v4](https://tailwindcss.com/), SCSS Modules, CSS Variables, HTML5 Canvas 2D API                                 |
+| **Form & Emailing**      | [EmailJS Browser SDK](https://www.emailjs.com/)                                                                               |
+| **Linting & Formatting** | ESLint 9, [Prettier 3](https://prettier.io/), React Hooks Plugin                                                              |
 
 ---
 

@@ -4,8 +4,17 @@ import React, { useRef, useState, useEffect, FormEvent } from 'react';
 import emailjs from '@emailjs/browser';
 import styles from './Contact.module.scss';
 import { DATA } from '../data/config';
+import { useButtonGlow } from '../hooks/useButtonGlow';
 
 const Contact: React.FC = () => {
+  const resumeBtnRef = useRef<HTMLAnchorElement>(null);
+  const resumeGlowRef = useRef<HTMLSpanElement>(null);
+  useButtonGlow(resumeBtnRef, resumeGlowRef);
+
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
+  const submitGlowRef = useRef<HTMLSpanElement>(null);
+  useButtonGlow(submitBtnRef, submitGlowRef);
+
   const form = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [submitState, setSubmitState] = useState<
@@ -200,8 +209,7 @@ const Contact: React.FC = () => {
     } catch (error: unknown) {
       console.error('EmailJS transmission error:', error);
       setSubmitState('error');
-      const isTimeout =
-        error instanceof Error && error.message === 'TIMEOUT';
+      const isTimeout = error instanceof Error && error.message === 'TIMEOUT';
       setStatusFeedback(
         isTimeout
           ? 'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.'
@@ -246,12 +254,16 @@ const Contact: React.FC = () => {
               <h3 className={styles.roleTitle}>FullStack-JS Developer</h3>
             </div>
             <a
+              ref={resumeBtnRef}
               href="resume.pdf"
               target="_blank"
               rel="noreferrer"
               className={styles.resumeBtn}
               title="Download Yaroslav Sych's Resume (PDF)"
             >
+              <span className={styles.btnGlow} aria-hidden="true">
+                <span ref={resumeGlowRef} className={styles.glowSpot} />
+              </span>
               <svg
                 className={styles.resumeBtnIcon}
                 viewBox="0 0 24 24"
@@ -494,6 +506,7 @@ const Contact: React.FC = () => {
 
             <div className={styles.formFooter}>
               <button
+                ref={submitBtnRef}
                 type="submit"
                 className={`${styles.submitBtn} ${
                   submitState === 'sending' ? styles.btnSending : ''
@@ -507,6 +520,11 @@ const Contact: React.FC = () => {
                 }
                 aria-live="polite"
               >
+                {/* Dynamic cursor-following glow effect */}
+                <span className={styles.btnGlow} aria-hidden="true">
+                  <span ref={submitGlowRef} className={styles.glowSpot} />
+                </span>
+
                 {/* Shockwave expanding ring upon success */}
                 {submitState === 'success' && (
                   <span className={styles.shockwaveRing} aria-hidden="true" />

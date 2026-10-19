@@ -1,18 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs>
-    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0c1017"/>
-      <stop offset="100%" stop-color="#000000"/>
-    </radialGradient>
-  </defs>
-  <!-- Deep Black Disc with Electric Lime Outer Ring -->
-  <circle cx="50" cy="50" r="46" fill="url(#bg)" stroke="#9BFF00" stroke-width="4.5"/>
-  <!-- Steel Slate Cyber Orbit Accent -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#7789AB" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.45"/>
-  <!-- Satellite Orbit Dot -->
-  <circle cx="50" cy="9.5" r="2.5" fill="#9BFF00"/>
-  <!-- High-Contrast Electric Lime Monogram Y -->
-  <text x="50" y="69" text-anchor="middle" fill="#9BFF00" 
-        font-family="system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, sans-serif" 
-        font-weight="900" font-size="58px">Y</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- High-contrast deep black disc with razor-sharp electric lime boundary -->
+  <circle cx="16" cy="16" r="14" fill="#05070a" stroke="#9BFF00" stroke-width="2"/>
+  <!-- Pixel-grid-aligned geometric monogram Y (100% integer coordinates on 32x32 grid) -->
+  <path d="M 8 8 L 13 8 L 16 12 L 19 8 L 24 8 L 18 16 L 18 24 L 14 24 L 14 16 Z" fill="#9BFF00"/>
 </svg>

@@ -5,8 +5,13 @@ import { DATA } from '../data/config';
 import styles from './Hero.module.scss';
 import developer from '../assets/yaroslav.png';
 import { WaveDivider } from '../components/WaveDivider';
+import { useButtonGlow } from '../hooks/useButtonGlow';
 
 const Hero: React.FC = () => {
+  const viewProjectsRef = useRef<HTMLAnchorElement>(null);
+  const viewProjectsGlowRef = useRef<HTMLSpanElement>(null);
+  useButtonGlow(viewProjectsRef, viewProjectsGlowRef);
+
   const visualRef = useRef<HTMLDivElement>(null);
   const orbitRingRef = useRef<HTMLDivElement>(null);
   const orbitRingSecRef = useRef<HTMLDivElement>(null);
@@ -348,9 +353,15 @@ const Hero: React.FC = () => {
 
             {/* Primary Action Buttons */}
             <div className={`${styles.actions} ${styles.animateFadeIn}`}>
-              <a href="#projects" className={styles.primaryButton}>
+              <a
+                ref={viewProjectsRef}
+                href="#projects"
+                className={styles.primaryButton}
+              >
+                <span className={styles.btnGlow} aria-hidden="true">
+                  <span ref={viewProjectsGlowRef} className={styles.glowSpot} />
+                </span>
                 <span className={styles.buttonLabel}>View Projects</span>
-                <span className={styles.buttonGlowSweep} aria-hidden="true" />
                 <svg
                   className={styles.buttonIcon}
                   viewBox="0 0 24 24"

@@ -177,6 +177,12 @@
     pointer-events: none;
   }
 
+  .resumeBtnIcon,
+  span:not(.btnGlow):not(.glowSpot) {
+    position: relative;
+    z-index: 2;
+  }
+
   .resumeBtnIcon {
     width: 17px;
     height: 17px;
@@ -214,6 +220,38 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+// Dynamic cursor-following glow for bright buttons (Resume & Submit)
+.btnGlow {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glowSpot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150px;
+  height: 150px;
+  margin-top: -75px;
+  margin-left: -75px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.48) 35%,
+    rgba(180, 255, 50, 0.28) 65%,
+    transparent 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition: opacity 0.25s ease;
 }
 
 // Tactile Contact Cards
@@ -578,6 +616,8 @@
     color 0.2s ease;
 
   .btnContent {
+    position: relative;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
     justify-content: center;
