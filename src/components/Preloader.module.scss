@@ -4,18 +4,18 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background-color: $bg-dark;
+  background-color: $bg-canvas;
   cursor: pointer;
   transition:
-    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.45s $ease-out-expo,
+    transform 0.45s $ease-out-expo,
+    filter 0.45s $ease-out-expo,
     visibility 0.45s;
 
   &.exiting {
     opacity: 0;
-    transform: scale(1.04);
-    filter: blur(8px);
+    transform: scale(1.03);
+    filter: blur(6px);
     pointer-events: none;
     visibility: hidden;
   }
@@ -30,8 +30,8 @@
   flex-direction: column;
   align-items: center;
   width: 90%;
-  max-width: 680px;
-  gap: 14px;
+  max-width: 640px;
+  gap: 16px;
 
   @media (max-width: 480px) {
     top: calc(50vh - 140px);
@@ -40,36 +40,34 @@
 }
 
 .skipHintAbove {
-  font-family: 'Fira Code', 'Courier New', Courier, monospace;
-  font-size: 0.85rem;
-  color: rgba($mint-neon, 0.7);
-  letter-spacing: 2px;
+  font-family: $font-mono;
+  font-size: 0.76rem;
+  color: $text-muted;
+  letter-spacing: 0.15em;
   font-weight: 500;
   text-transform: uppercase;
-  transition: all 0.3s ease;
-  animation: pulseHint 2.2s infinite ease-in-out;
+  transition: color $duration-micro $ease-out-expo;
+  animation: pulseHint 2.4s infinite ease-in-out;
 
   &:hover {
-    color: $mint-neon;
-    text-shadow: 0 0 12px rgba($mint-neon, 0.7);
+    color: $accent-lime;
   }
 }
 
 .terminalCard {
   width: 100%;
-  background: rgba(13, 27, 42, 0.92);
-  border: 1px solid rgba(100, 255, 188, 0.25);
+  background: rgba(10, 13, 18, 0.94);
+  border: 1px solid $border-hairline;
   border-radius: 12px;
   box-shadow:
-    0 0 35px rgba(100, 255, 188, 0.12),
-    0 10px 40px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(16px);
+    $shadow-bevel,
+    0 20px 50px -10px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(155, 255, 0, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   overflow: hidden;
   position: relative;
-  font-family: 'Fira Code', 'Courier New', Courier, monospace;
-  transition:
-    height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.3s ease;
+  font-family: $font-mono;
 }
 
 .terminalHeader {
@@ -77,8 +75,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 18px;
-  background: rgba(10, 25, 47, 0.8);
-  border-bottom: 1px solid rgba(100, 255, 188, 0.15);
+  background: rgba(4, 5, 8, 0.85);
+  border-bottom: 1px solid $border-hairline;
 }
 
 .windowDots {
@@ -93,52 +91,48 @@
 }
 
 .dot {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
 
   &.red {
-    background: #ff5f56;
-    box-shadow: 0 0 6px rgba(255, 95, 86, 0.4);
+    background: #ef4444;
   }
   &.yellow {
-    background: #ffbd2e;
-    box-shadow: 0 0 6px rgba(255, 189, 46, 0.4);
+    background: #eab308;
   }
   &.green {
-    background: #27c93f;
-    box-shadow: 0 0 6px rgba(39, 201, 63, 0.4);
+    background: $accent-lime;
+    box-shadow: 0 0 6px rgba(155, 255, 0, 0.4);
   }
 }
 
 .terminalTitle {
-  font-size: 0.82rem;
-  color: $text-dim;
-  letter-spacing: 0.5px;
+  font-size: 0.78rem;
+  color: $text-muted;
+  letter-spacing: 0.05em;
 }
 
 .terminalBody {
-  padding: 20px 20px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.5;
-  transition: padding 0.3s ease;
 
   @media (max-width: 600px) {
-    padding: 16px 14px;
-    font-size: 0.82rem;
+    padding: 16px 16px;
+    font-size: 0.8rem;
   }
 }
 
 .terminalLine {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
   gap: 8px;
-  animation: lineFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: lineFadeIn 0.35s $ease-out-expo forwards;
 
   @media (max-width: 480px) {
     flex-wrap: wrap;
@@ -146,36 +140,35 @@
 }
 
 .prefix {
-  color: #7982a9;
+  color: $accent-lime;
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
 }
 
 .arrow {
-  color: $mint-neon;
+  color: $accent-slate;
   font-weight: bold;
 }
 
 .text {
-  color: $text-main;
+  color: $text-secondary;
 }
 
 .highlight {
-  color: $mint-neon;
-  font-weight: bold;
-  text-shadow: 0 0 8px rgba($mint-neon, 0.4);
+  color: $text-primary;
+  font-weight: 600;
 }
 
 .status {
   margin-left: auto;
   flex-shrink: 0;
-  color: $mint-neon;
-  font-weight: bold;
-  font-size: 0.82rem;
-  background: rgba($mint-neon, 0.1);
+  color: $accent-lime;
+  font-weight: 600;
+  font-size: 0.75rem;
+  background: rgba(155, 255, 0, 0.1);
   padding: 2px 8px;
   border-radius: 4px;
-  border: 1px solid rgba($mint-neon, 0.2);
+  border: 1px solid rgba(155, 255, 0, 0.3);
 }
 
 .cursorLine {
@@ -186,38 +179,38 @@
 }
 
 .prompt {
-  color: $mint-neon;
+  color: $accent-lime;
   font-weight: bold;
 }
 
 .cursor {
-  width: 9px;
-  height: 17px;
-  background: $mint-neon;
+  width: 8px;
+  height: 16px;
+  background: $accent-lime;
   display: inline-block;
   animation: blink 0.9s steps(2, start) infinite;
-  box-shadow: 0 0 8px rgba($mint-neon, 0.6);
+  box-shadow: 0 0 8px $accent-lime;
 }
 
 .progressBarWrapper {
   width: 100%;
-  height: 3px;
-  background: rgba(100, 255, 188, 0.1);
+  height: 2px;
+  background: rgba(119, 137, 171, 0.1);
   overflow: hidden;
 }
 
 .progressBar {
   height: 100%;
   width: 0;
-  background: $mint-neon;
-  box-shadow: 0 0 10px $mint-neon;
+  background: linear-gradient(90deg, $accent-slate, $accent-lime);
+  box-shadow: 0 0 10px rgba(155, 255, 0, 0.6);
   animation: progressFill 2.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 @keyframes lineFadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;

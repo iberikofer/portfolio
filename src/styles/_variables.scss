@@ -1,13 +1,75 @@
-// Colors
-$bg-dark: #0a192f;
-$bg-light: #112240;
-$mint-neon: #64ffbc;
-$text-main: #ccd6f6;
-$text-dim: #767f98;
-$error: #ff4d4d;
-$neon-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+// ==============================================================================
+// Design System Tokens — Palette: #000000 (Black), #9BFF00 (Lime), #7789AB (Slate)
+// ==============================================================================
 
-// Fonts
-$font-main: 'Inter', sans-serif;
+// Base & Surface Palette
+$bg-canvas: #000000; // Deep Pure Black
+$bg-canvas-subtle: #07090c;
+$bg-card: rgba(12, 15, 20, 0.78);
+$bg-card-hover: rgba(18, 22, 30, 0.92);
+$bg-surface: #0b0e14;
+$bg-surface-elevated: #11151e;
+$bg-glass: rgba(10, 13, 18, 0.75);
+$bg-glass-heavy: rgba(4, 5, 8, 0.88);
 
-$container-width: 1300px;
+// 1. Primary Vibrant Accent: Electric Lime (#9BFF00)
+// Purpose: Primary interactive CTAs, live indicators, hover states, glows, focus rings
+$accent-lime: #9bff00;
+$accent-lime-hover: #b4ff33;
+$accent-lime-subtle: rgba(155, 255, 0, 0.1);
+$accent-lime-glow: rgba(155, 255, 0, 0.35);
+$accent-lime-border: rgba(155, 255, 0, 0.3);
+
+// 2. Secondary & Structural Accent: Steel Slate (#7789AB)
+// Purpose: Structural badges, timeline rails, subtle borders, metadata, secondary icons
+$accent-slate: #7789ab;
+$accent-slate-hover: #95a5c5;
+$accent-slate-subtle: rgba(119, 137, 171, 0.12);
+$accent-slate-glow: rgba(119, 137, 171, 0.25);
+$accent-slate-border: rgba(119, 137, 171, 0.22);
+
+// System Feedback
+$error: #ef4444;
+$error-subtle: rgba(239, 68, 68, 0.12);
+
+// Text Hierarchy (WCAG AAA/AA Compliant)
+$text-primary: #ffffff; // Crisp Pure White display
+$text-secondary: #a6b4cc; // Cool Slate readable body
+$text-muted: #7789ab; // Steel Slate metadata (#7789AB)
+$text-subtle: #505c73; // Darker slate
+
+// Hairline Borders & Shadows
+$border-hairline: rgba(119, 137, 171, 0.16);
+$border-hairline-subtle: rgba(255, 255, 255, 0.06);
+$border-hover: rgba(155, 255, 0, 0.4);
+$border-slate-hover: rgba(119, 137, 171, 0.35);
+
+// Inset Highlights for Physical Tactile Depth (David Sanders / Impeccable)
+$shadow-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+$shadow-bevel-heavy: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+$shadow-card:
+  0 12px 32px -10px rgba(0, 0, 0, 0.8),
+  0 0 1px 1px rgba(119, 137, 171, 0.08);
+$shadow-card-hover:
+  0 20px 40px -15px rgba(0, 0, 0, 0.9),
+  0 0 25px rgba(155, 255, 0, 0.1);
+
+// Typography
+$font-main:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  sans-serif;
+$font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+// Layout
+$container-width: 1240px;
+
+// Emil Kowalski Motion Curves & Physics
+$ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-tactile: cubic-bezier(0.2, 0.8, 0.2, 1);
+$duration-micro: 0.16s;
+$duration-medium: 0.28s;
+$duration-slow: 0.4s;

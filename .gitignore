@@ -2,6 +2,7 @@
 node_modules/
 .pnp
 .pnp.js
+package-lock.json
 
 # Production build
 dist/
@@ -38,6 +39,7 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+.agents/
 
 # OS metadata
 .DS_Store

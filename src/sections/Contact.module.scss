@@ -1,318 +1,435 @@
 @use '../styles/variables' as *;
 
-input:invalid,
-textarea:invalid {
-  border-color: rgba($error, 0.5);
-}
-
 .container {
-  padding: 100px 0;
-  color: $text-main;
-
-  @media (max-width: 768px) {
-    padding: 70px 0;
-  }
-
-  @media (max-width: 480px) {
-    padding: 50px 0;
-  }
-
-  @media (min-width: 2560px) {
-    padding: 140px 0;
-  }
+  padding: 80px 0 100px;
+  position: relative;
+  scroll-margin-top: 60px;
 }
 
 .wrapper {
-  max-width: 1000px;
+  max-width: 1040px;
   margin: 0 auto;
-  display: flex;
-  gap: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
   align-items: flex-start;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 0 20px;
-    align-items: stretch;
-    gap: 36px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 16px;
-    gap: 28px;
-  }
-
-  @media (min-width: 2560px) {
-    max-width: 1400px;
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
 }
 
+// Left Info Column
 .infoSide {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
-  .status {
-    color: $mint-neon;
-    font-family: $font-main;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px;
+  background: rgba(155, 255, 0, 0.06);
+  border: 1px solid rgba(155, 255, 0, 0.25);
+  border-radius: 999px;
+  margin-bottom: 20px;
+  font-family: $font-mono;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: $accent-lime;
+  width: fit-content;
+  box-shadow: $shadow-bevel;
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      background: $mint-neon;
-      border-radius: 50%;
-      display: inline-block;
-      box-shadow:
-        0 0 5px $mint-neon,
-        0 0 10px $mint-neon;
-      animation: statusPulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
-    }
-  }
-
-  @keyframes statusPulse {
-    0% {
-      transform: scale(1);
-      box-shadow:
-        0 0 5px $mint-neon,
-        0 0 10px $mint-neon;
-    }
-    50% {
-      transform: scale(1.2);
-      box-shadow:
-        0 0 12px $mint-neon,
-        0 0 20px rgba($mint-neon, 0.4);
-    }
-    100% {
-      transform: scale(1);
-      box-shadow:
-        0 0 5px $mint-neon,
-        0 0 10px $mint-neon;
-    }
-  }
-
-  .title {
-    font-size: clamp(28px, 4vw, 40px);
-    margin-bottom: 20px;
-    color: $text-main;
-  }
-
-  .description {
-    color: $text-dim;
-    line-height: 1.7;
-    margin-bottom: 30px;
-    text-align: left;
-  }
-
-  .contactList {
-    list-style: none;
-    padding: 0;
-    margin: 40px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-
-    li {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      transition: transform 0.3s ease;
-
-      span {
-        color: $mint-neon;
-      }
-
-      > a {
-        color: $text-main;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        display: inline-block;
-
-        &:hover,
-        &:focus-visible {
-          color: $mint-neon;
-        }
-
-        &:focus-visible {
-          outline: 2px solid $mint-neon;
-          outline-offset: 4px;
-          border-radius: 2px;
-        }
-
-        &:active {
-          transform: translateY(1px);
-        }
-      }
-    }
-  }
-
-  .contactIcon {
-    width: 45px;
-    height: 45px;
-    background: $bg-light;
-    border-radius: 8px;
+  .radarWrapper {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $text-dim;
-    transition: all 0.3s ease;
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+    width: 8px;
+    height: 8px;
   }
 
-  .contactText {
-    span {
-      display: block;
-      color: $mint-neon;
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-
-    a,
-    p {
-      color: $text-main;
-      text-decoration: none;
-      font-size: 16px;
-      margin: 0;
-      transition: all 0.3s ease;
-      display: inline-block;
-    }
-
-    a:hover,
-    a:focus-visible {
-      color: $mint-neon;
-    }
-
-    a:focus-visible {
-      outline: 2px solid $mint-neon;
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    a:active {
-      transform: translateY(1px);
-    }
+  .radarDot {
+    width: 6px;
+    height: 6px;
+    background-color: $accent-lime;
+    border-radius: 50%;
+    box-shadow: 0 0 6px $accent-lime;
   }
 
-  .socials {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-
-    a {
-      color: $text-dim;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      line-height: 0;
-      position: relative;
-      transition: color 0.3s ease;
-
-      svg {
-        width: 22px;
-        height: 22px;
-        flex-shrink: 0;
-        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-        pointer-events: none;
-      }
-
-      &:hover {
-        color: $mint-neon;
-
-        svg {
-          transform: translateY(-3px);
-        }
-      }
-
-      &:focus-visible {
-        outline: 2px solid $mint-neon;
-        outline-offset: 4px;
-        border-radius: 4px;
-        color: $mint-neon;
-
-        svg {
-          transform: translateY(-3px);
-        }
-      }
-
-      &:active {
-        svg {
-          transform: translateY(1px);
-        }
-      }
-    }
+  .radarPing {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $accent-lime;
+    opacity: 0.6;
+    animation: contactPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }
 
-.formSide {
-  flex: 1.2;
-  background: $bg-light;
-  padding: 26px 28px;
-  border-radius: 8px;
-  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+@keyframes contactPing {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.title {
+  font-size: clamp(26px, 3.5vw, 38px);
+  color: $text-primary;
+  margin: 0 0 14px;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.description {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: $text-muted;
+  margin-bottom: 24px;
+}
+
+// FullStack-JS Developer Resume Card
+.resumeCard {
+  background: $bg-card;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(155, 255, 0, 0.25);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  box-shadow:
+    $shadow-bevel,
+    0 8px 24px -4px rgba(0, 0, 0, 0.6),
+    0 0 18px rgba(155, 255, 0, 0.06);
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.resumeRoleInfo {
   display: flex;
   flex-direction: column;
+}
 
-  @media (max-width: 480px) {
-    padding: 20px 16px;
+.roleLabel {
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  color: $accent-slate;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 3px;
+}
+
+.roleTitle {
+  font-size: 1.05rem;
+  color: $text-primary;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.resumeBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: $accent-lime;
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.84rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 4px 14px -2px $accent-lime-glow;
+  cursor: pointer;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo;
+
+  // Anti-jitter hit area buffer: stays under cursor when button shifts upward
+  &::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    bottom: -10px;
+    left: -4px;
+    right: -4px;
+    pointer-events: auto;
   }
+
+  // Prevent event fluttering across child nodes
+  * {
+    pointer-events: none;
+  }
+
+  .resumeBtnIcon {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    transition: transform $duration-micro $ease-out-expo;
+  }
+
+  &:hover {
+    background: $accent-lime-hover;
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 #ffffff,
+      0 10px 24px -3px rgba(155, 255, 0, 0.5);
+
+    .resumeBtnIcon {
+      transform: translateY(-2px);
+    }
+  }
+
+  &:active {
+    transform: scale(0.97) translateY(0);
+    box-shadow: 0 2px 8px -2px $accent-lime-glow;
+
+    .resumeBtnIcon {
+      transform: translateY(0);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 500px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// Tactile Contact Cards
+.contactCards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.contactItem,
+.contactItemStatic {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: $bg-card;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $border-hairline;
+  border-radius: 10px;
+  box-shadow: $shadow-bevel;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+}
+
+.contactItem {
+  &:hover {
+    transform: translateY(-2px);
+    border-color: $border-hover;
+    background: $bg-card-hover;
+
+    .itemVal {
+      color: $text-primary;
+    }
+  }
+
+  &:active {
+    transform: scale(0.98) translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+.itemIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(119, 137, 171, 0.08);
+  border: 1px solid $border-hairline;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $accent-lime;
+  flex-shrink: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemLabel {
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+}
+
+.itemVal {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: $text-secondary;
+  transition: color $duration-micro $ease-out-expo;
+}
+
+// Socials
+.socialsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.socialsHeading {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.socialBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: $bg-card;
+  border: 1px solid $border-hairline;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  box-shadow: $shadow-bevel;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: $accent-lime;
+    border-color: $border-hover;
+    background: rgba(155, 255, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: scale(0.95) translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+// Form Container
+.formSide {
+  background: $bg-card;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid $border-hairline;
+  border-radius: 14px;
+  padding: 32px 36px;
+  box-shadow: $shadow-card, $shadow-bevel;
+
+  @media (max-width: 600px) {
+    padding: 24px 20px;
+  }
+}
+
+.formHeader {
+  margin-bottom: 24px;
 }
 
 .formTitle {
-  color: $text-main;
-  font-size: 20px;
-  margin: 0 0 20px 0;
-  font-weight: bold;
-  text-align: center;
+  font-size: 1.25rem;
+  color: $text-primary;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
 
-  @media (max-width: 480px) {
-    font-size: 18px;
-  }
+.formSubtitle {
+  font-size: 0.88rem;
+  color: $text-muted;
+  margin: 0;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-
-  @media (max-width: 600px) {
-    gap: 10px;
-  }
+  gap: 18px;
 }
 
 .inputRow {
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 
   @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 10px;
+    grid-template-columns: 1fr;
   }
 }
 
 .field {
-  flex: 1;
   position: relative;
+  width: 100%;
 
   input,
   textarea {
     width: 100%;
-    background: $bg-dark;
-    border: 1px solid rgba($mint-neon, 0.1);
-    border-radius: 4px;
-    padding: 15px;
-    color: $text-main;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid $border-hairline;
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: $text-primary;
     font-family: inherit;
+    font-size: 0.92rem;
     line-height: 1.5;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+    transition:
+      border-color $duration-micro $ease-out-expo,
+      box-shadow $duration-micro $ease-out-expo,
+      background-color $duration-micro $ease-out-expo;
 
     &::placeholder {
       color: transparent;
@@ -320,127 +437,110 @@ textarea:invalid {
 
     &:focus {
       outline: none;
-      border-color: $mint-neon;
-      box-shadow: 0 0 5px rgba($mint-neon, 0.2);
+      border-color: $accent-lime;
+      background: rgba(0, 0, 0, 0.95);
+      box-shadow:
+        inset 0 1px 2px rgba(0, 0, 0, 0.6),
+        0 0 0 3px rgba(155, 255, 0, 0.15);
     }
   }
 
   label {
     position: absolute;
-    left: 11px;
-    top: 15px;
-    color: rgba($text-dim, 0.7);
+    left: 14px;
+    top: 14px;
+    color: $text-muted;
     pointer-events: none;
+    font-size: 0.9rem;
+    line-height: 1;
     transition:
-      transform 0.25s ease,
-      color 0.25s ease;
+      transform $duration-micro $ease-out-expo,
+      color $duration-micro $ease-out-expo,
+      font-size $duration-micro $ease-out-expo;
     padding: 0 4px;
-    background-color: $bg-dark;
-    line-height: 1.5;
-    font-size: 16px;
+    background: transparent;
     transform-origin: left top;
-    will-change: transform, color;
   }
 
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label,
   textarea:focus ~ label,
   textarea:not(:placeholder-shown) ~ label {
-    transform: translate(0, -24px) scale(0.75);
-    color: $mint-neon;
-    line-height: 1;
-    border-radius: 2px;
-  }
-
-  input {
-    transition:
-      background-color 0.3s ease,
-      border-color 0.1s ease,
-      box-shadow 0.1s ease,
-      color 0.3s ease;
+    transform: translateY(-24px) scale(0.82);
+    color: $accent-lime;
+    font-family: $font-mono;
+    font-weight: 500;
   }
 
   textarea {
     resize: none;
-    min-height: 90px;
-    max-height: 400px;
-    overflow: hidden;
-    transition:
-      background-color 0.3s ease,
-      border-color 0.1s ease,
-      box-shadow 0.1s ease,
-      color 0.3s ease;
-  }
-}
-
-.submitBtn {
-  align-self: center;
-  background: transparent;
-  color: $mint-neon;
-  border: 1px solid $mint-neon;
-  border-radius: 4px;
-  padding: 15px 30px;
-  font-family: $font-main;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transform: translateY(0);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 150px;
-  height: 50px;
-
-  .hideText {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:focus-visible {
-    background: rgba($mint-neon, 0.1);
-    box-shadow: 0 0 15px rgba($mint-neon, 0.3);
-    transform: translateY(-3px);
-    outline: 2px solid $mint-neon;
-    outline-offset: 4px;
-  }
-
-  &.loading {
-    cursor: not-allowed;
-    background: rgba($mint-neon, 0.05);
-    color: transparent;
+    min-height: 100px;
+    max-height: 380px;
   }
 }
 
 .formFooter {
-  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  align-self: center;
-  width: fit-content;
-  margin: 10px 0 0 0;
+  gap: 14px;
+  margin-top: 6px;
+}
 
-  &:hover .submitBtn {
-    background: rgba($mint-neon, 0.1);
-    box-shadow: 0 0 15px rgba($mint-neon, 0.3);
-    transform: translateY(-3px);
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: $accent-lime;
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.94rem;
+  padding: 13px 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 10px 20px -5px $accent-lime-glow;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  &:hover:not(:disabled) {
+    background: $accent-lime-hover;
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 #ffffff,
+      0 14px 28px -4px rgba(155, 255, 0, 0.45);
   }
 
-  &:active .submitBtn,
-  .submitBtn:active {
-    transform: translateY(1px);
-    background: rgba($mint-neon, 0.25);
-    box-shadow: 0 0 5px rgba($mint-neon, 0.2);
+  &:active:not(:disabled) {
+    transform: scale(0.97) translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 3px;
+  }
+
+  &.loading {
+    opacity: 0.75;
+    cursor: wait;
   }
 }
 
+.spinnerWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .spinner {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba($mint-neon, 0.3);
-  border-top: 2px solid $mint-neon;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: #000000;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -454,46 +554,44 @@ textarea:invalid {
   }
 }
 
-.statusMessage {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  opacity: 0;
-  margin-bottom: 10px;
-  transform: translateX(-50%) translateY(-20px);
-  transition:
-    opacity 0.4s cubic-bezier(0.645, 0.045, 0.355, 1),
-    transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1),
-    color 0s 0.4s;
-  font-size: 13px;
-  font-family: $font-main;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 10;
+// Status Feedback Alert
+.statusAlert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  animation: alertFadeIn 0.25s $ease-out-expo;
+}
 
-  &.showSuccess,
-  &.showError {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    transition:
-      opacity 0.4s cubic-bezier(0.645, 0.045, 0.355, 1),
-      transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1),
-      color 0s 0s;
-  }
+.alertSuccess {
+  background: rgba(155, 255, 0, 0.1);
+  border: 1px solid rgba(155, 255, 0, 0.3);
+  color: #b4ff33;
 
-  &.showSuccess {
-    color: $mint-neon;
-  }
-
-  &.showError {
-    color: $error;
+  .alertIcon {
+    color: $accent-lime;
+    font-weight: bold;
   }
 }
 
-@keyframes fadeIn {
+.alertError {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+
+  .alertIcon {
+    color: $error;
+    font-weight: bold;
+  }
+}
+
+@keyframes alertFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;

@@ -100,9 +100,10 @@ const Header: React.FC = () => {
       </div>
       <nav className={`${styles.nav} container`}>
         <div className={styles.logo}>
-          <span>{displayedText}</span>
+          <span className={styles.logoPrefix}>~/</span>
+          <span className={styles.logoName}>{displayedText}</span>
           <span className={styles.cursor} aria-hidden="true">
-            |
+            _
           </span>
         </div>
         <ul className={styles.menu}>

@@ -46,9 +46,11 @@ export const WaveDivider: React.FC = () => {
 
     const layers: LayerConfig[] = [
       {
-        strokeColor: 'rgba(100, 255, 188, 0.12)',
-        fillColor: 'rgba(100, 255, 188, 0.015)',
-        lineWidth: 0.9,
+        strokeColor: 'rgba(119, 137, 171, 0.45)',
+        fillColor: 'rgba(119, 137, 171, 0.04)',
+        lineWidth: 1.2,
+        glowColor: 'rgba(119, 137, 171, 0.3)',
+        glowBlur: 4,
         getTopY: (x, t, cy) =>
           cy -
           5 +
@@ -57,9 +59,11 @@ export const WaveDivider: React.FC = () => {
         getThickness: (x, t) => 34 + Math.cos(x * 0.0025 + t * 0.28 + 3.0) * 10,
       },
       {
-        strokeColor: 'rgba(100, 255, 188, 0.25)',
-        fillColor: 'rgba(100, 255, 188, 0.03)',
-        lineWidth: 1.2,
+        strokeColor: 'rgba(155, 255, 0, 0.55)',
+        fillColor: 'rgba(155, 255, 0, 0.045)',
+        lineWidth: 1.5,
+        glowColor: 'rgba(155, 255, 0, 0.35)',
+        glowBlur: 6,
         getTopY: (x, t, cy) =>
           cy -
           9 +
@@ -68,11 +72,11 @@ export const WaveDivider: React.FC = () => {
         getThickness: (x, t) => 30 + Math.cos(x * 0.0033 + t * 0.4 + 2.0) * 8,
       },
       {
-        strokeColor: 'rgba(100, 255, 188, 0.45)',
-        fillColor: 'rgba(100, 255, 188, 0.05)',
-        lineWidth: 1.5,
-        glowColor: 'rgba(100, 255, 188, 0.2)',
-        glowBlur: 4,
+        strokeColor: 'rgba(119, 137, 171, 0.85)',
+        fillColor: 'rgba(119, 137, 171, 0.08)',
+        lineWidth: 1.8,
+        glowColor: 'rgba(119, 137, 171, 0.6)',
+        glowBlur: 8,
         getTopY: (x, t, cy) =>
           cy -
           13 +
@@ -81,11 +85,11 @@ export const WaveDivider: React.FC = () => {
         getThickness: (x, t) => 27 + Math.sin(x * 0.0045 - t * 0.52 + 0.9) * 8,
       },
       {
-        strokeColor: 'rgba(100, 255, 188, 0.75)',
-        fillColor: 'rgba(100, 255, 188, 0.08)',
-        lineWidth: 2.0,
-        glowColor: 'rgba(100, 255, 188, 0.5)',
-        glowBlur: 8,
+        strokeColor: 'rgba(155, 255, 0, 0.95)',
+        fillColor: 'rgba(155, 255, 0, 0.09)',
+        lineWidth: 2.2,
+        glowColor: 'rgba(155, 255, 0, 0.75)',
+        glowBlur: 10,
         getTopY: (x, t, cy) =>
           cy -
           16 +

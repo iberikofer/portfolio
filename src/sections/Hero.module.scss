@@ -4,143 +4,361 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: $bg-dark;
+  background-color: $bg-canvas;
   position: relative;
   width: 100%;
+  z-index: 10;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding-top: 80px;
+
+  @media (max-width: 768px) {
+    padding-top: 60px;
+  }
+}
+
+// Atmospheric Radial Glow Cone (Slate #7789AB + Lime #9BFF00)
+.ambientGlow {
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(119, 137, 171, 0.16) 0%,
+    rgba(155, 255, 0, 0.06) 45%,
+    transparent 70%
+  );
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+
+  @media (max-width: 900px) {
+    top: 5%;
+    right: 50%;
+    transform: translateX(50%);
+    width: 380px;
+    height: 380px;
+    opacity: 0.8;
+  }
 }
 
 .heroInner {
   flex: 1;
   display: flex;
   align-items: center;
-  width: 100%;
-  padding-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
-.container {
+.layout {
   display: flex;
   align-items: center;
-  gap: 5%;
+  justify-content: space-between;
+  gap: 48px;
   width: 100%;
 
   @media (max-width: 900px) {
     flex-direction: column-reverse;
     gap: 40px;
     text-align: center;
-    padding-top: 100px;
-    padding-bottom: 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding-top: 90px;
-    padding-bottom: 20px;
+    padding-top: 20px;
   }
 }
 
-.message {
-  flex: 1;
+.content {
+  flex: 1.2;
+  max-width: 640px;
 
   @media (max-width: 900px) {
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
+  }
+}
+
+// Status Pill with Electric Lime Radar Dot
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: rgba(155, 255, 0, 0.06);
+  border: 1px solid rgba(155, 255, 0, 0.25);
+  border-radius: 999px;
+  margin-bottom: 24px;
+  box-shadow: $shadow-bevel;
+  width: fit-content;
+
+  .radarWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+  }
+
+  .radarDot {
+    width: 7px;
+    height: 7px;
+    background-color: $accent-lime;
+    border-radius: 50%;
+    box-shadow: 0 0 8px $accent-lime;
+  }
+
+  .radarPing {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: $accent-lime;
+    opacity: 0.6;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .statusText {
+    font-size: 0.78rem;
+    font-family: $font-mono;
+    font-weight: 500;
+    color: $accent-lime;
+    letter-spacing: 0.02em;
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
   }
 }
 
 .intro {
-  color: $mint-neon;
-  font-family: 'Courier New', monospace;
-  margin-bottom: 1rem;
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-  }
+  font-family: $font-mono;
+  font-size: 0.9rem;
+  color: $accent-slate;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .name {
-  font-size: clamp(32px, 8vw, 80px);
-  color: $text-main;
-  margin: 0;
-}
-
-.title {
-  font-size: clamp(22px, 6vw, 60px);
-  color: $text-dim;
-  margin-top: 5px;
+  font-size: clamp(42px, 7vw, 84px);
+  color: $text-primary;
+  margin: 0 0 20px 0;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 800;
 }
 
 .bio {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: $text-secondary;
+  margin-bottom: 28px;
   max-width: 540px;
-  margin-top: 20px;
-  color: $text-dim;
-  text-align: justify;
-  text-align-last: left;
 
   @media (max-width: 900px) {
+    font-size: 0.98rem;
     text-align: center;
-    text-align-last: center;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
   }
 }
 
-.cta {
-  display: inline-block;
+// Metrics Bar
+.metricsBar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+  background: $bg-card;
+  border: 1px solid $border-hairline;
+  border-radius: 10px;
+  box-shadow: $shadow-bevel;
+  width: fit-content;
+  margin-bottom: 34px;
 
-  &:hover .button {
-    background-color: rgba(100, 255, 218, 0.1);
-    transform: translateY(-3px);
+  @media (max-width: 480px) {
+    gap: 12px;
+    padding: 10px 14px;
+    width: 100%;
+    justify-content: space-around;
   }
 
-  &:active .button,
-  .button:active {
-    transform: translateY(1px);
-    background-color: rgba(100, 255, 218, 0.25);
-    box-shadow: 0 0 5px rgba($mint-neon, 0.2);
+  .metricItem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @media (max-width: 900px) {
+      align-items: center;
+    }
   }
+
+  .metricVal {
+    font-family: $font-mono;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: $accent-lime;
+    line-height: 1.2;
+  }
+
+  .metricLab {
+    font-size: 0.72rem;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .metricDivider {
+    width: 1px;
+    height: 28px;
+    background: $border-hairline;
+  }
+}
+
+// Emil Kowalski Tactile Button Physics
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 
   @media (max-width: 900px) {
-    display: flex;
     justify-content: center;
   }
-}
-
-.button {
-  display: inline-block;
-  margin-top: 50px;
-  padding: 1.25rem 1.75rem;
-  border: 1px solid $mint-neon;
-  border-radius: 4px;
-  color: $mint-neon;
-  font-weight: bold;
-  box-shadow: $neon-shadow;
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   @media (max-width: 480px) {
-    margin-top: 30px;
-    padding: 1rem 1.5rem;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: $accent-lime;
+  color: #000000;
+  font-weight: 700;
+  font-size: 0.94rem;
+  padding: 13px 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 10px 25px -5px $accent-lime-glow;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 12px 20px;
   }
 
-  &:focus-visible {
-    background-color: rgba(100, 255, 218, 0.1);
-    transform: translateY(-3px);
-    outline: 2px solid $mint-neon;
-    outline-offset: 4px;
+  .buttonIcon {
+    width: 16px;
+    height: 16px;
+    transition: transform $duration-micro $ease-out-expo;
+  }
+
+  &:hover {
+    background: $accent-lime-hover;
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 #ffffff,
+      0 14px 30px -4px rgba(155, 255, 0, 0.5);
+
+    .buttonIcon {
+      transform: translateX(3px);
+    }
   }
 
   &:active {
-    transform: translateY(1px);
-    background-color: rgba(100, 255, 218, 0.2);
+    transform: scale(0.97) translateY(0);
+    box-shadow: 0 4px 12px -2px $accent-lime-glow;
   }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 3px;
+  }
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(119, 137, 171, 0.06);
+  color: $text-primary;
+  font-weight: 500;
+  font-size: 0.94rem;
+  padding: 13px 24px;
+  border-radius: 8px;
+  border: 1px solid $border-hairline;
+  box-shadow: $shadow-bevel;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo;
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 12px 20px;
+  }
+
+  .buttonIcon {
+    width: 16px;
+    height: 16px;
+    color: $accent-slate;
+    transition: transform $duration-micro $ease-out-expo;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(119, 137, 171, 0.12);
+    border-color: $border-slate-hover;
+
+    .buttonIcon {
+      transform: translateY(-2px);
+      color: $text-primary;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97) translateY(0);
+    background: rgba(119, 137, 171, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 3px;
+  }
+}
+
+// Visual Side & Avatar Frame
+.visualSide {
+  flex: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .blob {
   position: relative;
   width: clamp(220px, 35vw, 450px);
   height: clamp(220px, 35vw, 450px);
-  background-color: $bg-light;
+  background-color: $bg-surface-elevated;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -170,7 +388,7 @@
     left: 10%;
     right: 10%;
     bottom: 10%;
-    background: $mint-neon;
+    background: $accent-lime;
     border-radius: 50%;
     z-index: -1;
     filter: blur(40px);

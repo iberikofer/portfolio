@@ -2,71 +2,127 @@ import React from 'react';
 import styles from './About.module.scss';
 import { DATA } from '../data/config';
 
+const categoryIcons: Record<string, React.ReactNode> = {
+  frontend: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <polygon points="12 2 2 7 12 12 22 7 12 2}" />
+      <polyline points="2 17 12 22 22 17" />
+      <polyline points="2 12 12 17 22 12" />
+    </svg>
+  ),
+  backend: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+      <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+      <line x1="6" y1="6" x2="6.01" y2="6" />
+      <line x1="6" y1="18" x2="6.01" y2="18" />
+    </svg>
+  ),
+  other: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </svg>
+  ),
+  languages: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="2" y1="12" x2="22" y2="12" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+  ),
+};
+
 const About: React.FC = () => {
   return (
     <section id="about" className={styles.container}>
       <div className={styles.wrapper}>
-        <h2 className={styles.heading}>About Me</h2>
-        <div className={styles.divider}></div>
+        <div className={styles.headerArea}>
+          <div className={styles.badge}>Background &amp; Expertise</div>
+          <h2 className={styles.heading}>Engineering &amp; Foundations</h2>
+          <p className={styles.subheading}>
+            Fullstack development backed by university Computer Science studies,
+            disciplined code architecture, and a passion for crafting responsive
+            software.
+          </p>
+        </div>
+
         <div className={styles.content}>
           <div className={styles.textSide}>
-            <p>
-              <b tabIndex={0} className={styles.greetings}>
-                Greetings!
-              </b>{' '}
-              I'm an enthusiastic Fullstack Developer with a focus on building
-              clean and efficient digital experiences. My journey into
-              programming started with a curiosity about how things work under
-              the hood, which led me to explore both low-level and high-level
-              technologies.
-            </p>
-            <p>
-              Currently, I'm honing my skills in the React ecosystem while also
-              maintaining a strong interest in systems programming and
-              mathematics. I enjoy solving complex problems and turning ideas
-              into functional software.
-            </p>
-
-            <div className={styles.skillsGrid}>
-              {Object.entries(DATA.skills).map(
-                ([category, items], index, arr) => (
-                  <React.Fragment key={category}>
-                    <div className={styles.skillGroup}>
-                      <h4 className={styles.skillTitle}>{category}</h4>
-                      <ul className={styles.skillList}>
-                        {items.map((item) => (
-                          <li key={item} className={styles.skillItem}>
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {index < arr.length - 1 && (
-                      <div className={styles.skillDivider} />
-                    )}
-                  </React.Fragment>
-                ),
-              )}
+            <div className={styles.bioCard}>
+              <p className={styles.leadText}>
+                <span className={styles.greetings}>Greetings!</span> I'm a
+                Fullstack Developer specializing in modern web experiences with
+                React, TypeScript, and Node.js. My passion for engineering began
+                with asking how software works at the deepest level, driving me
+                to explore both systems-level and high-level technologies.
+              </p>
+              <p>
+                Currently, I am sharpening my full-stack capabilities while
+                advancing in algorithms, mathematics, and systems programming
+                (C++, Java, Python) at Vinnytsia National Technical University.
+                I love turning complex logic into performant, visually
+                impeccable digital products.
+              </p>
             </div>
 
+            {/* Technical Skills Bento Grid */}
+            <div className={styles.skillsSection}>
+              <h3 className={styles.skillsHeading}>
+                Core Competencies &amp; Tech Stack
+              </h3>
+              <div className={styles.skillsGrid}>
+                {Object.entries(DATA.skills).map(([category, items]) => (
+                  <div key={category} className={styles.skillCard}>
+                    <div className={styles.skillCardHeader}>
+                      <span className={styles.skillCategoryIcon}>
+                        {categoryIcons[category] || (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                          </svg>
+                        )}
+                      </span>
+                      <h4 className={styles.skillTitle}>{category}</h4>
+                    </div>
+                    <ul className={styles.skillList}>
+                      {items.map((item) => (
+                        <li key={item} className={styles.skillItem}>
+                          <span className={styles.bulletDot} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Academic Archive Card */}
             <div className={styles.accentBox}>
               <div className={styles.boxHeader}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                </svg>
+                <div className={styles.boxHeaderIcon}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                  </svg>
+                </div>
                 <span>Academic Archive</span>
               </div>
               <p className={styles.archiveDescription}>
-                A curated collection of university coursework, lab assignments
-                and projects spanning multiple languages — C++, Java, Python and
-                JavaScript. These works document my academic journey and reflect
-                hands-on experience across different programming paradigms.
+                A curated repository of university coursework, lab assignments,
+                and computational projects across C++, Java, Python, and
+                JavaScript — documenting my academic progression across diverse
+                programming paradigms.
               </p>
               <a
                 href="https://github.com/iberikofer/academic-archive"
@@ -84,30 +140,37 @@ const About: React.FC = () => {
                 >
                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                 </svg>
-                iberikofer/academic-archive
+                <span>iberikofer/academic-archive</span>
+                <span className={styles.arrowIcon}>↗</span>
               </a>
             </div>
           </div>
 
           <div className={styles.visualSide}>
-            <div className={styles.accentBox}>
+            <div className={styles.timelineCard}>
               <div className={styles.boxHeader}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                  <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                </svg>
-                <span>Education</span>
+                <div className={styles.boxHeaderIcon}>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                  </svg>
+                </div>
+                <span>Education &amp; Credentials</span>
               </div>
+
               <div className={styles.timeline}>
                 <div className={styles.item}>
-                  <span className={styles.date}>
-                    2025 — Present (Expected 2029)
-                  </span>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.date}>
+                      2025 — Present (Exp. 2029)
+                    </span>
+                    <span className={styles.statusPill}>In Progress</span>
+                  </div>
                   <h4>
                     <a
                       href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37"
@@ -118,25 +181,35 @@ const About: React.FC = () => {
                     </a>
                   </h4>
                   <p>
-                    Bachelor’s in Software Engineering (Flexible schedule
-                    available if needed)
+                    Bachelor’s in Software Engineering — focus on data
+                    structures, algorithms, and modern computing.
                   </p>
                 </div>
+
                 <div className={styles.item}>
-                  <span className={styles.date}>2022 — 2024</span>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.date}>2022 — 2024</span>
+                    <span className={styles.statusPillAlt}>Certified</span>
+                  </div>
                   <h4>
                     <a
                       href="https://goit.global/et/courses/fullstack/"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      GoIT
+                      GoIT Academy
                     </a>
                   </h4>
-                  <p>Full-Stack development</p>
+                  <p>
+                    Full-Stack Web Development Bootcamp (React, Node.js,
+                    TypeScript, REST APIs).
+                  </p>
                 </div>
+
                 <div className={styles.item}>
-                  <span className={styles.date}>2021 — 2024</span>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.date}>2021 — 2024</span>
+                  </div>
                   <h4>
                     <a
                       href="https://maps.app.goo.gl/iNhCe66bAWo7mfTe8"
@@ -146,10 +219,13 @@ const About: React.FC = () => {
                       Vinnytsia Trade and Economics College
                     </a>
                   </h4>
-                  <p>Associate Degree in Tourism and Recreation</p>
+                  <p>Associate Degree in Tourism and Hospitality Management.</p>
                 </div>
+
                 <div className={styles.item}>
-                  <span className={styles.date}>2021</span>
+                  <div className={styles.itemHeader}>
+                    <span className={styles.date}>2021</span>
+                  </div>
                   <h4>
                     <a
                       href="https://maps.app.goo.gl/A4iwefxeDXjC4wWNA"
@@ -159,38 +235,10 @@ const About: React.FC = () => {
                       Humanities Lyceum of Vinnytsia №1
                     </a>
                   </h4>
-                  <p>English and German languages</p>
+                  <p>Advanced studies in English (B2) and German languages.</p>
                 </div>
               </div>
             </div>
-            {/* In progress =) */}
-            {/* <div className={styles.accentBox}>
-              <div className={styles.boxHeader}>
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2">
-                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-                </svg>
-                <span>Work Experience</span>
-              </div>
-              <div className={styles.timeline}>
-                <div className={styles.item}>
-                  <span className={styles.date}>2024 — 2025</span>
-                  <h4>
-                    <a
-                      href="https://maps.app.goo.gl/1k8WnDjq2m5nZvxh9"
-                      target="_blank"
-                      rel="noreferrer">
-                      Tour Agency "GOU-Travel"
-                    </a>
-                  </h4>
-                  <p>Tour agent / Tourism manager</p>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

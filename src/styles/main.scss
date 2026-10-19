@@ -7,85 +7,111 @@
   margin: 0;
   padding: 0;
   scrollbar-width: thin;
-  scrollbar-color: $mint-neon $bg-dark;
+  scrollbar-color: rgba(119, 137, 171, 0.3) $bg-canvas;
 }
 
 html {
   scroll-behavior: smooth;
-  /* Prevent layout shifts caused by scrollbar appearing */
   scrollbar-gutter: stable;
+  background-color: $bg-canvas;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   font-family: $font-main;
-  background-color: $bg-dark;
-  color: $text-main;
+  background-color: $bg-canvas;
+  color: $text-secondary;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  /* Better text rendering on all screens */
   text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  overflow-x: clip;
 }
 
+// Electric Lime High-Craft Selection
+::selection {
+  background: rgba(155, 255, 0, 0.35);
+  color: #ffffff;
+}
+
+// Typographic Scale & Tight Tracking
 h1,
 h2,
-h3 {
-  color: $mint-neon;
-  text-shadow: $neon-shadow;
+h3,
+h4,
+h5,
+h6 {
+  color: $text-primary;
+  font-family: $font-main;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+h1 {
+  letter-spacing: -0.038em;
+}
+
+p {
+  color: $text-secondary;
+  line-height: 1.68;
 }
 
 a {
   text-decoration: none;
   color: inherit;
-  transition: 0.3s;
+  transition:
+    color $duration-micro $ease-out-expo,
+    opacity $duration-micro $ease-out-expo;
 }
 
 ul {
   list-style: none;
 }
 
-/* Global container — adapts from mobile to 4K */
+button {
+  font-family: inherit;
+}
+
+// Global Container
 .container {
   max-width: $container-width;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 
   @media (max-width: 768px) {
-    padding: 0 16px;
+    padding: 0 18px;
   }
 
   @media (max-width: 480px) {
-    padding: 0 14px;
+    padding: 0 16px;
   }
 
-  /* 2K / 4K: more breathing room */
   @media (min-width: 1920px) {
-    max-width: 1600px;
-  }
-
-  @media (min-width: 2560px) {
-    max-width: 2000px;
-    padding: 0 40px;
+    max-width: 1440px;
+    padding: 0 32px;
   }
 }
 
+// Minimalist Dark Scrollbars
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: $bg-dark;
+  background: $bg-canvas;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $mint-neon;
-  border-radius: 10px;
-  border: 2px solid $bg-dark;
+  background: rgba(119, 137, 171, 0.25);
+  border-radius: 999px;
+  border: 1px solid $bg-canvas;
 
   &:hover {
-    cursor: pointer;
-    background: rgba($mint-neon, 0.8);
+    background: $accent-lime;
   }
 }
 
@@ -95,19 +121,23 @@ img {
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  display: block;
 }
 
-/* ───────────────────────────────────────────────
-   Global font-size scaling for larger displays
-─────────────────────────────────────────────── */
-@media (min-width: 1920px) {
-  html {
-    font-size: 17px;
-  }
+// Focus-Visible Ring (Lime)
+:focus-visible {
+  outline: 2px solid $accent-lime;
+  outline-offset: 3px;
 }
 
-@media (min-width: 2560px) {
-  html {
-    font-size: 19px;
+// Emil Kowalski Motion Discipline: Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

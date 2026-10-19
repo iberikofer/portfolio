@@ -7,23 +7,41 @@ const Footer: React.FC = () => {
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.container}>
-        <div className={styles.divider} />
-        <h2 className={styles.heading}>Get in touch</h2>
-        <p className={styles.subtext}>
-          I'm currently looking for new opportunities.
-          <span className={styles.subtextBreak}>
-            Whether you have a question or just want to say hi, my inbox is
-            always open!
-          </span>
-        </p>
-        <div className={styles.divider}></div>
+      <div className={`${styles.container} container`}>
+        <div className={styles.topRow}>
+          <div className={styles.brand}>
+            <span className={styles.brandPrefix}>~/</span>
+            <span className={styles.brandName}>{DATA.profile.name}</span>
+          </div>
 
-        <p className={styles.copyright}>
-          Designed &amp; Built by{' '}
-          <span className={styles.highlight}>{DATA.profile.name}</span>
-          <br />© {currentYear} — All rights reserved.
-        </p>
+          <ul className={styles.footerNav}>
+            <li>
+              <a href="#projects">Projects</a>
+            </li>
+            <li>
+              <a href="#about">About</a>
+            </li>
+            <li>
+              <a href="#contact">Contact</a>
+            </li>
+            <li>
+              <a href="#root" className={styles.backToTop}>
+                Back to top ↑
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles.bottomRow}>
+          <p className={styles.copyright}>
+            &copy; {currentYear} {DATA.profile.name}. All rights reserved.
+          </p>
+
+          <div className={styles.techBadge}>
+            <span className={styles.techDot} />
+            <span>React 19 &bull; TypeScript &bull; High-Craft UI</span>
+          </div>
+        </div>
       </div>
     </footer>
   );
