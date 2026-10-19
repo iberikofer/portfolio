@@ -3,12 +3,12 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: clamp(100px, 12vw, 160px);
-  transform: translateY(40%);
+  height: clamp(360px, 30vw, 440px);
+  transform: translateY(50%);
   overflow: visible;
   line-height: 0;
   pointer-events: none;
-  z-index: 30;
+  z-index: 100;
 }
 
 .waveCanvas {

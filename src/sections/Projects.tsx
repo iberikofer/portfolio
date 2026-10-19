@@ -1,25 +1,166 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { DATA, Project } from '../data/config';
 import styles from './Projects.module.scss';
 
-type FilterCategory = 'all' | 'fullstack' | 'react' | 'vanilla';
+type FilterCategory =
+  'all' | 'team' | 'fullstack' | 'frontend' | 'backend' | 'ai-tools' | 'games';
+
+const hasLiveDemo = (project: Project): boolean => {
+  if (project.status === 'Closed') return false;
+  if (!project.pages) return false;
+  if (project.pages.includes('#readme')) return false;
+  if (
+    project.pages.includes('github.com/') &&
+    !project.pages.includes('github.io')
+  ) {
+    return false;
+  }
+  return true;
+};
+
+const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      const rafId = requestAnimationFrame(() => {
+        setIsLoaded(true);
+      });
+      return () => cancelAnimationFrame(rafId);
+    }
+  }, [project.photo]);
+
+  return (
+    <img
+      ref={imgRef}
+      src={project.photo}
+      alt={project.title}
+      width={500}
+      height={320}
+      loading="lazy"
+      decoding="async"
+      onLoad={() => setIsLoaded(true)}
+      className={`${styles.projectImg} ${isLoaded ? styles.loaded : ''}`}
+      style={{
+        ...(project.objectPosition && {
+          objectPosition: project.objectPosition,
+        }),
+        ...(project.objectFit && {
+          objectFit: project.objectFit,
+        }),
+      }}
+    />
+  );
+};
 
 const Projects: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
+
+  const counts = useMemo(() => {
+    const list = DATA.projects;
+    return {
+      all: list.length,
+      team: list.filter((p) =>
+        p.tags.map((t) => t.toUpperCase()).includes('TEAM'),
+      ).length,
+      fullstack: list.filter((p) => {
+        const t = p.tags.map((tag) => tag.toUpperCase());
+        return (
+          t.includes('FULLSTACK') ||
+          (t.includes('REACT') && t.includes('NODE.JS')) ||
+          (t.includes('NEXT.JS') && t.includes('.NET'))
+        );
+      }).length,
+      frontend: list.filter((p) => {
+        const t = p.tags.map((tag) => tag.toUpperCase());
+        return (
+          t.includes('FRONTEND') ||
+          t.includes('REACT') ||
+          t.includes('NEXT.JS') ||
+          t.includes('HTML') ||
+          t.includes('CSS') ||
+          t.includes('SCSS') ||
+          t.includes('JS') ||
+          t.includes('JAVASCRIPT')
+        );
+      }).length,
+      backend: list.filter((p) => {
+        const t = p.tags.map((tag) => tag.toUpperCase());
+        return (
+          t.includes('BACKEND') ||
+          t.includes('NODE.JS') ||
+          t.includes('EXPRESS') ||
+          t.includes('.NET') ||
+          t.includes('POSTGRESQL') ||
+          t.includes('MONGODB')
+        );
+      }).length,
+      aiTools: list.filter((p) => {
+        const t = p.tags.map((tag) => tag.toUpperCase());
+        return (
+          t.includes('AI') ||
+          t.includes('AI AGENT') ||
+          t.includes('CLI') ||
+          t.includes('LLM') ||
+          t.includes('AUTOMATION')
+        );
+      }).length,
+      games: list.filter((p) => {
+        const t = p.tags.map((tag) => tag.toUpperCase());
+        return t.includes('GAME') || t.includes('SIMULATOR');
+      }).length,
+    };
+  }, []);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === 'all') return DATA.projects;
 
     return DATA.projects.filter((project) => {
       const tagsUpper = project.tags.map((t) => t.toUpperCase());
+      if (activeFilter === 'team') {
+        return tagsUpper.includes('TEAM');
+      }
       if (activeFilter === 'fullstack') {
-        return tagsUpper.includes('NODE.JS') || tagsUpper.includes('EXPRESS');
+        return (
+          tagsUpper.includes('FULLSTACK') ||
+          (tagsUpper.includes('REACT') && tagsUpper.includes('NODE.JS')) ||
+          (tagsUpper.includes('NEXT.JS') && tagsUpper.includes('.NET'))
+        );
       }
-      if (activeFilter === 'react') {
-        return tagsUpper.includes('REACT') && !tagsUpper.includes('NODE.JS');
+      if (activeFilter === 'frontend') {
+        return (
+          tagsUpper.includes('FRONTEND') ||
+          tagsUpper.includes('REACT') ||
+          tagsUpper.includes('NEXT.JS') ||
+          tagsUpper.includes('HTML') ||
+          tagsUpper.includes('CSS') ||
+          tagsUpper.includes('SCSS') ||
+          tagsUpper.includes('JS') ||
+          tagsUpper.includes('JAVASCRIPT')
+        );
       }
-      if (activeFilter === 'vanilla') {
-        return tagsUpper.includes('HTML') || !tagsUpper.includes('REACT');
+      if (activeFilter === 'backend') {
+        return (
+          tagsUpper.includes('BACKEND') ||
+          tagsUpper.includes('NODE.JS') ||
+          tagsUpper.includes('EXPRESS') ||
+          tagsUpper.includes('.NET') ||
+          tagsUpper.includes('POSTGRESQL') ||
+          tagsUpper.includes('MONGODB')
+        );
+      }
+      if (activeFilter === 'ai-tools') {
+        return (
+          tagsUpper.includes('AI') ||
+          tagsUpper.includes('AI AGENT') ||
+          tagsUpper.includes('CLI') ||
+          tagsUpper.includes('LLM') ||
+          tagsUpper.includes('AUTOMATION')
+        );
+      }
+      if (activeFilter === 'games') {
+        return tagsUpper.includes('GAME') || tagsUpper.includes('SIMULATOR');
       }
       return true;
     });
@@ -49,7 +190,17 @@ const Projects: React.FC = () => {
             onClick={() => setActiveFilter('all')}
           >
             <span>All</span>
-            <span className={styles.filterCount}>{DATA.projects.length}</span>
+            <span className={styles.filterCount}>{counts.all}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeFilter === 'team'}
+            className={`${styles.filterBtn} ${activeFilter === 'team' ? styles.active : ''}`}
+            onClick={() => setActiveFilter('team')}
+          >
+            <span>Team projects</span>
+            <span className={styles.filterCount}>{counts.team}</span>
           </button>
           <button
             type="button"
@@ -58,28 +209,48 @@ const Projects: React.FC = () => {
             className={`${styles.filterBtn} ${activeFilter === 'fullstack' ? styles.active : ''}`}
             onClick={() => setActiveFilter('fullstack')}
           >
-            <span>Fullstack / Node</span>
-            <span className={styles.filterCount}>2</span>
+            <span>Fullstack</span>
+            <span className={styles.filterCount}>{counts.fullstack}</span>
           </button>
           <button
             type="button"
             role="tab"
-            aria-selected={activeFilter === 'react'}
-            className={`${styles.filterBtn} ${activeFilter === 'react' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('react')}
+            aria-selected={activeFilter === 'frontend'}
+            className={`${styles.filterBtn} ${activeFilter === 'frontend' ? styles.active : ''}`}
+            onClick={() => setActiveFilter('frontend')}
           >
-            <span>React Ecosystem</span>
-            <span className={styles.filterCount}>5</span>
+            <span>Front-end</span>
+            <span className={styles.filterCount}>{counts.frontend}</span>
           </button>
           <button
             type="button"
             role="tab"
-            aria-selected={activeFilter === 'vanilla'}
-            className={`${styles.filterBtn} ${activeFilter === 'vanilla' ? styles.active : ''}`}
-            onClick={() => setActiveFilter('vanilla')}
+            aria-selected={activeFilter === 'backend'}
+            className={`${styles.filterBtn} ${activeFilter === 'backend' ? styles.active : ''}`}
+            onClick={() => setActiveFilter('backend')}
           >
-            <span>Vanilla &amp; UI</span>
-            <span className={styles.filterCount}>2</span>
+            <span>Back-end</span>
+            <span className={styles.filterCount}>{counts.backend}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeFilter === 'ai-tools'}
+            className={`${styles.filterBtn} ${activeFilter === 'ai-tools' ? styles.active : ''}`}
+            onClick={() => setActiveFilter('ai-tools')}
+          >
+            <span>AI &amp; Tools</span>
+            <span className={styles.filterCount}>{counts.aiTools}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeFilter === 'games'}
+            className={`${styles.filterBtn} ${activeFilter === 'games' ? styles.active : ''}`}
+            onClick={() => setActiveFilter('games')}
+          >
+            <span>Games/Simulators</span>
+            <span className={styles.filterCount}>{counts.games}</span>
           </button>
         </div>
       </div>
@@ -101,48 +272,123 @@ const Projects: React.FC = () => {
               }
             >
               {project.photo ? (
-                <img
-                  src={project.photo}
-                  alt={project.title}
-                  width={500}
-                  height={320}
-                  loading="lazy"
-                  style={{
-                    ...(project.objectPosition && {
-                      objectPosition: project.objectPosition,
-                    }),
-                    ...(project.objectFit && {
-                      objectFit: project.objectFit,
-                    }),
-                  }}
-                />
+                <ProjectImage project={project} />
               ) : (
                 <div className={styles.placeholderImage}>
-                  <svg
-                    className={styles.placeholderIcon}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21 15 16 10 5 21" />
-                  </svg>
-                  <span className={styles.placeholderText}>
-                    API / Microservice
-                  </span>
+                  {project.tags.includes('SIMULATOR') ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        {project.tags.includes('C++')
+                          ? 'C++ Simulation'
+                          : 'Java Simulation'}
+                      </span>
+                    </>
+                  ) : project.tags.includes('GAME') ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="6" x2="10" y1="12" y2="12" />
+                        <line x1="8" x2="8" y1="10" y2="14" />
+                        <line x1="15" x2="15.01" y1="13" y2="13" />
+                        <line x1="18" x2="18.01" y1="11" y2="11" />
+                        <rect width="20" height="12" x="2" y="6" rx="6" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        2D Game / SFML
+                      </span>
+                    </>
+                  ) : project.tags.includes('AI AGENT') ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect width="18" height="12" x="3" y="6" rx="2" />
+                        <path d="M12 2v4" />
+                        <line x1="8" x2="8" y1="12" y2="12" />
+                        <line x1="16" x2="16" y1="12" y2="12" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        AI Agent System
+                      </span>
+                    </>
+                  ) : project.tags.includes('TEAM') ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        Team Project
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="16 18 22 12 16 6" />
+                        <polyline points="8 6 2 12 8 18" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        API / Microservice
+                      </span>
+                    </>
+                  )}
                 </div>
               )}
 
               {/* Status Pill on Card */}
-              <div className={styles.cardStatusPill}>
-                {project.status === 'Closed' ? (
+              {project.status === 'Closed' ? (
+                <div className={styles.cardStatusPill}>
                   <span className={styles.statusClosed}>Archived</span>
-                ) : (
+                </div>
+              ) : hasLiveDemo(project) ? (
+                <div className={styles.cardStatusPill}>
                   <span className={styles.statusOpen}>Live Demo</span>
-                )}
-              </div>
+                </div>
+              ) : null}
             </div>
 
             {/* Project Content */}
@@ -234,7 +480,11 @@ const Projects: React.FC = () => {
                     target="_blank"
                     rel="noreferrer"
                     className={`${styles.actionBtn} ${styles.primaryActionBtn}`}
-                    title="Open Live Website"
+                    title={
+                      project.pages.includes('#readme')
+                        ? 'View Documentation'
+                        : 'Open Live Website'
+                    }
                   >
                     <svg
                       className={styles.actionIcon}
@@ -247,7 +497,9 @@ const Projects: React.FC = () => {
                     >
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
                     </svg>
-                    <span>Live</span>
+                    <span>
+                      {project.pages.includes('#readme') ? 'Docs' : 'Live'}
+                    </span>
                   </a>
                 ))}
             </div>

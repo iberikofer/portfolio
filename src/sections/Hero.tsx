@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import { DATA } from '../data/config';
 import styles from './Hero.module.scss';
 import developer from '../assets/yaroslav.png';
@@ -8,6 +8,73 @@ const Hero: React.FC = () => {
   const visualRef = useRef<HTMLDivElement>(null);
   const orbitRingRef = useRef<HTMLDivElement>(null);
   const orbitRingSecRef = useRef<HTMLDivElement>(null);
+  const nameRef = useRef<HTMLSpanElement>(null);
+
+  // Physics and direction state for the interactive green beam animation
+  const nameBeamRef = useRef({
+    pos: -35,
+    targetPos: -35,
+    currentY: 50,
+    targetY: 50,
+    beamRadius: 160,
+    direction: 1 as 1 | -1,
+    lastDirection: 1 as 1 | -1,
+    lastClientX: 0,
+    lastClientY: 0,
+    isHovering: false,
+  });
+
+  useEffect(() => {
+    const el = nameRef.current;
+    if (!el) return;
+
+    let animId: number;
+    let lastTime = performance.now();
+    const speed = 40; // % per second (~4.25s for full 170% pass)
+    const minBound = -35;
+    const maxBound = 135;
+
+    const update = (now: number) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      const s = nameBeamRef.current;
+      if (s.isHovering) {
+        // Fluid tracking toward cursor position
+        const diffX = s.targetPos - s.pos;
+        s.pos += diffX * Math.min(1, dt * 22);
+
+        const diffY = s.targetY - s.currentY;
+        s.currentY += diffY * Math.min(1, dt * 18);
+
+        s.beamRadius += (210 - s.beamRadius) * Math.min(1, dt * 10);
+      } else {
+        // Continuous traveling beam advancing in current direction
+        s.pos += s.direction * speed * dt;
+
+        // Wrap around seamlessly off-screen
+        if (s.direction === 1 && s.pos > maxBound) {
+          s.pos = minBound;
+        } else if (s.direction === -1 && s.pos < minBound) {
+          s.pos = maxBound;
+        }
+
+        s.currentY += (50 - s.currentY) * Math.min(1, dt * 6);
+        s.beamRadius += (160 - s.beamRadius) * Math.min(1, dt * 8);
+      }
+
+      el.style.setProperty('--beam-x', `${s.pos.toFixed(2)}%`);
+      el.style.setProperty('--beam-y', `${s.currentY.toFixed(1)}%`);
+      el.style.setProperty('--beam-r', `${s.beamRadius.toFixed(1)}px`);
+
+      animId = requestAnimationFrame(update);
+    };
+
+    animId = requestAnimationFrame(update);
+    return () => {
+      cancelAnimationFrame(animId);
+    };
+  }, []);
 
   const handleBlobMouseEnter = useCallback(() => {
     // Accelerate orbit rings to fast energetic speed only when hovering over the blob
@@ -69,24 +136,150 @@ const Hero: React.FC = () => {
     });
   }, []);
 
+  const handleNameMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLSpanElement>) => {
+      const el = nameRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(
+        0,
+        Math.min(100, ((e.clientX - rect.left) / rect.width) * 100),
+      );
+      const y = Math.max(
+        0,
+        Math.min(100, ((e.clientY - rect.top) / rect.height) * 100),
+      );
+
+      const s = nameBeamRef.current;
+      s.isHovering = true;
+      s.targetPos = x;
+      s.targetY = y;
+      s.lastClientX = e.clientX;
+      s.lastClientY = e.clientY;
+    },
+    [],
+  );
+
   const handleNameMouseMove = useCallback(
     (e: React.MouseEvent<HTMLSpanElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      e.currentTarget.style.setProperty('--name-mouse-x', `${x.toFixed(1)}%`);
-      e.currentTarget.style.setProperty('--name-mouse-y', `${y.toFixed(1)}%`);
+      const el = nameRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(
+        0,
+        Math.min(100, ((e.clientX - rect.left) / rect.width) * 100),
+      );
+      const y = Math.max(
+        0,
+        Math.min(100, ((e.clientY - rect.top) / rect.height) * 100),
+      );
+
+      const s = nameBeamRef.current;
+      const dx = e.clientX - s.lastClientX;
+      if (Math.abs(dx) >= 1) {
+        s.lastDirection = dx > 0 ? 1 : -1;
+      }
+
+      s.lastClientX = e.clientX;
+      s.lastClientY = e.clientY;
+      s.targetPos = x;
+      s.targetY = y;
+      s.isHovering = true;
     },
     [],
   );
 
   const handleNameMouseLeave = useCallback(
     (e: React.MouseEvent<HTMLSpanElement>) => {
-      e.currentTarget.style.setProperty('--name-mouse-x', '50%');
-      e.currentTarget.style.setProperty('--name-mouse-y', '50%');
+      const el = nameRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const s = nameBeamRef.current;
+
+      s.isHovering = false;
+      const exitX = Math.max(
+        0,
+        Math.min(100, ((e.clientX - rect.left) / rect.width) * 100),
+      );
+      s.pos = exitX;
+      s.targetPos = exitX;
+
+      // Determine exit direction:
+      // If exited right edge: resume right (1)
+      // If exited left edge: resume left (-1)
+      // If exited top/bottom: resume based on cursor movement momentum (s.lastDirection)
+      if (e.clientX >= rect.right - 6) {
+        s.direction = 1;
+      } else if (e.clientX <= rect.left + 6) {
+        s.direction = -1;
+      } else {
+        s.direction = s.lastDirection || (exitX > 50 ? 1 : -1);
+      }
     },
     [],
   );
+
+  const handleNameTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLSpanElement>) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const el = nameRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(
+        0,
+        Math.min(100, ((touch.clientX - rect.left) / rect.width) * 100),
+      );
+      const y = Math.max(
+        0,
+        Math.min(100, ((touch.clientY - rect.top) / rect.height) * 100),
+      );
+
+      const s = nameBeamRef.current;
+      s.isHovering = true;
+      s.targetPos = x;
+      s.targetY = y;
+      s.lastClientX = touch.clientX;
+      s.lastClientY = touch.clientY;
+    },
+    [],
+  );
+
+  const handleNameTouchMove = useCallback(
+    (e: React.TouchEvent<HTMLSpanElement>) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const el = nameRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const x = Math.max(
+        0,
+        Math.min(100, ((touch.clientX - rect.left) / rect.width) * 100),
+      );
+      const y = Math.max(
+        0,
+        Math.min(100, ((touch.clientY - rect.top) / rect.height) * 100),
+      );
+
+      const s = nameBeamRef.current;
+      const dx = touch.clientX - s.lastClientX;
+      if (Math.abs(dx) >= 1) {
+        s.lastDirection = dx > 0 ? 1 : -1;
+      }
+
+      s.lastClientX = touch.clientX;
+      s.lastClientY = touch.clientY;
+      s.targetPos = x;
+      s.targetY = y;
+    },
+    [],
+  );
+
+  const handleNameTouchEnd = useCallback(() => {
+    const s = nameBeamRef.current;
+    s.isHovering = false;
+    s.direction = s.lastDirection || 1;
+  }, []);
 
   return (
     <section className={styles.hero}>
@@ -113,10 +306,14 @@ const Hero: React.FC = () => {
 
             <h1 className={`${styles.name} ${styles.animateFadeIn}`}>
               <span
+                ref={nameRef}
                 className={styles.nameHighlight}
-                data-text={DATA.profile.name}
+                onMouseEnter={handleNameMouseEnter}
                 onMouseMove={handleNameMouseMove}
                 onMouseLeave={handleNameMouseLeave}
+                onTouchStart={handleNameTouchStart}
+                onTouchMove={handleNameTouchMove}
+                onTouchEnd={handleNameTouchEnd}
               >
                 {DATA.profile.name}
               </span>
@@ -132,7 +329,7 @@ const Hero: React.FC = () => {
             {/* Quick Metrics Bar */}
             <div className={`${styles.metricsBar} ${styles.animateFadeIn}`}>
               <div className={styles.metricItem}>
-                <span className={styles.metricVal}>9+</span>
+                <span className={styles.metricVal}>17+</span>
                 <span className={styles.metricLab}>Web Projects</span>
               </div>
               <div className={styles.metricDivider} />

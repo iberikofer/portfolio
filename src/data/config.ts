@@ -58,15 +58,29 @@ export const DATA: AppData = {
   skills: {
     frontend: [
       'React',
+      'Next.js',
       'TypeScript',
       'JavaScript',
-      'HTML5/CSS3',
       'Tailwind',
+      'SCSS',
       'Vite',
     ],
-    backend: ['Node.js', 'Express', 'MongoDB', 'SQLite', 'Prisma', 'REST API'],
-    other: ['Git', 'VScode', 'WebStorm'],
-    languages: ['English (B2)', 'Ukrainian (Native)', 'Russian (Fluent)'],
+    backend: [
+      'Node.js',
+      'Express',
+      'PostgreSQL',
+      'MongoDB',
+      'SQLite',
+      'Prisma',
+      'REST API',
+    ],
+    other: ['Git', 'Docker', 'VScode', 'WebStorm'],
+    languages: [
+      'English (B2)',
+      'Ukrainian (Native)',
+      'Russian (Fluent)',
+      'Spanish (A1)',
+    ],
   },
   projects: [
     {
@@ -76,6 +90,7 @@ export const DATA: AppData = {
       description:
         'My first full-stack app - Quiz Builder that allows users to create custom quizzes with various question types, interactive dashboard, and question inspection.',
       tags: [
+        'FULLSTACK',
         'REACT',
         'NODE.JS',
         'TS',
@@ -129,7 +144,7 @@ export const DATA: AppData = {
       photo: reactPhonebookImg,
       description:
         'React phonebook application with user authentication, Redux state management, and contact filtering.',
-      tags: ['REACT', 'REDUX', 'JS'],
+      tags: ['FULLSTACK', 'BACKEND', 'REACT', 'REDUX', 'JS'],
       link: 'https://github.com/iberikofer/react-phonebook',
       pages: 'https://iberikofer.github.io/react-phonebook/',
       status: 'Open',
@@ -140,7 +155,7 @@ export const DATA: AppData = {
       photo: nodePhonebookImg,
       description:
         'RESTful API for a phonebook service built with Node.js, Express, MongoDB, JWT auth, avatar uploads, and email verification.',
-      tags: ['NODE.JS', 'EXPRESS', 'MONGODB', 'JWT'],
+      tags: ['BACKEND', 'NODE.JS', 'EXPRESS', 'MONGODB', 'JWT', 'REST API'],
       link: 'https://github.com/iberikofer/node-phonebook',
       status: 'Open',
       objectPosition: 'center',
@@ -180,6 +195,103 @@ export const DATA: AppData = {
       tags: ['REACT', 'HOOKS', 'JS'],
       link: 'https://github.com/iberikofer/react-feedback-page',
       pages: 'https://iberikofer.github.io/react-feedback-page',
+      status: 'Open',
+    },
+    {
+      id: 10,
+      title: 'Dev Dialogue',
+      description:
+        'An interactive interview simulation platform crafted to prepare next-generation software engineers for technical, behavioral, and English interviews.',
+      tags: [
+        'TEAM',
+        'FULLSTACK',
+        'NEXT.JS',
+        'TYPESCRIPT',
+        '.NET',
+        'POSTGRESQL',
+      ],
+      link: 'https://github.com/iberikofer/dev-dialogue',
+      pages: 'https://dev-dialogue-web.onrender.com/',
+      status: 'Open',
+    },
+    {
+      id: 11,
+      title: 'Bookshelf',
+      description:
+        'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
+      tags: ['TEAM', 'JAVASCRIPT', 'HTML', 'SCSS', 'REST API'],
+      link: 'https://github.com/lezver/project-new_skill',
+      pages: 'https://lezver.github.io/project-new_skill/',
+      status: 'Open',
+    },
+    {
+      id: 12,
+      title: 'Ice Cream',
+      description:
+        'Modern responsive digital landing page for an ice cream brand, featuring Swiper carousels, customer review sliders, and interactive ordering popups built with a development team.',
+      tags: ['TEAM', 'HTML', 'SCSS', 'JS', 'SWIPER'],
+      link: 'https://github.com/lezver/team-13-ice-cream',
+      pages: 'https://lezver.github.io/team-13-ice-cream/',
+      status: 'Open',
+    },
+    {
+      id: 13,
+      title: 'HealthyHub',
+      description:
+        'Comprehensive health and nutrition tracking web app with calorie budgeting, interactive Chart.js analytics, goal tracking, and persistent state management built with a team.',
+      tags: ['TEAM', 'REACT', 'REDUX', 'CHART.JS', 'AXIOS'],
+      link: 'https://github.com/AndriiZlt/healthyHub-frontend',
+      pages: 'https://andriizlt.github.io/healthyHub-frontend/',
+      status: 'Open',
+    },
+    {
+      id: 14,
+      title: 'Agent For TOM',
+      description:
+        'Autonomous AI agent system (TOMAS) engineered for deterministic document generation and automated workflows with token optimization and multi-model routing.',
+      tags: ['TEAM', 'AI', 'AUTOMATION', 'PYTHON', 'AI AGENT', 'CLI', 'LLM'],
+      link: 'https://github.com/oleksandkov/Agent-For-TOM',
+      pages: 'https://github.com/oleksandkov/Agent-For-TOM#readme',
+      status: 'Open',
+    },
+    {
+      id: 15,
+      title: 'Fizz Rush',
+      description:
+        'A fast-paced 2D action game built with C++ and SFML. Dodge, roll, and escape from chasing enemies and bosses with custom physics, gamepad support, and full localization.',
+      tags: ['GAME', 'C++', 'SFML', '2D GAME', 'DESKTOP'],
+      link: 'https://github.com/iberikofer/fizz-rush',
+      pages: 'https://github.com/iberikofer/fizz-rush#readme',
+      status: 'Open',
+    },
+    {
+      id: 16,
+      title: 'Lethal Labyrinths',
+      description:
+        'Interactive discrete route optimization and resource gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
+      tags: [
+        'SIMULATOR',
+        'GAME',
+        'C++',
+        'SFML',
+        'IMGUI',
+        'ALGORITHMS',
+        'COURSEWORK',
+      ],
+      link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp',
+      pages:
+        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp#readme',
+      status: 'Open',
+    },
+    {
+      id: 17,
+      title: 'Tornado GYM Simulator',
+      description:
+        'Gamified object-oriented software system modeling fitness gym facilities, athletes, and equipment. Architected with strict OOP principles, UML state machines, and interactive Java simulation mechanics.',
+      tags: ['SIMULATOR', 'GAME', 'JAVA', 'OOP', 'UML', 'COURSEWORK'],
+      link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/OOP-java',
+      pages:
+        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/OOP-java#readme',
       status: 'Open',
     },
   ],

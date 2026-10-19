@@ -397,7 +397,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 22px;
 }
 
 .inputRow {
@@ -460,13 +460,15 @@
     padding: 0 4px;
     background: transparent;
     transform-origin: left top;
+    z-index: 2;
   }
 
   input:focus ~ label,
   input:not(:placeholder-shown) ~ label,
+  input:-webkit-autofill ~ label,
   textarea:focus ~ label,
   textarea:not(:placeholder-shown) ~ label {
-    transform: translateY(-24px) scale(0.82);
+    transform: translateY(-29px) scale(0.82);
     color: $accent-lime;
     font-family: $font-mono;
     font-weight: 500;
