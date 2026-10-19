@@ -15,12 +15,21 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
+const basePath = process.env.NODE_ENV === 'production' ? '/portfolio' : '';
+
 export const metadata: Metadata = {
   title: 'Yaroslav Sych',
   description:
     'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      {
+        url: `${basePath}/favicon.svg`,
+        type: 'image/svg+xml',
+      },
+    ],
+    shortcut: `${basePath}/favicon.svg`,
+    apple: `${basePath}/favicon.svg`,
   },
 };
 

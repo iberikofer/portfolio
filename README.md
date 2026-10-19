@@ -1,18 +1,19 @@
 # 👨‍💻 Yaroslav Sych — Developer Portfolio
 
-A modern, high-performance personal portfolio website built with **React 19**, **TypeScript**, **Vite**, and **SCSS Modules**. Designed with a futuristic dark neon aesthetic, real-time Canvas wave physics, smooth animations, auto-expanding form controls, and responsive layouts tailored for all screen sizes from 320px mobile devices to 4K displays.
+A modern, high-performance personal portfolio website built with **Next.js 16 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS**, and **SCSS Modules**. Designed with a futuristic dark neon aesthetic, real-time Canvas wave physics, smooth animations, auto-expanding form controls, and responsive layouts tailored for all screen sizes from 320px mobile devices to 4K displays.
 
 ---
 
 ## ✨ Features
 
-- **⚡ Blazing Fast Performance:** Powered by Vite 7 with `@vitejs/plugin-react-swc` for instant HMR and optimized production builds.
-- **🎨 Modern Cyberpunk UI:** Custom glassmorphism dark theme with neon mint accents (`#64ffbc`), smooth gradients, and non-intrusive ambient background lighting.
+- **⚡ Blazing Fast Performance:** Powered by Next.js 16 with Turbopack for instant HMR and optimized static export builds.
+- **🎨 Modern Cyberpunk UI:** Custom glassmorphism dark theme with electric lime accents (`#9bff00`), smooth gradients, and non-intrusive ambient background lighting.
 - **🌊 Dynamic Real-time Canvas Wave Divider:** Real-time 4-layer harmonic neon wave ribbons synthesized on HTML5 Canvas. Features dynamic crest/trough morphing and `IntersectionObserver` auto-pausing for 0% CPU consumption during scrolling.
 - **✍️ React Typewriter Logo:** A cross-browser, slice-free React typewriter animation in the header (`Yaroslav Sych |`) with a synchronized blinking cursor.
 - **📜 Scroll Progress Tracking:** Real-time progress bar reflecting reading depth across the page.
 - **💼 Project Showcase Grid:** Dynamic project cards featuring tech tags, project descriptions, live GitHub links, and GitHub Pages links.
-- **✉️ Interactive Contact Form:** Integrated with **EmailJS** for direct inbox message delivery, featuring:
+- **✉️ Interactive Contact Form:** Integrated with **EmailJS** for direct inbox message delivery with flight & celebration animations:
+  - Multi-phase takeoff, shockwave, and particle celebration sequence.
   - Auto-expanding/shrinking `textarea` with smooth height transitions.
   - Custom scrollbar overflow handling for extra-long messages.
 - **📱 Ultra-Responsive Layout:** Carefully tuned breakpoints (`320px`, `360px`, `425px`, `480px`, `768px`, `1024px`) ensuring seamless experience on all mobile, tablet, and desktop viewports.
@@ -24,9 +25,8 @@ A modern, high-performance personal portfolio website built with **React 19**, *
 
 | Domain                   | Technologies                                                                  |
 | ------------------------ | ----------------------------------------------------------------------------- |
-| **Core Framework**       | [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
-| **Build Tooling**        | [Vite 7](https://vitejs.dev/), SWC Compiler                                   |
-| **Styling & Graphics**   | SCSS Modules, CSS Variables, HTML5 Canvas 2D API, Flexbox/Grid                |
+| **Core Framework**       | [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
+| **Styling & Design**     | [Tailwind CSS v4](https://tailwindcss.com/), SCSS Modules, CSS Variables, HTML5 Canvas 2D API |
 | **Form & Emailing**      | [EmailJS Browser SDK](https://www.emailjs.com/)                               |
 | **Linting & Formatting** | ESLint 9, [Prettier 3](https://prettier.io/), React Hooks Plugin              |
 

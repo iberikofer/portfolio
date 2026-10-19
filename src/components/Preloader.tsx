@@ -35,7 +35,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       {
         id: 2,
         prefix: 'core::load',
-        text: 'mounting [React 19 + TypeScript + Canvas]',
+        text: 'mounting [Next.js + React 19 + TypeScript + Tailwind]',
         status: '[100%]',
       },
       {

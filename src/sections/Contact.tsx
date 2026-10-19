@@ -8,17 +8,29 @@ import { DATA } from '../data/config';
 const Contact: React.FC = () => {
   const form = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [formStatus, setFormStatus] = useState<string>('');
-  const [isSending, setIsSending] = useState<boolean>(false);
+  const [submitState, setSubmitState] = useState<
+    'idle' | 'sending' | 'success' | 'error' | 'validation-error'
+  >('idle');
+  const [statusFeedback, setStatusFeedback] = useState<string>('');
 
-  useEffect(() => {
-    if (formStatus !== '') {
-      const timer = setTimeout(() => {
-        setFormStatus('');
-      }, 6000);
-      return () => clearTimeout(timer);
-    }
-  }, [formStatus]);
+  const PARTICLES = [
+    { dx: '-85px', dy: '-45px', color: '#9bff00', size: 5, delay: '0ms' },
+    { dx: '-65px', dy: '-75px', color: '#ffffff', size: 4, delay: '40ms' },
+    { dx: '-25px', dy: '-90px', color: '#b4ff33', size: 6, delay: '20ms' },
+    { dx: '25px', dy: '-90px', color: '#9bff00', size: 5, delay: '60ms' },
+    { dx: '65px', dy: '-75px', color: '#ffffff', size: 4, delay: '10ms' },
+    { dx: '90px', dy: '-40px', color: '#b4ff33', size: 6, delay: '50ms' },
+    { dx: '95px', dy: '15px', color: '#9bff00', size: 5, delay: '30ms' },
+    { dx: '75px', dy: '60px', color: '#ffffff', size: 4, delay: '70ms' },
+    { dx: '40px', dy: '80px', color: '#b4ff33', size: 6, delay: '20ms' },
+    { dx: '-10px', dy: '85px', color: '#9bff00', size: 5, delay: '80ms' },
+    { dx: '-55px', dy: '70px', color: '#ffffff', size: 4, delay: '40ms' },
+    { dx: '-90px', dy: '35px', color: '#b4ff33', size: 6, delay: '10ms' },
+    { dx: '-95px', dy: '-10px', color: '#9bff00', size: 5, delay: '60ms' },
+    { dx: '-45px', dy: '-50px', color: '#ffffff', size: 3, delay: '30ms' },
+    { dx: '50px', dy: '-50px', color: '#9bff00', size: 4, delay: '50ms' },
+    { dx: '0px', dy: '55px', color: '#b4ff33', size: 5, delay: '70ms' },
+  ];
 
   const mirrorRef = useRef<HTMLDivElement | null>(null);
 
@@ -79,44 +91,132 @@ const Contact: React.FC = () => {
     adjustTextareaHeight(e.currentTarget);
   };
 
-  const sendEmail = (e: FormEvent<HTMLFormElement>) => {
+  const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!form.current) return;
-
-    const formData = new FormData(form.current);
-    const userName = (formData.get('user_name') as string | null)?.trim() ?? '';
-    const message = (formData.get('message') as string | null)?.trim() ?? '';
-
-    if (!userName || !message) {
-      setFormStatus('spaceError');
+    if (
+      !form.current ||
+      submitState === 'sending' ||
+      submitState === 'success'
+    ) {
       return;
     }
 
-    setIsSending(true);
+    const formData = new FormData(form.current);
+    const userName = (formData.get('user_name') as string | null)?.trim() ?? '';
+    const userEmail =
+      (formData.get('user_email') as string | null)?.trim() ?? '';
+    const subject = (formData.get('subject') as string | null)?.trim() ?? '';
+    const message = (formData.get('message') as string | null)?.trim() ?? '';
 
-    emailjs
-      .sendForm(
-        'service_zryayhv',
-        'template_hyhed1i',
-        form.current,
-        's_rEp5-7RXlD2T7_4',
-      )
-      .then(
-        () => {
-          setFormStatus('success');
-          setIsSending(false);
-          form.current?.reset();
-          if (textareaRef.current) {
-            textareaRef.current.style.height = '80px';
-            textareaRef.current.style.overflowY = 'hidden';
+    if (!userName || !message) {
+      setSubmitState('validation-error');
+      setStatusFeedback('Please enter both your name and message.');
+      setTimeout(() => {
+        setSubmitState((prev) => {
+          if (prev === 'validation-error') {
+            setStatusFeedback('');
+            return 'idle';
           }
-        },
-        (error: { text?: string }) => {
-          setFormStatus('error');
-          setIsSending(false);
-          console.error('EmailJS error:', error.text);
-        },
+          return prev;
+        });
+      }, 3000);
+      return;
+    }
+
+    // Validate email format and valid top-level domain (prevent DNS timeouts on typos like .b)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+    if (userEmail && !emailRegex.test(userEmail)) {
+      setSubmitState('validation-error');
+      setStatusFeedback(
+        'Please provide a valid email format (e.g. yourname@domain.com).',
       );
+      setTimeout(() => {
+        setSubmitState((prev) => {
+          if (prev === 'validation-error') {
+            setStatusFeedback('');
+            return 'idle';
+          }
+          return prev;
+        });
+      }, 3500);
+      return;
+    }
+
+    setSubmitState('sending');
+    setStatusFeedback('');
+
+    // Minimum visual delay so user can appreciate the rocket/plane takeoff
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Hard network timeout (8.5s) to prevent the button hanging on external mail delays
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('TIMEOUT')), 8500),
+    );
+
+    // Interactive Demo / Test Mode support (if user types 'test')
+    const isTestMode =
+      userName.toLowerCase() === 'test' ||
+      subject.toLowerCase().includes('test') ||
+      message.toLowerCase().includes('test') ||
+      userEmail.includes('@test.');
+
+    try {
+      if (isTestMode) {
+        // Smoothly simulate successful dispatch for animation testing
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+      } else {
+        await Promise.all([
+          Promise.race([
+            emailjs.sendForm(
+              'service_zryayhv',
+              'template_hyhed1i',
+              form.current,
+              's_rEp5-7RXlD2T7_4',
+            ),
+            timeoutPromise,
+          ]),
+          minDelay,
+        ]);
+      }
+
+      setSubmitState('success');
+      setStatusFeedback('Message sent successfully! I will be in touch soon.');
+      form.current?.reset();
+      if (textareaRef.current) {
+        textareaRef.current.style.height = '80px';
+        textareaRef.current.style.overflowY = 'hidden';
+      }
+
+      // Smoothly return to idle after celebratory period
+      setTimeout(() => {
+        setSubmitState((prev) => {
+          if (prev === 'success') {
+            setStatusFeedback('');
+            return 'idle';
+          }
+          return prev;
+        });
+      }, 5000);
+    } catch (error: unknown) {
+      console.error('EmailJS transmission error:', error);
+      setSubmitState('error');
+      const isTimeout =
+        error instanceof Error && error.message === 'TIMEOUT';
+      setStatusFeedback(
+        isTimeout
+          ? 'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.'
+          : 'Delivery issue with email service. Please reach me directly via email or Telegram.',
+      );
+      setTimeout(() => {
+        setSubmitState((prev) => {
+          if (prev === 'error') {
+            setStatusFeedback('');
+            return 'idle';
+          }
+          return prev;
+        });
+      }, 5000);
+    }
   };
 
   return (
@@ -301,7 +401,14 @@ const Contact: React.FC = () => {
         </div>
 
         {/* Form Column */}
-        <div className={styles.formSide}>
+        <div
+          className={`${styles.formSide} ${
+            submitState === 'sending' ? styles.formTransmitting : ''
+          } ${submitState === 'success' ? styles.formSuccess : ''}`}
+        >
+          {/* Cybernetic laser scanner line across top border during transmission */}
+          <div className={styles.laserScanBar} aria-hidden="true" />
+
           <div className={styles.formHeader}>
             <h3 className={styles.formTitle}>Send a Direct Message</h3>
             <p className={styles.formSubtitle}>
@@ -311,51 +418,75 @@ const Contact: React.FC = () => {
 
           <form ref={form} className={styles.form} onSubmit={sendEmail}>
             <div className={styles.inputRow}>
-              <div className={styles.field}>
+              <div
+                className={`${styles.field} ${
+                  submitState === 'sending' ? styles.fieldLocked : ''
+                }`}
+              >
                 <input
                   type="text"
                   name="user_name"
                   id="user_name"
                   placeholder=" "
                   required
-                  disabled={isSending}
+                  disabled={
+                    submitState === 'sending' || submitState === 'success'
+                  }
                 />
                 <label htmlFor="user_name">Your Name</label>
               </div>
 
-              <div className={styles.field}>
+              <div
+                className={`${styles.field} ${
+                  submitState === 'sending' ? styles.fieldLocked : ''
+                }`}
+              >
                 <input
                   type="email"
                   name="user_email"
                   id="user_email"
                   placeholder=" "
                   required
-                  disabled={isSending}
+                  disabled={
+                    submitState === 'sending' || submitState === 'success'
+                  }
                 />
                 <label htmlFor="user_email">Your Email</label>
               </div>
             </div>
 
-            <div className={styles.field}>
+            <div
+              className={`${styles.field} ${
+                submitState === 'sending' ? styles.fieldLocked : ''
+              }`}
+            >
               <input
                 type="text"
                 name="subject"
                 id="subject"
                 placeholder=" "
-                disabled={isSending}
+                disabled={
+                  submitState === 'sending' || submitState === 'success'
+                }
                 autoComplete="off"
               />
               <label htmlFor="subject">Subject</label>
             </div>
 
-            <div className={styles.field}>
+            <div
+              className={`${styles.field} ${
+                submitState === 'sending' ? styles.fieldLocked : ''
+              }`}
+            >
               <textarea
                 ref={textareaRef}
                 name="message"
                 id="message"
                 placeholder=" "
                 required
-                disabled={isSending}
+                disabled={
+                  submitState === 'sending' || submitState === 'success'
+                }
                 onInput={handleTextareaInput}
               />
               <label htmlFor="message">Your Message...</label>
@@ -364,49 +495,151 @@ const Contact: React.FC = () => {
             <div className={styles.formFooter}>
               <button
                 type="submit"
-                className={`${styles.submitBtn} ${isSending ? styles.loading : ''}`}
-                disabled={isSending}
+                className={`${styles.submitBtn} ${
+                  submitState === 'sending' ? styles.btnSending : ''
+                } ${submitState === 'success' ? styles.btnSuccess : ''} ${
+                  submitState === 'error' || submitState === 'validation-error'
+                    ? styles.btnError
+                    : ''
+                }`}
+                disabled={
+                  submitState === 'sending' || submitState === 'success'
+                }
+                aria-live="polite"
               >
-                {!isSending && <span>Send Message</span>}
-                {isSending && (
-                  <span className={styles.spinnerWrapper}>
-                    <span className={styles.spinner} />
-                    <span>Transmitting...</span>
+                {/* Shockwave expanding ring upon success */}
+                {submitState === 'success' && (
+                  <span className={styles.shockwaveRing} aria-hidden="true" />
+                )}
+
+                {/* Micro particle celebration burst */}
+                {submitState === 'success' && (
+                  <div className={styles.particlesBurst} aria-hidden="true">
+                    {PARTICLES.map((p, i) => (
+                      <span
+                        key={i}
+                        className={styles.particle}
+                        style={
+                          {
+                            '--dx': p.dx,
+                            '--dy': p.dy,
+                            '--p-color': p.color,
+                            '--p-size': `${p.size}px`,
+                            '--p-delay': p.delay,
+                          } as React.CSSProperties
+                        }
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* State: IDLE */}
+                {submitState === 'idle' && (
+                  <span className={styles.btnContent}>
+                    <span>Send Message</span>
+                    <svg
+                      className={styles.planeIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M22 2L11 13" />
+                      <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                    </svg>
+                  </span>
+                )}
+
+                {/* State: SENDING / TRANSMITTING */}
+                {submitState === 'sending' && (
+                  <span className={styles.btnContent}>
+                    <div className={styles.flightScene} aria-hidden="true">
+                      <svg
+                        className={styles.launchingPlane}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M22 2L11 13" />
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                      </svg>
+                    </div>
+                    <span className={styles.transmittingRing} />
+                    <span className={styles.transmittingText}>
+                      <span>Transmitting</span>
+                      <span className={styles.pulsingDots}>
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                      </span>
+                    </span>
+                  </span>
+                )}
+
+                {/* State: SUCCESS */}
+                {submitState === 'success' && (
+                  <span className={styles.btnContent}>
+                    <div className={styles.checkWrapper}>
+                      <svg
+                        className={styles.checkSvg}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                      >
+                        <circle
+                          className={styles.checkCircle}
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          strokeWidth="2.2"
+                        />
+                        <path
+                          className={styles.checkTick}
+                          d="M7.5 12.5L10.5 15.5L16.5 9.5"
+                          strokeWidth="2.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <span className={styles.successText}>
+                      Message Dispatched! ✨
+                    </span>
+                  </span>
+                )}
+
+                {/* State: ERROR or VALIDATION-ERROR */}
+                {(submitState === 'error' ||
+                  submitState === 'validation-error') && (
+                  <span className={styles.btnContent}>
+                    <span className={styles.errorExclamation}>!</span>
+                    <span>
+                      {submitState === 'validation-error'
+                        ? 'Please Complete Fields'
+                        : 'Delivery Failed • Tap to Retry'}
+                    </span>
                   </span>
                 )}
               </button>
 
-              {formStatus && (
+              {statusFeedback && submitState !== 'idle' && (
                 <div
                   className={`${styles.statusAlert} ${
-                    formStatus === 'success'
+                    submitState === 'success'
                       ? styles.alertSuccess
                       : styles.alertError
                   }`}
                   role="status"
                 >
-                  {formStatus === 'success' && (
-                    <>
-                      <span className={styles.alertIcon}>✓</span>
-                      <span>
-                        Message sent successfully! I'll be in touch soon.
-                      </span>
-                    </>
-                  )}
-                  {formStatus === 'error' && (
-                    <>
-                      <span className={styles.alertIcon}>✕</span>
-                      <span>
-                        Delivery issue. Please reach me directly via email.
-                      </span>
-                    </>
-                  )}
-                  {formStatus === 'spaceError' && (
-                    <>
-                      <span className={styles.alertIcon}>!</span>
-                      <span>Please enter a non-empty name and message.</span>
-                    </>
-                  )}
+                  <span className={styles.alertIcon}>
+                    {submitState === 'success' ? '✓' : '!'}
+                  </span>
+                  <span>{statusFeedback}</span>
                 </div>
               )}
             </div>

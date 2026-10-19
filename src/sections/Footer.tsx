@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
 
           <div className={styles.techBadge}>
             <span className={styles.techDot} />
-            <span>React 19 &bull; TypeScript &bull; High-Craft UI</span>
+            <span>Next.js &bull; React 19 &bull; TypeScript &bull; Tailwind CSS</span>
           </div>
         </div>
       </div>
