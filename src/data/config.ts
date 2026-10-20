@@ -288,7 +288,7 @@ export const DATA: AppData = {
       title: 'Lethal Labyrinths',
       photo: lethalLabyrinthsImg,
       description:
-        'Interactive discrete route optimization and resource gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
+        'Inspired by Lethal Company — interactive route optimization and scrap-gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
       tags: [
         'SIMULATOR',
         'GAME',
