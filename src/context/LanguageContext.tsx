@@ -8,13 +8,12 @@ import React, {
   useRef,
   useEffect,
   useCallback,
-  useSyncExternalStore,
   ReactNode,
 } from 'react';
 import { Language, TranslationData, TRANSLATIONS } from '../data/translations';
 import styles from './LanguageContext.module.scss';
 
-const STORAGE_KEY = 'portfolio_filter_lang';
+export const LANGUAGE_STORAGE_KEY = 'portfolio_filter_lang';
 
 type TransitionPhase = 'idle' | 'darkening' | 'brightening';
 
@@ -30,51 +29,35 @@ const LanguageContext = createContext<LanguageContextValue | undefined>(
   undefined,
 );
 
-let memoryLang: Language | null = null;
-const listeners = new Set<() => void>();
+export function getLocalizedUrl(targetLang: Language): string {
+  if (typeof window === 'undefined') return `/${targetLang}`;
+  const isProd = window.location.pathname.startsWith('/portfolio');
+  const basePath = isProd ? '/portfolio' : '';
+  return `${basePath}/${targetLang}${window.location.search}${window.location.hash}`;
+}
 
-function getClientSnapshot(): Language {
-  if (typeof window === 'undefined') return 'en';
-  if (memoryLang !== null) return memoryLang;
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    memoryLang = saved === 'uk' ? 'uk' : 'en';
-  } catch {
-    memoryLang = 'en';
+export function getLangFromPathname(): Language | null {
+  if (typeof window === 'undefined') return null;
+  const path = window.location.pathname;
+  if (path.endsWith('/uk') || path.includes('/uk/') || path.includes('/uk?')) {
+    return 'uk';
   }
-  return memoryLang;
+  if (path.endsWith('/en') || path.includes('/en/') || path.includes('/en?')) {
+    return 'en';
+  }
+  return null;
 }
 
-function getServerSnapshot(): Language {
-  return 'en';
+interface LanguageProviderProps {
+  children: ReactNode;
+  initialLang?: Language;
 }
 
-function subscribe(callback: () => void): () => void {
-  listeners.add(callback);
-  const handleStorage = (e: StorageEvent) => {
-    if (
-      e.key === STORAGE_KEY &&
-      (e.newValue === 'en' || e.newValue === 'uk')
-    ) {
-      memoryLang = e.newValue;
-      callback();
-    }
-  };
-  window.addEventListener('storage', handleStorage);
-  return () => {
-    listeners.delete(callback);
-    window.removeEventListener('storage', handleStorage);
-  };
-}
-
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
+export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   children,
+  initialLang = 'en',
 }) => {
-  const lang = useSyncExternalStore(
-    subscribe,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
+  const [lang, setLangState] = useState<Language>(initialLang);
 
   const [phase, setPhase] = useState<TransitionPhase>('idle');
   const [isInteractive, setIsInteractive] = useState<boolean>(false);
@@ -95,22 +78,38 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
     return () => clearAllTimers();
   }, [clearAllTimers]);
 
-  const applyLang = useCallback((newLang: Language) => {
-    memoryLang = newLang;
+  // Synchronize on mount and update storage + document lang
+  useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, newLang);
-      document.documentElement.lang = newLang;
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+      document.documentElement.lang = lang;
     } catch {
       // Ignore storage write issues
     }
-    listeners.forEach((listener) => listener());
-  }, []);
+  }, [lang]);
+
+  // Listen to browser Back/Forward navigation
+  useEffect(() => {
+    const handlePopState = () => {
+      const routeLang = getLangFromPathname();
+      if (routeLang && routeLang !== lang) {
+        setLangState(routeLang);
+        try {
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, routeLang);
+          document.documentElement.lang = routeLang;
+        } catch {
+          // Ignore
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [lang]);
 
   const switchWithTransition = useCallback(
     (targetLang: Language) => {
-      if (isTransitioningRef.current) return;
-      const current = getClientSnapshot();
-      if (targetLang === current) return;
+      if (isTransitioningRef.current || targetLang === lang) return;
 
       clearAllTimers();
 
@@ -121,8 +120,17 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
 
       // Phase 1: 1.0s smooth darkening
       darkenTimerRef.current = setTimeout(() => {
-        // Screen is now fully dark: switch language imperceptibly
-        applyLang(targetLang);
+        // Screen is now fully dark: switch language imperceptibly & update route in address bar
+        setLangState(targetLang);
+        try {
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, targetLang);
+          document.documentElement.lang = targetLang;
+
+          const targetUrl = getLocalizedUrl(targetLang);
+          window.history.pushState(null, '', targetUrl);
+        } catch {
+          // Ignore
+        }
 
         // Phase 2: 1.0s smooth brightening begins
         setPhase('brightening');
@@ -141,7 +149,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
         }, 1000);
       }, 1000);
     },
-    [applyLang, clearAllTimers],
+    [lang, clearAllTimers],
   );
 
   const setLang = useCallback(
@@ -153,10 +161,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({
 
   const toggleLang = useCallback(() => {
     if (isTransitioningRef.current) return;
-    const current = getClientSnapshot();
-    const next: Language = current === 'en' ? 'uk' : 'en';
+    const next: Language = lang === 'en' ? 'uk' : 'en';
     switchWithTransition(next);
-  }, [switchWithTransition]);
+  }, [lang, switchWithTransition]);
 
   const t = useMemo(() => TRANSLATIONS[lang], [lang]);
 

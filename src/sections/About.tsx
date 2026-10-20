@@ -126,7 +126,7 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/sCvKDiFo2cJhcYW37"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       <span>{t.about.vntuName}</span>
                       <svg
@@ -159,7 +159,7 @@ const About: React.FC = () => {
                     <a
                       href="https://goit.global/et/courses/fullstack/"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       <span>{t.about.goitName}</span>
                       <svg
@@ -191,7 +191,7 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/iNhCe66bAWo7mfTe8"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       <span>{t.about.collegeName}</span>
                       <svg
@@ -221,7 +221,7 @@ const About: React.FC = () => {
                     <a
                       href="https://maps.app.goo.gl/A4iwefxeDXjC4wWNA"
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                     >
                       <span>{t.about.lyceumName}</span>
                       <svg
@@ -279,7 +279,7 @@ const About: React.FC = () => {
             <a
               href="https://github.com/iberikofer/academic-archive"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className={styles.archiveLink}
             >
               <svg

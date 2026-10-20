@@ -13,6 +13,7 @@ import styles from './Contact.module.scss';
 import { DATA } from '../data/config';
 import { useButtonGlow } from '../hooks/useButtonGlow';
 import { useLanguage } from '../context/LanguageContext';
+import { trackEvent } from '../lib/analytics';
 
 interface FlyingPlaneCoord {
   top: number;
@@ -22,6 +23,32 @@ interface FlyingPlaneCoord {
 }
 
 const DRAFT_STORAGE_KEY = 'portfolio_contact_draft';
+const COOLDOWN_STORAGE_KEY = 'portfolio_contact_last_sent';
+const COOLDOWN_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
+// Base64 encoded contacts to prevent scrapers from harvesting plaintext emails/numbers from static HTML
+const ENCODED_EMAIL = 'c3ljaC55YXJvc2xhdi53b3JrQGdtYWlsLmNvbQ==';
+const ENCODED_PHONE = 'KzM4MCAoNjgpIDcxMi03OS03NQ==';
+const ENCODED_TEL_HREF = 'KzM4MDY4NzEyNzk3NQ==';
+
+const decodeContact = (encoded: string): string => {
+  if (typeof window === 'undefined') return '';
+  try {
+    return atob(encoded);
+  } catch {
+    return '';
+  }
+};
+
+const sanitizeInput = (text: string): string => {
+  if (!text) return '';
+  return text
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/javascript\s*:/gi, '')
+    .replace(/data\s*:\s*text\/html/gi, '')
+    .replace(/on\w+\s*=/gi, '')
+    .replace(/[<>]/g, '');
+};
 
 interface ContactDraft {
   userName: string;
@@ -29,6 +56,30 @@ interface ContactDraft {
   subject: string;
   message: string;
 }
+
+const getRemainingCooldownSeconds = (): number => {
+  if (typeof window === 'undefined') return 0;
+  try {
+    const raw = localStorage.getItem(COOLDOWN_STORAGE_KEY);
+    if (!raw) return 0;
+    const lastSent = parseInt(raw, 10);
+    if (isNaN(lastSent)) return 0;
+    const elapsed = Date.now() - lastSent;
+    if (elapsed < COOLDOWN_DURATION_MS) {
+      return Math.ceil((COOLDOWN_DURATION_MS - elapsed) / 1000);
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+};
+
+const formatCooldown = (seconds: number): string => {
+  if (seconds <= 0) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+};
 
 const getHasSavedDraft = (): boolean => {
   if (typeof window === 'undefined') return false;
@@ -62,11 +113,14 @@ const Contact: React.FC = () => {
   const staticPlaneRef = useRef<SVGSVGElement>(null);
   const [flyingPlane, setFlyingPlane] = useState<FlyingPlaneCoord | null>(null);
   const [submitState, setSubmitState] = useState<
-    'idle' | 'sending' | 'success' | 'error' | 'validation-error'
+    'idle' | 'sending' | 'success' | 'error' | 'validation-error' | 'rate-limited'
   >('idle');
   const [statusFeedback, setStatusFeedback] = useState<string>('');
   const [isAlertFading, setIsAlertFading] = useState<boolean>(false);
   const [hasDraftRestored, setHasDraftRestored] = useState<boolean>(getHasSavedDraft);
+  const [cooldownSeconds, setCooldownSeconds] = useState<number>(getRemainingCooldownSeconds);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  const [honeypot, setHoneypot] = useState<string>('');
 
   const PARTICLES = [
     { dx: '-85px', dy: '-45px', color: '#9bff00', size: 5, delay: '0ms' },
@@ -88,6 +142,27 @@ const Contact: React.FC = () => {
   ];
 
   const mirrorRef = useRef<HTMLDivElement | null>(null);
+
+  // Decode obfuscated contact info on client mount (safe from static HTML scrapers)
+  useEffect(() => {
+    const rafId = requestAnimationFrame(() => setIsMounted(true));
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  const safeEmail = isMounted ? decodeContact(ENCODED_EMAIL) : '';
+  const safePhone = isMounted ? decodeContact(ENCODED_PHONE) : '';
+  const safeTelHref = isMounted ? decodeContact(ENCODED_TEL_HREF) : '';
+
+  // Synchronize cooldown countdown ticker
+
+  useEffect(() => {
+    if (cooldownSeconds <= 0) return;
+    const interval = setInterval(() => {
+      const remaining = getRemainingCooldownSeconds();
+      setCooldownSeconds(remaining);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [cooldownSeconds]);
 
   useEffect(() => {
     return () => {
@@ -153,10 +228,10 @@ const Contact: React.FC = () => {
     if (!form.current) return;
     try {
       const formData = new FormData(form.current);
-      const userName = (formData.get('user_name') as string | null) || '';
-      const userEmail = (formData.get('user_email') as string | null) || '';
-      const subject = (formData.get('subject') as string | null) || '';
-      const message = textareaRef.current?.value || '';
+      const userName = sanitizeInput((formData.get('user_name') as string | null) || '');
+      const userEmail = sanitizeInput((formData.get('user_email') as string | null) || '');
+      const subject = sanitizeInput((formData.get('subject') as string | null) || '');
+      const message = sanitizeInput(textareaRef.current?.value || '');
 
       if (
         userName.trim() ||
@@ -260,12 +335,62 @@ const Contact: React.FC = () => {
       return;
     }
 
+    // Rate-limiting check: max 1 submission every 5 minutes
+    const remainingCooldown = getRemainingCooldownSeconds();
+    if (remainingCooldown > 0) {
+      trackEvent('contact_rate_limited', { remainingSeconds: remainingCooldown });
+      setSubmitState('rate-limited');
+      setStatusFeedback(
+        t.contact.statusRateLimited.replace(
+          '{time}',
+          formatCooldown(remainingCooldown),
+        ),
+      );
+      setTimeout(() => {
+        setIsAlertFading(true);
+      }, 3200);
+      setTimeout(() => {
+        setSubmitState((prev) => {
+          if (prev === 'rate-limited') {
+            setStatusFeedback('');
+            setIsAlertFading(false);
+            return 'idle';
+          }
+          return prev;
+        });
+      }, 3800);
+      return;
+    }
+
     const formData = new FormData(form.current);
-    const userName = (formData.get('user_name') as string | null)?.trim() ?? '';
-    const userEmail =
-      (formData.get('user_email') as string | null)?.trim() ?? '';
-    const subject = (formData.get('subject') as string | null)?.trim() ?? '';
-    const message = (formData.get('message') as string | null)?.trim() ?? '';
+
+    // Anti-Spam Honeypot Trap: automated bots populate hidden fields; real users never do
+    const botTrap = (formData.get('website_url') as string | null)?.trim() || honeypot.trim();
+    if (botTrap) {
+      trackEvent('honeypot_trapped');
+      setSubmitState('success');
+      setStatusFeedback(t.contact.statusSuccess);
+      form.current?.reset();
+      clearDraft();
+      setHoneypot('');
+      setTimeout(() => setIsAlertFading(true), 3500);
+      setTimeout(() => {
+        setSubmitState('idle');
+        setIsAlertFading(false);
+        setStatusFeedback('');
+      }, 4200);
+      return;
+    }
+
+    const rawUserName = (formData.get('user_name') as string | null)?.trim() ?? '';
+    const rawUserEmail = (formData.get('user_email') as string | null)?.trim() ?? '';
+    const rawSubject = (formData.get('subject') as string | null)?.trim() ?? '';
+    const rawMessage = (formData.get('message') as string | null)?.trim() ?? '';
+
+    const userName = sanitizeInput(rawUserName);
+    const userEmail = sanitizeInput(rawUserEmail);
+    const subject = sanitizeInput(rawSubject);
+    const message = sanitizeInput(rawMessage);
 
     if (!userName || !message) {
       setSubmitState('validation-error');
@@ -357,10 +482,17 @@ const Contact: React.FC = () => {
         ]);
       }
 
+      trackEvent('submit_contact_form', { test_mode: isTestMode });
       setSubmitState('success');
       setStatusFeedback(t.contact.statusSuccess);
       form.current?.reset();
       clearDraft();
+      try {
+        localStorage.setItem(COOLDOWN_STORAGE_KEY, Date.now().toString());
+        setCooldownSeconds(Math.ceil(COOLDOWN_DURATION_MS / 1000));
+      } catch {
+        // Ignore storage errors
+      }
       if (textareaRef.current) {
         textareaRef.current.style.height = '';
         textareaRef.current.style.overflowY = 'hidden';
@@ -446,9 +578,14 @@ const Contact: React.FC = () => {
               ref={resumeBtnRef}
               href="resume.pdf"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className={styles.resumeBtn}
               title={t.contact.cvDesc}
+              onClick={() =>
+                trackEvent('download_resume', {
+                  role: 'FullStack-JS Developer',
+                })
+              }
             >
               <span className={styles.btnGlow} aria-hidden="true">
                 <span ref={resumeGlowRef} className={styles.glowSpot} />
@@ -472,8 +609,16 @@ const Contact: React.FC = () => {
 
           <div className={styles.contactCards}>
             <a
-              href={`mailto:${DATA.profile.email}`}
+              href={safeEmail ? `mailto:${safeEmail}` : '#'}
               className={styles.contactItem}
+              onClick={(e) => {
+                trackEvent('social_click', { channel: 'email' });
+                if (!safeEmail) {
+                  e.preventDefault();
+                  const decoded = decodeContact(ENCODED_EMAIL);
+                  window.location.href = `mailto:${decoded}`;
+                }
+              }}
             >
               <div className={styles.itemIcon}>
                 <svg
@@ -488,11 +633,22 @@ const Contact: React.FC = () => {
               </div>
               <div className={styles.itemText}>
                 <span className={styles.itemLabel}>{t.contact.emailTitle}</span>
-                <span className={styles.itemVal}>{DATA.profile.email}</span>
+                <span className={styles.itemVal}>{safeEmail || 'sych.•••@gmail.com'}</span>
               </div>
             </a>
 
-            <a href="tel:+380687127975" className={styles.contactItem}>
+            <a
+              href={safeTelHref ? `tel:${safeTelHref}` : '#'}
+              className={styles.contactItem}
+              onClick={(e) => {
+                trackEvent('social_click', { channel: 'phone' });
+                if (!safeTelHref) {
+                  e.preventDefault();
+                  const decodedTel = decodeContact(ENCODED_TEL_HREF);
+                  window.location.href = `tel:${decodedTel}`;
+                }
+              }}
+            >
               <div className={styles.itemIcon}>
                 <svg
                   viewBox="0 0 24 24"
@@ -505,7 +661,7 @@ const Contact: React.FC = () => {
               </div>
               <div className={styles.itemText}>
                 <span className={styles.itemLabel}>{t.contact.phoneTitle}</span>
-                <span className={styles.itemVal}>{DATA.profile.phone}</span>
+                <span className={styles.itemVal}>{safePhone || '+380 (68) •••-••-••'}</span>
               </div>
             </a>
 
@@ -563,6 +719,17 @@ const Contact: React.FC = () => {
                 </button>
               </div>
             )}
+            {cooldownSeconds > 0 && (
+              <div className={styles.cooldownBadge}>
+                <span className={styles.cooldownDot} />
+                <span>
+                  {t.contact.cooldownBadge.replace(
+                    '{time}',
+                    formatCooldown(cooldownSeconds),
+                  )}
+                </span>
+              </div>
+            )}
           </div>
 
           <form
@@ -571,6 +738,31 @@ const Contact: React.FC = () => {
             onSubmit={sendEmail}
             onInput={saveDraft}
           >
+            {/* Honeypot anti-spam trap (invisible to humans, traps scraping bots) */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '-9999px',
+                top: '-9999px',
+                width: '1px',
+                height: '1px',
+                opacity: 0,
+                pointerEvents: 'none',
+                overflow: 'hidden',
+              }}
+              aria-hidden="true"
+            >
+              <input
+                type="text"
+                name="website_url"
+                id="website_url"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(e) => setHoneypot(e.target.value)}
+              />
+            </div>
+
             <div className={styles.inputRow}>
               <div
                 className={`${styles.field} ${
@@ -656,9 +848,23 @@ const Contact: React.FC = () => {
                   submitState === 'error' || submitState === 'validation-error'
                     ? styles.btnError
                     : ''
-                }`}
+                } ${
+                  submitState === 'idle' && cooldownSeconds > 0
+                    ? styles.btnCooldown
+                    : ''
+                } ${submitState === 'rate-limited' ? styles.btnWarning : ''}`}
                 disabled={
-                  submitState === 'sending' || submitState === 'success'
+                  submitState === 'sending' ||
+                  submitState === 'success' ||
+                  (submitState === 'idle' && cooldownSeconds > 0)
+                }
+                title={
+                  cooldownSeconds > 0
+                    ? t.contact.cooldownBadge.replace(
+                        '{time}',
+                        formatCooldown(cooldownSeconds),
+                      )
+                    : undefined
                 }
                 aria-live="polite"
               >
@@ -693,8 +899,32 @@ const Contact: React.FC = () => {
                   </div>
                 )}
 
-                {/* State: IDLE */}
-                {submitState === 'idle' && (
+                {/* State: COOLDOWN COUNTDOWN IN IDLE */}
+                {submitState === 'idle' && cooldownSeconds > 0 && (
+                  <span className={styles.btnContent}>
+                    <svg
+                      className={styles.clockIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <span>
+                      {t.contact.btnCooldown.replace(
+                        '{time}',
+                        formatCooldown(cooldownSeconds),
+                      )}
+                    </span>
+                  </span>
+                )}
+
+                {/* State: IDLE READY */}
+                {submitState === 'idle' && cooldownSeconds === 0 && (
                   <span className={styles.btnContent}>
                     <span>{t.contact.btnIdle}</span>
                     <svg
@@ -772,6 +1002,14 @@ const Contact: React.FC = () => {
                     </span>
                   </span>
                 )}
+
+                {/* State: RATE-LIMITED */}
+                {submitState === 'rate-limited' && (
+                  <span className={styles.btnContent}>
+                    <span className={styles.errorExclamation}>⏳</span>
+                    <span>{t.contact.btnRateLimited}</span>
+                  </span>
+                )}
               </button>
 
               {statusFeedback && submitState !== 'idle' && (
@@ -779,12 +1017,18 @@ const Contact: React.FC = () => {
                   className={`${styles.statusAlert} ${
                     submitState === 'success'
                       ? styles.alertSuccess
-                      : styles.alertError
+                      : submitState === 'rate-limited'
+                        ? styles.alertWarning
+                        : styles.alertError
                   } ${isAlertFading ? styles.alertFadingOut : ''}`}
                   role="status"
                 >
                   <span className={styles.alertIcon}>
-                    {submitState === 'success' ? '✓' : '!'}
+                    {submitState === 'success'
+                      ? '✓'
+                      : submitState === 'rate-limited'
+                        ? '⏳'
+                        : '!'}
                   </span>
                   <span>{statusFeedback}</span>
                 </div>

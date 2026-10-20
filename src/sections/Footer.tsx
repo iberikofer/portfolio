@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
               <a
                 href={DATA.profile.linkedin}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 className={styles.socialBtn}
                 title="LinkedIn"
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
               <a
                 href="https://t.me/YSych"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="Telegram"
                 className={styles.socialBtn}
                 title="Telegram"
@@ -55,7 +55,7 @@ const Footer: React.FC = () => {
               <a
                 href="https://www.instagram.com/yaroslav.sych"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="Instagram"
                 className={styles.socialBtn}
                 title="Instagram"
@@ -74,7 +74,7 @@ const Footer: React.FC = () => {
               <a
                 href={DATA.profile.github}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="GitHub"
                 className={styles.socialBtn}
                 title="GitHub"

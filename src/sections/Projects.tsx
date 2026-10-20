@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import { DATA, Project, ImageSource } from '../data/config';
 import { useLanguage } from '../context/LanguageContext';
+import { trackEvent } from '../lib/analytics';
 import styles from './Projects.module.scss';
 
 type ScopeCategory = 'all' | 'solo' | 'team';
@@ -237,7 +238,7 @@ const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
     <img
       ref={imgRef}
       src={getImgSrc(project.photo)}
-      alt={project.title}
+      alt={`${project.title} — ${project.tags.join(', ')} project preview`}
       width={500}
       height={320}
       loading="lazy"
@@ -332,6 +333,7 @@ const Projects: React.FC = () => {
   }, []);
 
   const handleScopeSelect = (id: ScopeCategory) => {
+    trackEvent('filter_scope_change', { scope: id });
     activeScopeRef.current = id;
     setActiveScope(id);
     updateScopeIndicator(id);
@@ -339,9 +341,11 @@ const Projects: React.FC = () => {
   };
 
   const handleChipToggle = (chip: TechChip) => {
-    const next = selectedChips.includes(chip)
-      ? selectedChips.filter((c) => c !== chip)
-      : [...selectedChips, chip];
+    const isAdding = !selectedChips.includes(chip);
+    trackEvent('filter_tag_toggle', { chip, active: isAdding });
+    const next = isAdding
+      ? [...selectedChips, chip]
+      : selectedChips.filter((c) => c !== chip);
     setSelectedChips(next);
     syncFilterState(activeScope, next, matchMode);
   };
@@ -349,13 +353,15 @@ const Projects: React.FC = () => {
   const handleCardTagClick = (chip: TechChip) => {
     // If this chip is already the only one active, reset to all.
     // Otherwise, filter specifically by this chip, clearing unrelated chips like ai-tools.
-    const next =
-      selectedChips.length === 1 && selectedChips[0] === chip ? [] : [chip];
+    const isClearing = selectedChips.length === 1 && selectedChips[0] === chip;
+    trackEvent('filter_tag_toggle', { chip, active: !isClearing });
+    const next = isClearing ? [] : [chip];
     setSelectedChips(next);
     syncFilterState(activeScope, next, matchMode);
   };
 
   const handleClearChips = () => {
+    trackEvent('filter_reset');
     setSelectedChips([]);
     syncFilterState(activeScope, [], matchMode);
   };
@@ -381,31 +387,30 @@ const Projects: React.FC = () => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [updateScopeIndicator]);
 
-  // Restore saved filter state ONCE post-mount (after hydration without cascading render error)
+  // Restore saved filter state on mount from URL params / localStorage
   useEffect(() => {
     if (hasRestoredRef.current) return;
-    hasRestoredRef.current = true;
 
-    const savedScope = getSavedScope();
-    const savedChips = getSavedChips();
-    const savedMode = getSavedMode();
+    const timer = setTimeout(() => {
+      hasRestoredRef.current = true;
+      const savedScope = getSavedScope();
+      const savedChips = getSavedChips();
+      const savedMode = getSavedMode();
 
-    if (savedScope !== 'all' || savedChips.length > 0 || savedMode !== 'any') {
-      const raf = requestAnimationFrame(() => {
-        if (savedScope !== 'all') {
-          activeScopeRef.current = savedScope;
-          setActiveScope(savedScope);
-          updateScopeIndicator(savedScope);
-        }
-        if (savedChips.length > 0) {
-          setSelectedChips(savedChips);
-        }
-        if (savedMode !== 'any') {
-          setMatchMode(savedMode);
-        }
-      });
-      return () => cancelAnimationFrame(raf);
-    }
+      if (savedScope !== 'all') {
+        activeScopeRef.current = savedScope;
+        setActiveScope(savedScope);
+        updateScopeIndicator(savedScope);
+      }
+      if (savedChips.length > 0) {
+        setSelectedChips(savedChips);
+      }
+      if (savedMode !== 'any') {
+        setMatchMode(savedMode);
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [updateScopeIndicator]);
 
   // Update scope indicator when activeScope changes
@@ -503,6 +508,36 @@ const Projects: React.FC = () => {
       }
     });
   }, [activeScope, selectedChips, matchMode]);
+
+  const hasActiveChips = selectedChips.length > 0;
+  const [cachedActionInfo, setCachedActionInfo] = useState({
+    chipsCount: selectedChips.length,
+    filteredCount: filteredProjects.length,
+    mode: matchMode,
+  });
+
+  if (
+    selectedChips.length > 0 &&
+    (cachedActionInfo.chipsCount !== selectedChips.length ||
+      cachedActionInfo.filteredCount !== filteredProjects.length ||
+      cachedActionInfo.mode !== matchMode)
+  ) {
+    setCachedActionInfo({
+      chipsCount: selectedChips.length,
+      filteredCount: filteredProjects.length,
+      mode: matchMode,
+    });
+  }
+
+  const displayedChipsCount = hasActiveChips
+    ? selectedChips.length
+    : cachedActionInfo.chipsCount;
+  const displayedFilteredCount = hasActiveChips
+    ? filteredProjects.length
+    : cachedActionInfo.filteredCount;
+  const displayedMatchMode = hasActiveChips
+    ? matchMode
+    : cachedActionInfo.mode;
 
   return (
     <section id="projects" className={styles.projects}>
@@ -611,69 +646,78 @@ const Projects: React.FC = () => {
             })}
           </div>
 
-          {/* Row 3: Action Bar (only when chips selected) */}
-          {selectedChips.length > 0 && (
-            <div className={styles.deckRow} style={{ animation: 'fadeInDeck 0.22s ease both' }}>
-              <span className={styles.activeChipsInfo}>
-                {selectedChips.length} {t.projects.activeWord} ·{' '}
-                <span className={styles.resultCount}>
-                  {filteredProjects.length}{' '}
-                  {t.projects.projectsWord}
+          {/* Row 3: Action Bar (smooth accordion expand/collapse) */}
+          <div
+            className={`${styles.actionBarWrapper} ${
+              hasActiveChips ? styles.actionBarVisible : ''
+            }`}
+            aria-hidden={!hasActiveChips}
+          >
+            <div className={styles.actionBarInner}>
+              <div className={`${styles.deckRow} ${styles.deckRowAction}`}>
+                <span className={styles.activeChipsInfo}>
+                  {displayedChipsCount} {t.projects.activeWord} ·{' '}
+                  <span className={styles.resultCount}>
+                    {displayedFilteredCount} {t.projects.projectsWord}
+                  </span>
                 </span>
-              </span>
 
-              {selectedChips.length > 1 && (
-                <div
-                  className={styles.modeToggle}
-                  role="radiogroup"
-                  aria-label="Tag match logic"
-                >
-                  <button
-                    type="button"
-                    className={`${styles.modeBtn} ${
-                      matchMode === 'any' ? styles.activeMode : ''
-                    }`}
-                    onClick={() => handleModeChange('any')}
-                    title="Match projects with ANY of the selected tags"
+                {displayedChipsCount > 1 && (
+                  <div
+                    className={styles.modeToggle}
+                    role="radiogroup"
+                    aria-label="Tag match logic"
                   >
-                    Any (OR)
-                  </button>
-                  <button
-                    type="button"
-                    className={`${styles.modeBtn} ${
-                      matchMode === 'all' ? styles.activeMode : ''
-                    }`}
-                    onClick={() => handleModeChange('all')}
-                    title="Match projects that have ALL selected tags"
-                  >
-                    All (AND)
-                  </button>
-                </div>
-              )}
+                    <button
+                      type="button"
+                      tabIndex={hasActiveChips ? 0 : -1}
+                      className={`${styles.modeBtn} ${
+                        displayedMatchMode === 'any' ? styles.activeMode : ''
+                      }`}
+                      onClick={() => handleModeChange('any')}
+                      title="Match projects with ANY of the selected tags"
+                    >
+                      Any (OR)
+                    </button>
+                    <button
+                      type="button"
+                      tabIndex={hasActiveChips ? 0 : -1}
+                      className={`${styles.modeBtn} ${
+                        displayedMatchMode === 'all' ? styles.activeMode : ''
+                      }`}
+                      onClick={() => handleModeChange('all')}
+                      title="Match projects that have ALL selected tags"
+                    >
+                      All (AND)
+                    </button>
+                  </div>
+                )}
 
-              <button
-                type="button"
-                onClick={handleClearChips}
-                className={styles.clearAllBtn}
-                title="Clear all selected tags"
-              >
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <button
+                  type="button"
+                  tabIndex={hasActiveChips ? 0 : -1}
+                  onClick={handleClearChips}
+                  className={styles.clearAllBtn}
+                  title="Clear all selected tags"
                 >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-                <span>{t.projects.resetFilters}</span>
-              </button>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                  <span>{t.projects.resetFilters}</span>
+                </button>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 
@@ -909,9 +953,15 @@ const Projects: React.FC = () => {
               <a
                 href={project.link}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className={styles.actionBtn}
                 title="View GitHub Repository"
+                onClick={() =>
+                  trackEvent('view_project_source', {
+                    project: project.title,
+                    id: project.id,
+                  })
+                }
               >
                 <svg
                   className={styles.actionIcon}
@@ -931,9 +981,15 @@ const Projects: React.FC = () => {
                 <a
                   href={project.mockup}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className={styles.actionBtn}
                   title="View Figma Mockup"
+                  onClick={() =>
+                    trackEvent('view_project_mockup', {
+                      project: project.title,
+                      id: project.id,
+                    })
+                  }
                 >
                   <svg
                     className={styles.actionIcon}
@@ -976,12 +1032,23 @@ const Projects: React.FC = () => {
                   <a
                     href={project.pages}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className={`${styles.actionBtn} ${styles.primaryActionBtn}`}
                     title={
                       project.pages.includes('#readme')
                         ? 'View Documentation'
                         : 'Open Live Website'
+                    }
+                    onClick={() =>
+                      trackEvent(
+                        project.pages?.includes('#readme')
+                          ? 'view_project_docs'
+                          : 'view_project_demo',
+                        {
+                          project: project.title,
+                          id: project.id,
+                        },
+                      )
                     }
                   >
                     <svg
@@ -1034,8 +1101,11 @@ const Projects: React.FC = () => {
         <a
           href={DATA.profile.github}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className={styles.githubCtaBtn}
+          onClick={() =>
+            trackEvent('github_profile_click', { source: 'projects_footer' })
+          }
         >
           <span>github.com/iberikofer</span>
           <svg

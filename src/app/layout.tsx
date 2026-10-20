@@ -39,6 +39,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import { Analytics } from '@vercel/analytics/react';
+
 export default function RootLayout({
   children,
 }: {
@@ -50,7 +52,14 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       data-scroll-behavior="smooth"
     >
-      <body suppressHydrationWarning>{children}</body>
+      <head>
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+      </head>
+      <body suppressHydrationWarning>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

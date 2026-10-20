@@ -100,11 +100,15 @@ export interface TranslationData {
     btnSuccess: string;
     btnError: string;
     btnValidation: string;
+    btnCooldown: string;
+    btnRateLimited: string;
     statusSuccess: string;
     statusValidationRequired: string;
     statusValidationEmail: string;
     statusTimeout: string;
     statusIssue: string;
+    statusRateLimited: string;
+    cooldownBadge: string;
     draftRestored: string;
     draftClear: string;
   };
@@ -189,10 +193,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         11: 'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
         12: 'Modern responsive digital landing page for an ice cream brand, featuring Swiper carousels, customer review sliders, and interactive ordering popups built with a development team.',
         13: 'Comprehensive health and nutrition tracking web app with calorie budgeting, interactive Chart.js analytics, goal tracking, and persistent state management built with a team.',
-        14: 'Modern luxury yacht rental platform featuring yacht specifications, fleet catalog previews, and a contact consultation form.',
-        15: 'An online educational landing page for learning English. Promotes courses, teachers, and an easy application flow.',
-        16: 'A cozy hotel & restaurant complex website with room previews, menu highlights, and direct reservation forms.',
-        17: 'An elegant e-commerce landing page showcasing luxury wristwatches with interactive models and buying requests.',
+        14: 'Autonomous AI agent system (TOMAS) engineered for deterministic document generation and automated workflows with token optimization and multi-model routing.',
+        15: 'A fast-paced 2D action game built with C++ and SFML. Dodge, roll, and escape from chasing enemies and bosses with custom physics, gamepad support, and full localization.',
+        16: 'Interactive discrete route optimization and resource gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
+        17: 'Gamified object-oriented software system modeling fitness gym facilities, athletes, and equipment. Architected with strict OOP principles, UML state machines, and interactive Java simulation mechanics.',
       },
     },
     about: {
@@ -252,6 +256,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       btnSuccess: 'Message Dispatched! ✨',
       btnError: 'Delivery Failed • Tap to Retry',
       btnValidation: 'Please Complete Fields',
+      btnCooldown: 'Wait {time}',
+      btnRateLimited: 'Limit: 1 msg / 5 min',
       statusSuccess:
         'Message sent successfully! I will be in touch soon.',
       statusValidationRequired:
@@ -262,6 +268,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.',
       statusIssue:
         'Delivery issue with email service. Please reach me directly via email or Telegram.',
+      statusRateLimited:
+        'Please wait {time} before sending another message.',
+      cooldownBadge:
+        'Submission limit: 1 message per 5 min (available in {time})',
       draftRestored: 'Draft restored',
       draftClear: 'clear',
     },
@@ -344,10 +354,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         11: 'Інтерактивний командний веб-додаток для пошуку та читання книг з категоріями, пагінацією списку покупок та модальними вікнами.',
         12: 'Сучасний командний лендінг бренду морозива зі Swiper-каруселями, слайдером відгуків та формою замовлення.',
         13: 'Командний веб-додаток для контролю харчування та калорій з інтерактивною аналітикою Chart.js і трекінгом цілей.',
-        14: 'Преміальна платформа оренди яхт з характеристиками суден, каталогом флоту та формою консультації.',
-        15: 'Освітній лендінг для курсів вивчення англійської мови з презентацією викладачів та онлайн-записом.',
-        16: 'Веб-сайт готельно-ресторанного комплексу з каталогом номерів, меню ресторану та бронюванням.',
-        17: 'Елегантний інтернет-магазин швейцарських наручних годинників з інтерактивними моделями.',
+        14: 'Автономна система AI-агентів (TOMAS) для детермінованої генерації документів та автоматизованих робочих процесів з оптимізацією токенів і маршрутизацією моделей.',
+        15: 'Динамічна 2D-екшн гра на C++ та SFML. Ухиляння, перекати та втеча від переслідувачів і босів із власною фізикою, підтримкою геймпада та повною локалізацією.',
+        16: 'Інтерактивний симулятор оптимізації дискретних маршрутів і збору ресурсів на C++20, SFML та Dear ImGui. Алгоритми A*, Dijkstra, BFS, евристика TSP 2-Opt, DP рюкзак та генерація лабіринтів BSP.',
+        17: 'Гейміфікована обʼєктно-орієнтована система моделювання фітнес-залу, спортсменів та інвентарю на Java за принципами ООП, UML-діаграмами станів та симуляційними механіками.',
       },
     },
     about: {
@@ -407,6 +417,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       btnSuccess: 'Повідомлення надіслано! ✨',
       btnError: 'Помилка доставки • Спробувати знову',
       btnValidation: 'Заповніть обовʼязкові поля',
+      btnCooldown: 'Зачекайте {time}',
+      btnRateLimited: 'Ліміт: 1 лист на 5 хв',
       statusSuccess:
         "Повідомлення успішно надіслано! Я зв'яжуся з вами найближчим часом.",
       statusValidationRequired:
@@ -417,6 +429,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         'Таймаут мережі: сервіс пошти відповідає занадто довго. Будь ласка, напишіть мені напряму на email або в Telegram.',
       statusIssue:
         'Помилка доставки поштового сервісу. Будь ласка, напишіть мені напряму на email або в Telegram.',
+      statusRateLimited:
+        'Будь ласка, зачекайте {time} перед наступною відправкою.',
+      cooldownBadge:
+        'Обмеження: 1 повідомлення на 5 хв (доступно через {time})',
       draftRestored: 'Чернетку відновлено',
       draftClear: 'очистити',
     },

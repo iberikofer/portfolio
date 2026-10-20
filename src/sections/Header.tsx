@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { trackEvent } from '../lib/analytics';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
   const { t, toggleLang, isTransitioning } = useLanguage();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
-  const [scrollProgress, setScrollProgress] = useState<number>(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let requestRunning: number | null = null;
@@ -16,9 +17,16 @@ const Header: React.FC = () => {
       const scrollHeight =
         document.documentElement.scrollHeight - window.innerHeight;
       const progress =
-        scrollHeight > 0 ? (window.scrollY / scrollHeight) * 100 : 0;
-      setScrollProgress(progress);
-      setIsScrolled(window.scrollY > 50);
+        scrollHeight > 0
+          ? Math.min(1, Math.max(0, window.scrollY / scrollHeight))
+          : 0;
+
+      if (progressBarRef.current) {
+        progressBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      const scrolled = window.scrollY > 50;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
       requestRunning = null;
     };
 
@@ -40,10 +48,7 @@ const Header: React.FC = () => {
   return (
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.progressTrack}>
-        <div
-          className={styles.progressBar}
-          style={{ width: `${scrollProgress}%` }}
-        />
+        <div ref={progressBarRef} className={styles.progressBar} />
       </div>
       <nav className={`${styles.nav} container`}>
         <div className={styles.logo}>
@@ -79,7 +84,10 @@ const Header: React.FC = () => {
           <button
             type="button"
             className={`${styles.langToggleBtn} ${isTransitioning ? styles.busy : ''}`}
-            onClick={toggleLang}
+            onClick={() => {
+              trackEvent('toggle_language');
+              toggleLang();
+            }}
             disabled={isTransitioning}
             aria-busy={isTransitioning}
             aria-label={t.header.toggleLangLabel}

@@ -237,15 +237,60 @@
   }
 }
 
-// Row 3: Action bar (animated fade-in)
-@keyframes fadeInDeck {
+// Row 3: Action bar smooth accordion expand/collapse
+.actionBarWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  pointer-events: none;
+  will-change: grid-template-rows;
+  transition:
+    grid-template-rows 0.36s cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 0.36s;
+
+  &.actionBarVisible {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      grid-template-rows 0.44s cubic-bezier(0.32, 0.72, 0, 1),
+      visibility 0s;
+
+    .deckRowAction {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.32s cubic-bezier(0.25, 1, 0.5, 1) 0.08s,
+        transform 0.44s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+  }
+}
+
+.actionBarInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.deckRowAction {
+  border-top: 1px solid rgba(155, 255, 0, 0.2);
+  gap: 10px;
+  padding: 7px 10px;
+  opacity: 0;
+  transform: translateY(-5px);
+  will-change: opacity, transform;
+  transition:
+    opacity 0.18s ease-out,
+    transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes fadeInMode {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: scale(0.94);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
   }
 }
 
@@ -272,6 +317,7 @@
   padding: 2px;
   gap: 2px;
   flex-shrink: 0;
+  animation: fadeInMode 0.26s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
 
 .modeBtn {

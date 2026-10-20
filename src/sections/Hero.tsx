@@ -441,7 +441,7 @@ const Hero: React.FC = () => {
                         ? developer
                         : (developer as { src: string }).src
                     }
-                    alt={t.profile.name}
+                    alt={`${t.profile.name} — ${t.profile.title}`}
                     width={500}
                     height={500}
                     loading="eager"

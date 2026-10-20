@@ -9,6 +9,10 @@ import quizImg from '../assets/quiz.png';
 import reactPhonebookImg from '../assets/reactPhonebook.png';
 import iceCreamImg from '../assets/iceCream.png';
 import bookshelfImg from '../assets/bookshelf.png';
+import fizzRushImg from '../assets/fizzRush.png';
+import agentTomImg from '../assets/agentTOM.png';
+import lethalLabyrinthsImg from '../assets/lethalLabyrinths.png';
+import tornadoGymImg from '../assets/tornadoGYM.png';
 import type { StaticImageData } from 'next/image';
 
 export type ImageSource = string | StaticImageData;
@@ -227,7 +231,7 @@ export const DATA: AppData = {
         'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
       tags: ['TEAM', 'JAVASCRIPT', 'HTML', 'SCSS', 'REST API'],
       link: 'https://github.com/lezver/project-new_skill',
-      pages: 'https://lezver.github.io/project-new_skill/',
+      pages: 'https://iberikofer.github.io/bookshelf-page',
       status: 'Open',
     },
     {
@@ -254,16 +258,20 @@ export const DATA: AppData = {
     {
       id: 14,
       title: 'Agent For TOM',
+      photo: agentTomImg,
       description:
         'Autonomous AI agent system (TOMAS) engineered for deterministic document generation and automated workflows with token optimization and multi-model routing.',
       tags: ['TEAM', 'AI', 'AUTOMATION', 'PYTHON', 'AI AGENT', 'CLI', 'LLM'],
       link: 'https://github.com/oleksandkov/Agent-For-TOM',
       pages: 'https://github.com/oleksandkov/Agent-For-TOM#readme',
       status: 'Open',
+      objectFit: 'cover',
+      objectPosition: 'center',
     },
     {
       id: 15,
       title: 'Fizz Rush',
+      photo: fizzRushImg,
       description:
         'A fast-paced 2D action game built with C++ and SFML. Dodge, roll, and escape from chasing enemies and bosses with custom physics, gamepad support, and full localization.',
       tags: ['GAME', 'C++', 'SFML', '2D GAME', 'DESKTOP'],
@@ -274,6 +282,7 @@ export const DATA: AppData = {
     {
       id: 16,
       title: 'Lethal Labyrinths',
+      photo: lethalLabyrinthsImg,
       description:
         'Interactive discrete route optimization and resource gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
       tags: [
@@ -285,21 +294,24 @@ export const DATA: AppData = {
         'ALGORITHMS',
         'COURSEWORK',
       ],
-      link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp',
+      link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp#readme',
       pages:
-        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp#readme',
+        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp/docs#readme',
       status: 'Open',
+      objectPosition: 'center',
     },
     {
       id: 17,
       title: 'Tornado GYM Simulator',
+      photo: tornadoGymImg,
       description:
         'Gamified object-oriented software system modeling fitness gym facilities, athletes, and equipment. Architected with strict OOP principles, UML state machines, and interactive Java simulation mechanics.',
       tags: ['SIMULATOR', 'GAME', 'JAVA', 'OOP', 'UML', 'COURSEWORK'],
       link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/OOP-java',
       pages:
-        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/OOP-java#readme',
+        'https://github.com/iberikofer/academic-archive/tree/main/course-projects/OOP-java/docs#readme',
       status: 'Open',
+      objectPosition: 'center 25%',
     },
   ],
 };
