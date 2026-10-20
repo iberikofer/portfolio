@@ -10,25 +10,194 @@ import React, {
 import { DATA, Project, ImageSource } from '../data/config';
 import styles from './Projects.module.scss';
 
-type FilterCategory =
-  'all' | 'team' | 'fullstack' | 'frontend' | 'backend' | 'ai-tools' | 'games';
+type ScopeCategory = 'all' | 'solo' | 'team';
 
-interface FilterTab {
-  id: FilterCategory;
+type TechChip = 'fullstack' | 'frontend' | 'backend' | 'ai-tools' | 'games';
+
+interface ScopeTab {
+  id: ScopeCategory;
   label: string;
-  countKey:
-    'all' | 'team' | 'fullstack' | 'frontend' | 'backend' | 'aiTools' | 'games';
+  countKey: 'all' | 'solo' | 'team';
 }
 
-const FILTER_TABS: FilterTab[] = [
+const SCOPE_TABS: ScopeTab[] = [
   { id: 'all', label: 'All', countKey: 'all' },
+  { id: 'solo', label: 'Solo projects', countKey: 'solo' },
   { id: 'team', label: 'Team projects', countKey: 'team' },
+];
+
+interface ChipDefinition {
+  id: TechChip;
+  label: string;
+  countKey: 'fullstack' | 'frontend' | 'backend' | 'aiTools' | 'games';
+}
+
+const TECH_CHIPS: ChipDefinition[] = [
   { id: 'fullstack', label: 'Fullstack', countKey: 'fullstack' },
   { id: 'frontend', label: 'Front-end', countKey: 'frontend' },
   { id: 'backend', label: 'Back-end', countKey: 'backend' },
   { id: 'ai-tools', label: 'AI & Tools', countKey: 'aiTools' },
   { id: 'games', label: 'Games/Simulators', countKey: 'games' },
 ];
+
+const VALID_SCOPES: ScopeCategory[] = ['all', 'solo', 'team'];
+const VALID_CHIPS: TechChip[] = [
+  'fullstack',
+  'frontend',
+  'backend',
+  'ai-tools',
+  'games',
+];
+
+const matchesChip = (project: Project, chip: TechChip): boolean => {
+  const t = project.tags.map((tag) => tag.toUpperCase());
+  switch (chip) {
+    case 'fullstack':
+      return (
+        t.includes('FULLSTACK') ||
+        (t.includes('REACT') && t.includes('NODE.JS')) ||
+        (t.includes('NEXT.JS') && t.includes('.NET'))
+      );
+    case 'frontend':
+      return (
+        t.includes('FRONTEND') ||
+        t.includes('REACT') ||
+        t.includes('NEXT.JS') ||
+        t.includes('HTML') ||
+        t.includes('CSS') ||
+        t.includes('SCSS') ||
+        t.includes('JS') ||
+        t.includes('JAVASCRIPT')
+      );
+    case 'backend':
+      return (
+        t.includes('BACKEND') ||
+        t.includes('NODE.JS') ||
+        t.includes('EXPRESS') ||
+        t.includes('.NET') ||
+        t.includes('POSTGRESQL') ||
+        t.includes('MONGODB') ||
+        t.includes('SQLITE') ||
+        t.includes('PRISMA')
+      );
+    case 'ai-tools':
+      return (
+        t.includes('AI') ||
+        t.includes('AI AGENT') ||
+        t.includes('CLI') ||
+        t.includes('LLM') ||
+        t.includes('AUTOMATION') ||
+        t.includes('PYTHON')
+      );
+    case 'games':
+      return t.includes('GAME') || t.includes('SIMULATOR');
+    default:
+      return true;
+  }
+};
+
+const mapTagToChip = (tag: string): TechChip | null => {
+  const t = tag.toUpperCase();
+  if (t === 'FULLSTACK') return 'fullstack';
+  if (
+    [
+      'BACKEND',
+      'NODE.JS',
+      'EXPRESS',
+      '.NET',
+      'POSTGRESQL',
+      'MONGODB',
+      'SQLITE',
+      'PRISMA',
+    ].includes(t)
+  ) {
+    return 'backend';
+  }
+  if (
+    [
+      'FRONTEND',
+      'REACT',
+      'NEXT.JS',
+      'HTML',
+      'CSS',
+      'SCSS',
+      'JS',
+      'JAVASCRIPT',
+      'TS',
+      'TYPESCRIPT',
+      'TAILWIND',
+      'SWIPER',
+    ].includes(t)
+  ) {
+    return 'frontend';
+  }
+  if (['AI', 'AI AGENT', 'CLI', 'LLM', 'AUTOMATION', 'PYTHON'].includes(t)) {
+    return 'ai-tools';
+  }
+  if (['GAME', 'SIMULATOR'].includes(t)) {
+    return 'games';
+  }
+  return null;
+};
+
+const SCOPE_STORAGE_KEY = 'portfolio_filter_scope';
+const CHIPS_STORAGE_KEY = 'portfolio_filter_chips';
+const MODE_STORAGE_KEY = 'portfolio_filter_mode';
+
+const getSavedScope = (): ScopeCategory => {
+  if (typeof window === 'undefined') return 'all';
+  try {
+    const urlParam = new URLSearchParams(window.location.search).get('scope');
+    if (urlParam && (VALID_SCOPES as string[]).includes(urlParam)) {
+      return urlParam as ScopeCategory;
+    }
+    const stored = localStorage.getItem(SCOPE_STORAGE_KEY);
+    if (stored && (VALID_SCOPES as string[]).includes(stored)) {
+      return stored as ScopeCategory;
+    }
+  } catch {
+    // Ignore storage errors
+  }
+  return 'all';
+};
+
+const getSavedChips = (): TechChip[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const urlParam = new URLSearchParams(window.location.search).get('tags');
+    if (urlParam) {
+      const parts = urlParam
+        .split(',')
+        .filter((p): p is TechChip => (VALID_CHIPS as string[]).includes(p));
+      if (parts.length > 0) return parts;
+    }
+    const stored = localStorage.getItem(CHIPS_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        return parsed.filter((p): p is TechChip =>
+          (VALID_CHIPS as string[]).includes(p),
+        );
+      }
+    }
+  } catch {
+    // Ignore storage errors
+  }
+  return [];
+};
+
+const getSavedMode = (): 'any' | 'all' => {
+  if (typeof window === 'undefined') return 'any';
+  try {
+    const urlParam = new URLSearchParams(window.location.search).get('mode');
+    if (urlParam === 'all' || urlParam === 'any') return urlParam;
+    const stored = localStorage.getItem(MODE_STORAGE_KEY);
+    if (stored === 'all' || stored === 'any') return stored;
+  } catch {
+    // Ignore
+  }
+  return 'any';
+};
 
 const hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
@@ -87,45 +256,168 @@ const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
 };
 
 const Projects: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
-  const [indicator, setIndicator] = useState<{
+  const [activeScope, setActiveScope] = useState<ScopeCategory>('all');
+  const [selectedChips, setSelectedChips] = useState<TechChip[]>([]);
+  const [matchMode, setMatchMode] = useState<'any' | 'all'>('any');
+
+  const [scopeIndicator, setScopeIndicator] = useState<{
     x: number;
     y: number;
     width: number;
     height: number;
     opacity: number;
   }>({ x: 0, y: 0, width: 0, height: 0, opacity: 0 });
+
+  const activeScopeRef = useRef<ScopeCategory>(activeScope);
+  const hasRestoredRef = useRef(false);
+
   const [hasMounted, setHasMounted] = useState(false);
   const [isTransitionEnabled, setIsTransitionEnabled] = useState(false);
 
-  const filterBarRef = useRef<HTMLDivElement>(null);
-  const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const scopeBarRef = useRef<HTMLDivElement>(null);
+  const scopeBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
-  const updateIndicator = useCallback(
-    (filter: FilterCategory = activeFilter) => {
-      const activeBtn = btnRefs.current[filter];
-      if (!activeBtn) return;
-      setIndicator({
-        x: activeBtn.offsetLeft,
-        y: activeBtn.offsetTop,
-        width: activeBtn.offsetWidth,
-        height: activeBtn.offsetHeight,
-        opacity: 1,
-      });
+  const syncFilterState = useCallback(
+    (scope: ScopeCategory, chips: TechChip[], mode: 'any' | 'all') => {
+      if (typeof window === 'undefined') return;
+      try {
+        localStorage.setItem(SCOPE_STORAGE_KEY, scope);
+        localStorage.setItem(CHIPS_STORAGE_KEY, JSON.stringify(chips));
+        localStorage.setItem(MODE_STORAGE_KEY, mode);
+
+        const url = new URL(window.location.href);
+        if (scope !== 'all') {
+          url.searchParams.set('scope', scope);
+        } else {
+          url.searchParams.delete('scope');
+        }
+
+        if (chips.length > 0) {
+          url.searchParams.set('tags', chips.join(','));
+        } else {
+          url.searchParams.delete('tags');
+        }
+
+        if (chips.length > 1 && mode === 'all') {
+          url.searchParams.set('mode', 'all');
+        } else {
+          url.searchParams.delete('mode');
+        }
+
+        window.history.replaceState(
+          null,
+          '',
+          url.pathname + url.search + url.hash,
+        );
+      } catch {
+        // Ignore storage/history errors
+      }
     },
-    [activeFilter],
+    [],
   );
 
-  const handleFilterSelect = (id: FilterCategory) => {
-    setActiveFilter(id);
-    updateIndicator(id);
+  const updateScopeIndicator = useCallback((scope?: ScopeCategory) => {
+    const targetScope = scope || activeScopeRef.current;
+    const activeBtn = scopeBtnRefs.current[targetScope];
+    if (!activeBtn) return;
+    setScopeIndicator({
+      x: activeBtn.offsetLeft,
+      y: activeBtn.offsetTop,
+      width: activeBtn.offsetWidth,
+      height: activeBtn.offsetHeight,
+      opacity: 1,
+    });
+  }, []);
+
+  const handleScopeSelect = (id: ScopeCategory) => {
+    activeScopeRef.current = id;
+    setActiveScope(id);
+    updateScopeIndicator(id);
+    syncFilterState(id, selectedChips, matchMode);
   };
 
+  const handleChipToggle = (chip: TechChip) => {
+    const next = selectedChips.includes(chip)
+      ? selectedChips.filter((c) => c !== chip)
+      : [...selectedChips, chip];
+    setSelectedChips(next);
+    syncFilterState(activeScope, next, matchMode);
+  };
+
+  const handleCardTagClick = (chip: TechChip) => {
+    // If this chip is already the only one active, reset to all.
+    // Otherwise, filter specifically by this chip, clearing unrelated chips like ai-tools.
+    const next =
+      selectedChips.length === 1 && selectedChips[0] === chip ? [] : [chip];
+    setSelectedChips(next);
+    syncFilterState(activeScope, next, matchMode);
+  };
+
+  const handleClearChips = () => {
+    setSelectedChips([]);
+    syncFilterState(activeScope, [], matchMode);
+  };
+
+  const handleModeChange = (mode: 'any' | 'all') => {
+    setMatchMode(mode);
+    syncFilterState(activeScope, selectedChips, mode);
+  };
+
+  // Sync state if user clicks Back / Forward in browser history
+  useEffect(() => {
+    const handlePopState = () => {
+      const scope = getSavedScope();
+      const chips = getSavedChips();
+      const mode = getSavedMode();
+      activeScopeRef.current = scope;
+      setActiveScope(scope);
+      setSelectedChips(chips);
+      setMatchMode(mode);
+      updateScopeIndicator(scope);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [updateScopeIndicator]);
+
+  // Restore saved filter state ONCE post-mount (after hydration without cascading render error)
+  useEffect(() => {
+    if (hasRestoredRef.current) return;
+    hasRestoredRef.current = true;
+
+    const savedScope = getSavedScope();
+    const savedChips = getSavedChips();
+    const savedMode = getSavedMode();
+
+    if (savedScope !== 'all' || savedChips.length > 0 || savedMode !== 'any') {
+      const raf = requestAnimationFrame(() => {
+        if (savedScope !== 'all') {
+          activeScopeRef.current = savedScope;
+          setActiveScope(savedScope);
+          updateScopeIndicator(savedScope);
+        }
+        if (savedChips.length > 0) {
+          setSelectedChips(savedChips);
+        }
+        if (savedMode !== 'any') {
+          setMatchMode(savedMode);
+        }
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [updateScopeIndicator]);
+
+  // Update scope indicator when activeScope changes
+  useEffect(() => {
+    activeScopeRef.current = activeScope;
+    updateScopeIndicator(activeScope);
+  }, [activeScope, updateScopeIndicator]);
+
+  // Mount observers & window resize handlers (runs once on mount)
   useEffect(() => {
     let timerId: ReturnType<typeof setTimeout> | null = null;
 
     const rafId = requestAnimationFrame(() => {
-      updateIndicator(activeFilter);
+      updateScopeIndicator();
       setHasMounted(true);
 
       timerId = setTimeout(() => {
@@ -133,135 +425,82 @@ const Projects: React.FC = () => {
       }, 50);
     });
 
-    const handleResize = () => updateIndicator(activeFilter);
+    const handleResize = () => {
+      updateScopeIndicator();
+    };
     window.addEventListener('resize', handleResize);
 
     if (document.fonts?.ready) {
-      document.fonts.ready.then(() => updateIndicator(activeFilter));
+      document.fonts.ready.then(() => {
+        updateScopeIndicator();
+      });
     }
 
-    let ro: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined' && filterBarRef.current) {
-      ro = new ResizeObserver(() => updateIndicator(activeFilter));
-      ro.observe(filterBarRef.current);
+    let roScope: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && scopeBarRef.current) {
+      roScope = new ResizeObserver(() => updateScopeIndicator());
+      roScope.observe(scopeBarRef.current);
     }
 
     return () => {
       cancelAnimationFrame(rafId);
       if (timerId) clearTimeout(timerId);
       window.removeEventListener('resize', handleResize);
-      ro?.disconnect();
+      roScope?.disconnect();
     };
-  }, [activeFilter, updateIndicator]);
+  }, [updateScopeIndicator]);
 
-  const counts = useMemo(() => {
+  const scopeCounts = useMemo(() => {
     const list = DATA.projects;
+    const team = list.filter((p) =>
+      p.tags.map((t) => t.toUpperCase()).includes('TEAM'),
+    ).length;
     return {
       all: list.length,
-      team: list.filter((p) =>
-        p.tags.map((t) => t.toUpperCase()).includes('TEAM'),
-      ).length,
-      fullstack: list.filter((p) => {
-        const t = p.tags.map((tag) => tag.toUpperCase());
-        return (
-          t.includes('FULLSTACK') ||
-          (t.includes('REACT') && t.includes('NODE.JS')) ||
-          (t.includes('NEXT.JS') && t.includes('.NET'))
-        );
-      }).length,
-      frontend: list.filter((p) => {
-        const t = p.tags.map((tag) => tag.toUpperCase());
-        return (
-          t.includes('FRONTEND') ||
-          t.includes('REACT') ||
-          t.includes('NEXT.JS') ||
-          t.includes('HTML') ||
-          t.includes('CSS') ||
-          t.includes('SCSS') ||
-          t.includes('JS') ||
-          t.includes('JAVASCRIPT')
-        );
-      }).length,
-      backend: list.filter((p) => {
-        const t = p.tags.map((tag) => tag.toUpperCase());
-        return (
-          t.includes('BACKEND') ||
-          t.includes('NODE.JS') ||
-          t.includes('EXPRESS') ||
-          t.includes('.NET') ||
-          t.includes('POSTGRESQL') ||
-          t.includes('MONGODB')
-        );
-      }).length,
-      aiTools: list.filter((p) => {
-        const t = p.tags.map((tag) => tag.toUpperCase());
-        return (
-          t.includes('AI') ||
-          t.includes('AI AGENT') ||
-          t.includes('CLI') ||
-          t.includes('LLM') ||
-          t.includes('AUTOMATION')
-        );
-      }).length,
-      games: list.filter((p) => {
-        const t = p.tags.map((tag) => tag.toUpperCase());
-        return t.includes('GAME') || t.includes('SIMULATOR');
-      }).length,
+      solo: list.length - team,
+      team,
     };
   }, []);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all') return DATA.projects;
-
-    return DATA.projects.filter((project) => {
-      const tagsUpper = project.tags.map((t) => t.toUpperCase());
-      if (activeFilter === 'team') {
-        return tagsUpper.includes('TEAM');
-      }
-      if (activeFilter === 'fullstack') {
-        return (
-          tagsUpper.includes('FULLSTACK') ||
-          (tagsUpper.includes('REACT') && tagsUpper.includes('NODE.JS')) ||
-          (tagsUpper.includes('NEXT.JS') && tagsUpper.includes('.NET'))
-        );
-      }
-      if (activeFilter === 'frontend') {
-        return (
-          tagsUpper.includes('FRONTEND') ||
-          tagsUpper.includes('REACT') ||
-          tagsUpper.includes('NEXT.JS') ||
-          tagsUpper.includes('HTML') ||
-          tagsUpper.includes('CSS') ||
-          tagsUpper.includes('SCSS') ||
-          tagsUpper.includes('JS') ||
-          tagsUpper.includes('JAVASCRIPT')
-        );
-      }
-      if (activeFilter === 'backend') {
-        return (
-          tagsUpper.includes('BACKEND') ||
-          tagsUpper.includes('NODE.JS') ||
-          tagsUpper.includes('EXPRESS') ||
-          tagsUpper.includes('.NET') ||
-          tagsUpper.includes('POSTGRESQL') ||
-          tagsUpper.includes('MONGODB')
-        );
-      }
-      if (activeFilter === 'ai-tools') {
-        return (
-          tagsUpper.includes('AI') ||
-          tagsUpper.includes('AI AGENT') ||
-          tagsUpper.includes('CLI') ||
-          tagsUpper.includes('LLM') ||
-          tagsUpper.includes('AUTOMATION')
-        );
-      }
-      if (activeFilter === 'games') {
-        return tagsUpper.includes('GAME') || tagsUpper.includes('SIMULATOR');
-      }
+  const techCounts = useMemo(() => {
+    const scoped = DATA.projects.filter((p) => {
+      const isTeam = p.tags.map((t) => t.toUpperCase()).includes('TEAM');
+      if (activeScope === 'team') return isTeam;
+      if (activeScope === 'solo') return !isTeam;
       return true;
     });
-  }, [activeFilter]);
+
+    return {
+      all: scoped.length,
+      fullstack: scoped.filter((p) => matchesChip(p, 'fullstack')).length,
+      frontend: scoped.filter((p) => matchesChip(p, 'frontend')).length,
+      backend: scoped.filter((p) => matchesChip(p, 'backend')).length,
+      aiTools: scoped.filter((p) => matchesChip(p, 'ai-tools')).length,
+      games: scoped.filter((p) => matchesChip(p, 'games')).length,
+    };
+  }, [activeScope]);
+
+  const filteredProjects = useMemo(() => {
+    return DATA.projects.filter((project) => {
+      const tagsUpper = project.tags.map((t) => t.toUpperCase());
+      const isTeam = tagsUpper.includes('TEAM');
+
+      // 1. Scope filter (All / Solo / Team)
+      if (activeScope === 'team' && !isTeam) return false;
+      if (activeScope === 'solo' && isTeam) return false;
+
+      // 2. Multi-tag Chips filter
+      if (selectedChips.length === 0) return true;
+
+      if (matchMode === 'any') {
+        // Match ANY selected chip (OR)
+        return selectedChips.some((chip) => matchesChip(project, chip));
+      } else {
+        // Match ALL selected chips (AND)
+        return selectedChips.every((chip) => matchesChip(project, chip));
+      }
+    });
+  }, [activeScope, selectedChips, matchMode]);
 
   return (
     <section id="projects" className={styles.projects}>
@@ -273,50 +512,203 @@ const Projects: React.FC = () => {
           built with modern engineering standards.
         </p>
 
-        {/* Filter Tabs (frontend-design functional density) */}
-        <div
-          ref={filterBarRef}
-          className={`${styles.filterBar} ${hasMounted ? styles.hasMounted : ''}`}
-          role="tablist"
-          aria-label="Filter projects"
-        >
-          {/* Smooth sliding active indicator pill */}
+        {/* Two-tier Filter Controls: Unified Deck */}
+        <div className={styles.filterDeck}>
+          {/* Row 1: Scope Bar (All / Solo / Team) */}
           <div
-            className={`${styles.activeIndicator} ${
-              isTransitionEnabled ? '' : styles.noTransition
-            }`}
-            style={{
-              transform: `translate3d(${indicator.x}px, ${indicator.y}px, 0)`,
-              width: `${indicator.width}px`,
-              height: `${indicator.height}px`,
-              opacity: indicator.opacity,
-            }}
-            aria-hidden="true"
-          />
+            ref={scopeBarRef}
+            className={`${styles.deckRow} ${styles.deckRowScope} ${hasMounted ? styles.hasMounted : ''}`}
+            role="tablist"
+            aria-label="Filter projects by collaboration type"
+          >
+            <div
+              className={`${styles.activeIndicator} ${
+                isTransitionEnabled ? '' : styles.noTransition
+              }`}
+              style={{
+                transform: `translate3d(${scopeIndicator.x}px, ${scopeIndicator.y}px, 0)`,
+                width: `${scopeIndicator.width}px`,
+                height: `${scopeIndicator.height}px`,
+                opacity: scopeIndicator.opacity,
+              }}
+              aria-hidden="true"
+            />
 
-          {FILTER_TABS.map((tab) => {
-            const isActive = activeFilter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                ref={(el) => {
-                  btnRefs.current[tab.id] = el;
-                }}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                className={`${styles.filterBtn} ${isActive ? styles.active : ''}`}
-                onClick={() => handleFilterSelect(tab.id)}
-              >
-                <span>{tab.label}</span>
-                <span className={styles.filterCount}>
-                  {counts[tab.countKey]}
+            {SCOPE_TABS.map((tab) => {
+              const isActive = activeScope === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  ref={(el) => {
+                    scopeBtnRefs.current[tab.id] = el;
+                  }}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  className={`${styles.scopeBtn} ${isActive ? styles.active : ''}`}
+                  onClick={() => handleScopeSelect(tab.id)}
+                >
+                  <span>{tab.label}</span>
+                  <span className={styles.filterCount}>
+                    {scopeCounts[tab.countKey]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Row 2: Chips Bar (Tech tag filters) */}
+          <div
+            className={styles.deckRow}
+            role="group"
+            aria-label="Filter projects by tags (multi-select)"
+          >
+            {/* All / Reset Button */}
+            <button
+              type="button"
+              className={`${styles.chipBtn} ${
+                selectedChips.length === 0 ? styles.active : ''
+              }`}
+              onClick={handleClearChips}
+              aria-pressed={selectedChips.length === 0}
+            >
+              <span>All</span>
+              <span className={styles.filterCount}>{techCounts.all}</span>
+            </button>
+
+            {/* Tag Chips */}
+            {TECH_CHIPS.map((chip) => {
+              const isSelected = selectedChips.includes(chip.id);
+              const count = techCounts[chip.countKey];
+              return (
+                <button
+                  key={chip.id}
+                  type="button"
+                  className={`${styles.chipBtn} ${
+                    isSelected ? styles.active : ''
+                  } ${count === 0 ? styles.emptyCategory : ''}`}
+                  onClick={() => handleChipToggle(chip.id)}
+                  aria-pressed={isSelected}
+                >
+                  {isSelected && (
+                    <span className={styles.activeDot} aria-hidden="true" />
+                  )}
+                  <span>{chip.label}</span>
+                  <span className={styles.filterCount}>{count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Row 3: Action Bar (only when chips selected) */}
+          {selectedChips.length > 0 && (
+            <div className={styles.deckRow} style={{ animation: 'fadeInDeck 0.22s ease both' }}>
+              <span className={styles.activeChipsInfo}>
+                {selectedChips.length}{' '}
+                {selectedChips.length === 1 ? 'tag' : 'tags'} active ·{' '}
+                <span className={styles.resultCount}>
+                  {filteredProjects.length}{' '}
+                  {filteredProjects.length === 1 ? 'project' : 'projects'}
                 </span>
+              </span>
+
+              {selectedChips.length > 1 && (
+                <div
+                  className={styles.modeToggle}
+                  role="radiogroup"
+                  aria-label="Tag match logic"
+                >
+                  <button
+                    type="button"
+                    className={`${styles.modeBtn} ${
+                      matchMode === 'any' ? styles.activeMode : ''
+                    }`}
+                    onClick={() => handleModeChange('any')}
+                    title="Match projects with ANY of the selected tags"
+                  >
+                    Any (OR)
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.modeBtn} ${
+                      matchMode === 'all' ? styles.activeMode : ''
+                    }`}
+                    onClick={() => handleModeChange('all')}
+                    title="Match projects that have ALL selected tags"
+                  >
+                    All (AND)
+                  </button>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleClearChips}
+                className={styles.clearAllBtn}
+                title="Clear all selected tags"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+                <span>Reset</span>
               </button>
-            );
-          })}
+            </div>
+          )}
         </div>
       </div>
+
+      {filteredProjects.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              <line x1="8" y1="11" x2="14" y2="11" />
+            </svg>
+          </div>
+          <h3 className={styles.emptyTitle}>No matching projects found</h3>
+          <p className={styles.emptyText}>
+            No projects in this scope match all selected tags together.
+          </p>
+          <div className={styles.emptyActions}>
+            {matchMode === 'all' && (
+              <button
+                type="button"
+                className={styles.switchModeBtn}
+                onClick={() => handleModeChange('any')}
+              >
+                Switch to &quot;Any (OR)&quot; match
+              </button>
+            )}
+            <button
+              type="button"
+              className={styles.resetFiltersBtn}
+              onClick={handleClearChips}
+            >
+              Reset filters
+            </button>
+          </div>
+        </div>
+      ) : (
 
       <div className={styles.grid}>
         {filteredProjects.map((project: Project, idx) => (
@@ -459,11 +851,42 @@ const Projects: React.FC = () => {
               <h3 className={styles.projectTitle}>{project.title}</h3>
 
               <div className={styles.tags}>
-                {project.tags.map((tag) => (
-                  <span key={tag} className={styles.tag}>
-                    {tag}
-                  </span>
-                ))}
+                {project.tags.map((tag) => {
+                  const upper = tag.toUpperCase();
+                  const isTeamTag = upper === 'TEAM';
+                  const mappedChip = mapTagToChip(tag);
+                  const isTagActive = isTeamTag
+                    ? activeScope === 'team'
+                    : mappedChip
+                      ? selectedChips.includes(mappedChip)
+                      : false;
+
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => {
+                        if (isTeamTag) {
+                          handleScopeSelect(
+                            activeScope === 'team' ? 'all' : 'team',
+                          );
+                        } else if (mappedChip) {
+                          handleCardTagClick(mappedChip);
+                        }
+                      }}
+                      className={`${styles.tag} ${isTagActive ? styles.tagActive : ''}`}
+                      title={
+                        isTeamTag
+                          ? `Filter: Team projects (${activeScope === 'team' ? 'Active - click to reset' : 'Click to filter'})`
+                          : mappedChip
+                            ? `Filter: ${tag} (${isTagActive ? 'Active - click to remove' : 'Click to filter'})`
+                            : tag
+                      }
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
               </div>
 
               <p className={styles.description}>{project.description}</p>
@@ -569,6 +992,7 @@ const Projects: React.FC = () => {
           </article>
         ))}
       </div>
+      )}
 
       {/* GitHub Callout Card */}
       <div className={styles.githubCard}>

@@ -56,65 +56,45 @@ const About: React.FC = () => {
         </div>
 
         <div className={styles.content}>
-          <div className={styles.leftColumn}>
-            {/* Technical Skills Bento Grid */}
-            <div className={styles.skillsSection}>
-              <h3 className={styles.skillsHeading}>
-                Core Competencies &amp; Tech Stack
-              </h3>
-              <div className={styles.skillsGrid}>
-                {Object.entries(DATA.skills).map(([category, items]) => (
-                  <div key={category} className={styles.skillCard}>
-                    <div className={styles.skillCardHeader}>
-                      <span className={styles.skillCategoryIcon}>
-                        {categoryIcons[category] || (
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <polyline points="16 18 22 12 16 6" />
-                            <polyline points="8 6 2 12 8 18" />
-                          </svg>
-                        )}
-                      </span>
-                      <h4 className={styles.skillTitle}>{category}</h4>
-                    </div>
-                    <ul className={styles.skillList}>
-                      {items.map((item) => (
-                        <li key={item} className={styles.skillItem}>
-                          <span className={styles.bulletDot} />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
+          {/* Top Left: Technical Skills Bento Grid */}
+          <div className={styles.skillsSection}>
+            <h3 className={styles.skillsHeading}>
+              Core Competencies &amp; Tech Stack
+            </h3>
+            <div className={styles.skillsGrid}>
+              {Object.entries(DATA.skills).map(([category, items]) => (
+                <div key={category} className={styles.skillCard}>
+                  <div className={styles.skillCardHeader}>
+                    <span className={styles.skillCategoryIcon}>
+                      {categoryIcons[category] || (
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <polyline points="16 18 22 12 16 6" />
+                          <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                      )}
+                    </span>
+                    <h4 className={styles.skillTitle}>{category}</h4>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Greetings Bio Card */}
-            <div className={styles.bioCard}>
-              <p className={styles.leadText}>
-                <span className={styles.greetings}>Greetings!</span> I'm a
-                Fullstack Developer specializing in modern web experiences with
-                React, TypeScript, and Node.js. My passion for engineering began
-                with asking how software works at the deepest level, driving me
-                to explore both systems-level and high-level technologies.
-              </p>
-              <p>
-                Currently, I am sharpening my full-stack capabilities while
-                advancing in algorithms, mathematics, and systems programming
-                (C++, Java, Python) at Vinnytsia National Technical University.
-                I love turning complex logic into performant, visually
-                impeccable digital products.
-              </p>
+                  <ul className={styles.skillList}>
+                    {items.map((item) => (
+                      <li key={item} className={styles.skillItem}>
+                        <span className={styles.bulletDot} />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className={styles.rightColumn}>
-            {/* Education & Credentials */}
+          {/* Top Right: Education & Credentials */}
+          <div className={styles.educationSection}>
             <div className={styles.timelineCard}>
               <div className={styles.boxHeader}>
                 <div className={styles.boxHeaderIcon}>
@@ -207,49 +187,67 @@ const About: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Academic Archive Card */}
-            <div className={styles.accentBox}>
-              <div className={styles.boxHeader}>
-                <div className={styles.boxHeaderIcon}>
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-                  </svg>
-                </div>
-                <span>Academic Archive</span>
-              </div>
-              <p className={styles.archiveDescription}>
-                A curated repository of university coursework, lab assignments,
-                and computational projects across C++, Java, Python, and
-                JavaScript — documenting my academic progression across diverse
-                programming paradigms.
-              </p>
-              <a
-                href="https://github.com/iberikofer/academic-archive"
-                target="_blank"
-                rel="noreferrer"
-                className={styles.archiveLink}
-              >
+          {/* Bottom Left: Greetings Bio Card */}
+          <div className={styles.bioCard}>
+            <p className={styles.leadText}>
+              <span className={styles.greetings}>Greetings!</span> I'm a
+              Fullstack Developer specializing in modern web experiences with
+              React, TypeScript, and Node.js. My passion for engineering began
+              with asking how software works at the deepest level, driving me
+              to explore both systems-level and high-level technologies.
+            </p>
+            <p>
+              Currently, I am sharpening my full-stack capabilities while
+              advancing in algorithms, mathematics, and systems programming
+              (C++, Java, Python) at Vinnytsia National Technical University.
+              I love turning complex logic into performant, visually
+              impeccable digital products.
+            </p>
+          </div>
+
+          {/* Bottom Right: Academic Archive Card */}
+          <div className={styles.accentBox}>
+            <div className={styles.boxHeader}>
+              <div className={styles.boxHeaderIcon}>
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
                 >
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                 </svg>
-                <span>iberikofer/academic-archive</span>
-                <span className={styles.arrowIcon}>↗</span>
-              </a>
+              </div>
+              <span>Academic Archive</span>
             </div>
+            <p className={styles.archiveDescription}>
+              A curated repository of university coursework, lab assignments,
+              and computational projects across C++, Java, Python, and
+              JavaScript — documenting my academic progression across diverse
+              programming paradigms.
+            </p>
+            <a
+              href="https://github.com/iberikofer/academic-archive"
+              target="_blank"
+              rel="noreferrer"
+              className={styles.archiveLink}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg>
+              <span>iberikofer/academic-archive</span>
+              <span className={styles.arrowIcon}>↗</span>
+            </a>
           </div>
         </div>
       </div>

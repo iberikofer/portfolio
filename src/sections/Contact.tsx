@@ -1,10 +1,50 @@
 'use client';
 
-import React, { useRef, useState, useEffect, FormEvent } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  FormEvent,
+} from 'react';
+import { createPortal } from 'react-dom';
 import emailjs from '@emailjs/browser';
 import styles from './Contact.module.scss';
 import { DATA } from '../data/config';
 import { useButtonGlow } from '../hooks/useButtonGlow';
+
+interface FlyingPlaneCoord {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+}
+
+const DRAFT_STORAGE_KEY = 'portfolio_contact_draft';
+
+interface ContactDraft {
+  userName: string;
+  userEmail: string;
+  subject: string;
+  message: string;
+}
+
+const getHasSavedDraft = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return false;
+    const draft: ContactDraft = JSON.parse(raw);
+    return Boolean(
+      (draft.userName && draft.userName.trim()) ||
+        (draft.userEmail && draft.userEmail.trim()) ||
+        (draft.subject && draft.subject.trim()) ||
+        (draft.message && draft.message.trim()),
+    );
+  } catch {
+    return false;
+  }
+};
 
 const Contact: React.FC = () => {
   const resumeBtnRef = useRef<HTMLAnchorElement>(null);
@@ -17,10 +57,14 @@ const Contact: React.FC = () => {
 
   const form = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const staticPlaneRef = useRef<SVGSVGElement>(null);
+  const [flyingPlane, setFlyingPlane] = useState<FlyingPlaneCoord | null>(null);
   const [submitState, setSubmitState] = useState<
     'idle' | 'sending' | 'success' | 'error' | 'validation-error'
   >('idle');
   const [statusFeedback, setStatusFeedback] = useState<string>('');
+  const [isAlertFading, setIsAlertFading] = useState<boolean>(false);
+  const [hasDraftRestored, setHasDraftRestored] = useState<boolean>(getHasSavedDraft);
 
   const PARTICLES = [
     { dx: '-85px', dy: '-45px', color: '#9bff00', size: 5, delay: '0ms' },
@@ -82,11 +126,18 @@ const Contact: React.FC = () => {
     mirror.textContent =
       element.value + (element.value.endsWith('\n') ? ' ' : '');
 
-    const minH = 80;
-    const maxH = 400;
+    const minH = 170;
+    const maxH = 480;
     const borderOffset = element.offsetHeight - element.clientHeight;
     const rawHeight = mirror.scrollHeight + borderOffset;
-    const nextHeight = Math.min(Math.max(rawHeight, minH), maxH);
+
+    if (rawHeight <= minH) {
+      element.style.height = '';
+      element.style.overflowY = 'hidden';
+      return;
+    }
+
+    const nextHeight = Math.min(rawHeight, maxH);
     element.style.height = `${nextHeight}px`;
 
     if (rawHeight > maxH) {
@@ -96,8 +147,105 @@ const Contact: React.FC = () => {
     }
   };
 
+  const saveDraft = useCallback(() => {
+    if (!form.current) return;
+    try {
+      const formData = new FormData(form.current);
+      const userName = (formData.get('user_name') as string | null) || '';
+      const userEmail = (formData.get('user_email') as string | null) || '';
+      const subject = (formData.get('subject') as string | null) || '';
+      const message = textareaRef.current?.value || '';
+
+      if (
+        userName.trim() ||
+        userEmail.trim() ||
+        subject.trim() ||
+        message.trim()
+      ) {
+        const draft: ContactDraft = { userName, userEmail, subject, message };
+        localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+      } else {
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
+
+  const clearDraft = useCallback(() => {
+    try {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      setHasDraftRestored(false);
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
+
+  // Restore draft on mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+      if (raw && form.current) {
+        const draft: ContactDraft = JSON.parse(raw);
+
+        if (draft.userName) {
+          const input = form.current.elements.namedItem(
+            'user_name',
+          ) as HTMLInputElement | null;
+          if (input) {
+            input.value = draft.userName;
+          }
+        }
+        if (draft.userEmail) {
+          const input = form.current.elements.namedItem(
+            'user_email',
+          ) as HTMLInputElement | null;
+          if (input) {
+            input.value = draft.userEmail;
+          }
+        }
+        if (draft.subject) {
+          const input = form.current.elements.namedItem(
+            'subject',
+          ) as HTMLInputElement | null;
+          if (input) {
+            input.value = draft.subject;
+          }
+        }
+        if (draft.message && textareaRef.current) {
+          textareaRef.current.value = draft.message;
+          adjustTextareaHeight(textareaRef.current);
+        }
+      }
+    } catch {
+      // Ignore parse/storage errors
+    }
+  }, []);
+
+  // Save draft on window unload, tab switch (visibility change), or pagehide
+  useEffect(() => {
+    const handleBeforeUnload = () => saveDraft();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        saveDraft();
+      }
+    };
+    const handlePageHide = () => saveDraft();
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [saveDraft]);
+
   const handleTextareaInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     adjustTextareaHeight(e.currentTarget);
+    saveDraft();
   };
 
   const sendEmail = async (e: FormEvent<HTMLFormElement>) => {
@@ -121,14 +269,18 @@ const Contact: React.FC = () => {
       setSubmitState('validation-error');
       setStatusFeedback('Please enter both your name and message.');
       setTimeout(() => {
+        setIsAlertFading(true);
+      }, 3000);
+      setTimeout(() => {
         setSubmitState((prev) => {
           if (prev === 'validation-error') {
             setStatusFeedback('');
+            setIsAlertFading(false);
             return 'idle';
           }
           return prev;
         });
-      }, 3000);
+      }, 3600);
       return;
     }
 
@@ -140,22 +292,39 @@ const Contact: React.FC = () => {
         'Please provide a valid email format (e.g. yourname@domain.com).',
       );
       setTimeout(() => {
+        setIsAlertFading(true);
+      }, 3400);
+      setTimeout(() => {
         setSubmitState((prev) => {
           if (prev === 'validation-error') {
             setStatusFeedback('');
+            setIsAlertFading(false);
             return 'idle';
           }
           return prev;
         });
-      }, 3500);
+      }, 4000);
       return;
+    }
+
+    const planeRect = staticPlaneRef.current?.getBoundingClientRect();
+    if (planeRect) {
+      setFlyingPlane({
+        top: planeRect.top,
+        left: planeRect.left,
+        width: planeRect.width,
+        height: planeRect.height,
+      });
+      setTimeout(() => {
+        setFlyingPlane(null);
+      }, 3900);
     }
 
     setSubmitState('sending');
     setStatusFeedback('');
 
-    // Minimum visual delay so user can appreciate the rocket/plane takeoff
-    const minDelay = new Promise((resolve) => setTimeout(resolve, 1000));
+    // Minimum visual delay so user can appreciate the full flight before success state
+    const minDelay = new Promise((resolve) => setTimeout(resolve, 3950));
 
     // Hard network timeout (8.5s) to prevent the button hanging on external mail delays
     const timeoutPromise = new Promise((_, reject) =>
@@ -172,7 +341,7 @@ const Contact: React.FC = () => {
     try {
       if (isTestMode) {
         // Smoothly simulate successful dispatch for animation testing
-        await new Promise((resolve) => setTimeout(resolve, 1200));
+        await new Promise((resolve) => setTimeout(resolve, 4000));
       } else {
         await Promise.all([
           Promise.race([
@@ -191,39 +360,61 @@ const Contact: React.FC = () => {
       setSubmitState('success');
       setStatusFeedback('Message sent successfully! I will be in touch soon.');
       form.current?.reset();
+      clearDraft();
       if (textareaRef.current) {
-        textareaRef.current.style.height = '80px';
+        textareaRef.current.style.height = '';
         textareaRef.current.style.overflowY = 'hidden';
       }
 
       // Smoothly return to idle after celebratory period
       setTimeout(() => {
+        setIsAlertFading(true);
+      }, 4300);
+
+      setTimeout(() => {
         setSubmitState((prev) => {
           if (prev === 'success') {
             setStatusFeedback('');
+            setIsAlertFading(false);
             return 'idle';
           }
           return prev;
         });
       }, 5000);
     } catch (error: unknown) {
-      console.error('EmailJS transmission error:', error);
+      const emailJsError = error as { status?: number; text?: string };
+      const errDetail =
+        emailJsError?.text ||
+        (error instanceof Error ? error.message : String(error));
+      console.error('EmailJS transmission error:', {
+        status: emailJsError?.status,
+        text: errDetail,
+        raw: error,
+      });
+
       setSubmitState('error');
       const isTimeout = error instanceof Error && error.message === 'TIMEOUT';
       setStatusFeedback(
         isTimeout
           ? 'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.'
-          : 'Delivery issue with email service. Please reach me directly via email or Telegram.',
+          : errDetail && errDetail !== '[object Object]'
+            ? `Delivery issue (${errDetail}). Please reach me directly via email or Telegram.`
+            : 'Delivery issue with email service. Please reach me directly via email or Telegram.',
       );
+      setTimeout(() => {
+        setIsAlertFading(true);
+      }, 5300);
+
       setTimeout(() => {
         setSubmitState((prev) => {
           if (prev === 'error') {
             setStatusFeedback('');
+            setIsAlertFading(false);
             return 'idle';
           }
           return prev;
         });
-      }, 5000);
+      }, 6000);
     }
   };
 
@@ -340,76 +531,6 @@ const Contact: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Socials Row */}
-          <div className={styles.socialsSection}>
-            <span className={styles.socialsHeading}>Social Profiles</span>
-            <div className={styles.socials}>
-              <a
-                href={DATA.profile.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
-                className={styles.socialBtn}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-              </a>
-              <a
-                href="https://t.me/YSych"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Telegram"
-                className={styles.socialBtn}
-              >
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M11.944 0C5.352 0 0 5.352 0 11.944c0 6.592 5.352 11.944 11.944 11.944 6.592 0 11.944-5.352 11.944-11.944C23.888 5.352 18.536 0 11.944 0zm5.832 8.352l-1.992 9.392c-.144.664-.536.824-1.096.512l-3.032-2.232-1.464 1.408c-.16.16-.304.296-.624.296l.216-3.072 5.592-5.048c.24-.216-.048-.336-.368-.12l-6.912 4.352-2.976-.928c-.648-.2-.664-.648.136-.96l11.632-4.48c.536-.192 1.008.128.888.88z" />
-                </svg>
-              </a>
-              <a
-                href="https://www.instagram.com/yaroslav.sych"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-                className={styles.socialBtn}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                </svg>
-              </a>
-              <a
-                href={DATA.profile.github}
-                target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-                className={styles.socialBtn}
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                </svg>
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Form Column */}
@@ -426,9 +547,32 @@ const Contact: React.FC = () => {
             <p className={styles.formSubtitle}>
               I respond promptly to inquiries and project propositions.
             </p>
+            {hasDraftRestored && (
+              <div className={styles.draftBadge}>
+                <span>Saved draft restored</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    form.current?.reset();
+                    clearDraft();
+                    if (textareaRef.current) {
+                      textareaRef.current.style.height = '';
+                    }
+                  }}
+                  className={styles.clearDraftBtn}
+                >
+                  Clear draft
+                </button>
+              </div>
+            )}
           </div>
 
-          <form ref={form} className={styles.form} onSubmit={sendEmail}>
+          <form
+            ref={form}
+            className={styles.form}
+            onSubmit={sendEmail}
+            onInput={saveDraft}
+          >
             <div className={styles.inputRow}>
               <div
                 className={`${styles.field} ${
@@ -486,7 +630,7 @@ const Contact: React.FC = () => {
             </div>
 
             <div
-              className={`${styles.field} ${
+              className={`${styles.field} ${styles.messageField} ${
                 submitState === 'sending' ? styles.fieldLocked : ''
               }`}
             >
@@ -556,6 +700,7 @@ const Contact: React.FC = () => {
                   <span className={styles.btnContent}>
                     <span>Send Message</span>
                     <svg
+                      ref={staticPlaneRef}
                       className={styles.planeIcon}
                       viewBox="0 0 24 24"
                       fill="none"
@@ -573,20 +718,6 @@ const Contact: React.FC = () => {
                 {/* State: SENDING / TRANSMITTING */}
                 {submitState === 'sending' && (
                   <span className={styles.btnContent}>
-                    <div className={styles.flightScene} aria-hidden="true">
-                      <svg
-                        className={styles.launchingPlane}
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M22 2L11 13" />
-                        <path d="M22 2L15 22L11 13L2 9L22 2Z" />
-                      </svg>
-                    </div>
                     <span className={styles.transmittingRing} />
                     <span className={styles.transmittingText}>
                       <span>Transmitting</span>
@@ -651,7 +782,7 @@ const Contact: React.FC = () => {
                     submitState === 'success'
                       ? styles.alertSuccess
                       : styles.alertError
-                  }`}
+                  } ${isAlertFading ? styles.alertFadingOut : ''}`}
                   role="status"
                 >
                   <span className={styles.alertIcon}>
@@ -664,6 +795,40 @@ const Contact: React.FC = () => {
           </form>
         </div>
       </div>
+
+      {flyingPlane &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            className={styles.flyingPlaneCarrier}
+            style={
+              {
+                top: `${flyingPlane.top}px`,
+                left: `${flyingPlane.left}px`,
+                width: `${flyingPlane.width}px`,
+                height: `${flyingPlane.height}px`,
+                '--start-x': `${flyingPlane.left}px`,
+              } as React.CSSProperties
+            }
+            aria-hidden="true"
+          >
+            <div className={styles.flyingPlaneWave}>
+              <svg
+                className={styles.flyingPlaneSvg}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M22 2L11 13" />
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+              </svg>
+            </div>
+          </div>,
+          document.body,
+        )}
     </section>
   );
 };

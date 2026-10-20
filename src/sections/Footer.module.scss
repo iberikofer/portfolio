@@ -4,7 +4,7 @@
   position: relative;
   background-color: $bg-canvas;
   border-top: 1px solid $border-hairline;
-  padding: 48px 0 36px;
+  padding: 36px 0;
   box-shadow: $shadow-bevel;
 }
 
@@ -41,40 +41,93 @@
   }
 }
 
-.footerNav {
+// Social Profiles (Right-aligned)
+.socialsSection {
   display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
 
   @media (max-width: 600px) {
-    gap: 14px;
+    align-items: flex-start;
+  }
+}
+
+.socialsHeading {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  color: $text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: right;
+
+  @media (max-width: 600px) {
+    text-align: left;
+  }
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+
+  @media (max-width: 600px) {
+    justify-content: flex-start;
+  }
+}
+
+.socialBtn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: $bg-card;
+  border: 1px solid $border-hairline;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  box-shadow: $shadow-bevel;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
   }
 
-  a {
-    font-size: 0.84rem;
-    color: $text-muted;
-    transition: color $duration-micro $ease-out-expo;
-
-    &:hover {
-      color: $accent-lime;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $accent-lime;
-      outline-offset: 2px;
-    }
+  // Anti-jitter hover bridge: inert when idle, extends downward on hover to eliminate edge flicker
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
   }
 
-  .backToTop {
+  &:hover {
     color: $accent-lime;
-    font-family: $font-mono;
-    font-size: 0.78rem;
+    border-color: $border-hover;
+    background: rgba(155, 255, 0, 0.08);
+    transform: translateY(-2px);
 
-    &:hover {
-      color: $accent-lime-hover;
-      text-decoration: underline;
+    &::after {
+      pointer-events: auto;
+      bottom: -6px;
     }
+  }
+
+  &:active {
+    transform: scale(0.95) translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
   }
 }
 

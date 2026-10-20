@@ -45,29 +45,347 @@
   margin-bottom: 28px;
 }
 
-// Filter Tabs
-.filterBar {
+// ─── Unified Filter Deck ──────────────────────────────────────────────────────
+// One container, one border, three rows separated by CSS dividers. Zero SVG.
+.filterDeck {
   display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: rgba(14, 18, 26, 0.95);
+  border: 1px solid rgba(155, 255, 0, 0.65);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 32px -4px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(155, 255, 0, 0.06) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(14px);
+  overflow: hidden;
+  max-width: 100%;
+
+  @media (max-width: 680px) {
+    width: 100%;
+    border-radius: 12px;
+  }
+}
+
+// Each row inside the deck
+.deckRow {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px;
-  background: rgba(12, 15, 20, 0.85);
-  border: 1px solid $border-hairline;
-  border-radius: 10px;
-  box-shadow: $shadow-bevel;
-  flex-wrap: wrap;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 5px 5px;
   position: relative;
 
-  @media (max-width: 600px) {
-    width: 100%;
+  // Divider between rows
+  & + .deckRow {
+    border-top: 1px solid rgba(155, 255, 0, 0.2);
+  }
+}
+
+// Row 1: Scope bar — slightly taller, center-aligned
+.deckRowScope {
+  padding: 4px;
+  flex-wrap: nowrap;
+  justify-content: center;
+
+  @media (max-width: 520px) {
+    flex-wrap: wrap;
+  }
+}
+
+// Scope tab buttons
+.scopeBtn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: $text-secondary;
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  transition:
+    color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  .filterCount {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgba(119, 137, 171, 0.12);
+    color: $text-muted;
+    transition:
+      background-color $duration-micro $ease-out-expo,
+      color $duration-micro $ease-out-expo;
   }
 
-  // Fallback before hydration / position measurement
-  &:not(.hasMounted) .filterBtn.active {
-    background: rgba(155, 255, 0, 0.08);
-    border-color: rgba(155, 255, 0, 0.3);
-    box-shadow: $shadow-bevel;
+  &:hover:not(.active) {
+    color: $text-primary;
+    background: rgba(119, 137, 171, 0.08);
+  }
+
+  &.active {
+    color: $accent-lime;
+
+    .filterCount {
+      background: rgba(155, 255, 0, 0.18);
+      color: $accent-lime;
+    }
+  }
+
+  @media (max-width: 600px) {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+// Chip buttons (Row 2)
+.chipBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: $text-secondary;
+  font-size: 0.84rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo,
+    transform $duration-micro $ease-out-expo;
+
+  .activeDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $accent-lime;
+    box-shadow: 0 0 8px $accent-lime;
+    display: inline-block;
+  }
+
+  .filterCount {
+    font-family: $font-mono;
+    font-size: 0.72rem;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgba(119, 137, 171, 0.12);
+    color: $text-muted;
+    transition:
+      background-color $duration-micro $ease-out-expo,
+      color $duration-micro $ease-out-expo;
+  }
+
+  &:hover:not(.active) {
+    color: $text-primary;
+    background: rgba(119, 137, 171, 0.08);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.active {
+    color: $accent-lime;
+    background: linear-gradient(
+      180deg,
+      rgba(155, 255, 0, 0.12) 0%,
+      rgba(155, 255, 0, 0.04) 100%
+    );
+    border-color: rgba(155, 255, 0, 0.35);
+    box-shadow:
+      $shadow-bevel,
+      0 0 16px rgba(155, 255, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    .filterCount {
+      background: rgba(155, 255, 0, 0.18);
+      color: $accent-lime;
+    }
+  }
+
+  &.emptyCategory {
+    opacity: 0.45;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+// Row 3: Action bar (animated fade-in)
+@keyframes fadeInDeck {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activeChipsInfo {
+  font-size: 0.76rem;
+  color: $text-secondary;
+  font-family: $font-mono;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+
+  .resultCount {
+    color: $accent-lime;
+    font-weight: 600;
+  }
+}
+
+.modeToggle {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid $border-hairline;
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.modeBtn {
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: $text-muted;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all $duration-micro $ease-out-expo;
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &.activeMode {
+    background: rgba(155, 255, 0, 0.16);
+    color: $accent-lime;
+    box-shadow: 0 0 10px rgba(155, 255, 0, 0.15);
+  }
+}
+
+.clearAllBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 5px;
+  color: $text-muted;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 2px 7px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all $duration-micro $ease-out-expo;
+
+  &:hover {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.35);
+    background: rgba(255, 107, 107, 0.08);
+  }
+}
+
+
+// Empty state
+.emptyState {
+  text-align: center;
+  padding: 56px 24px;
+  max-width: 460px;
+  margin: 0 auto 48px;
+  background: rgba(15, 19, 28, 0.6);
+  border: 1px dashed rgba(119, 137, 171, 0.2);
+  border-radius: 12px;
+
+  .emptyIcon {
+    color: $text-muted;
+    margin-bottom: 14px;
+    opacity: 0.7;
+    display: flex;
+    justify-content: center;
+  }
+
+  .emptyTitle {
+    font-size: 1.15rem;
+    color: $text-primary;
+    margin: 0 0 8px;
+  }
+
+  .emptyText {
+    font-size: 0.88rem;
+    color: $text-muted;
+    margin: 0 0 20px;
+    line-height: 1.5;
+  }
+
+  .emptyActions {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .switchModeBtn,
+  .resetFiltersBtn {
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all $duration-micro $ease-out-expo;
+  }
+
+  .switchModeBtn {
+    background: rgba(155, 255, 0, 0.12);
+    border: 1px solid rgba(155, 255, 0, 0.35);
+    color: $accent-lime;
+
+    &:hover {
+      background: rgba(155, 255, 0, 0.22);
+      border-color: $accent-lime;
+    }
+  }
+
+  .resetFiltersBtn {
+    background: transparent;
+    border: 1px solid $border-hairline;
+    color: $text-secondary;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: $text-primary;
+    }
   }
 }
 
@@ -105,63 +423,6 @@
   }
 }
 
-.filterBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  color: $text-secondary;
-  font-size: 0.84rem;
-  font-weight: 500;
-  padding: 7px 14px;
-  border-radius: 7px;
-  border: 1px solid transparent;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    color $duration-micro $ease-out-expo,
-    background-color $duration-micro $ease-out-expo,
-    transform $duration-micro $ease-out-expo;
-
-  .filterCount {
-    font-family: $font-mono;
-    font-size: 0.72rem;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: rgba(119, 137, 171, 0.12);
-    color: $text-muted;
-    transition:
-      background-color $duration-micro $ease-out-expo,
-      color $duration-micro $ease-out-expo;
-  }
-
-  &:hover:not(.active) {
-    color: $text-primary;
-    background: rgba(119, 137, 171, 0.08);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &.active {
-    color: $accent-lime;
-
-    .filterCount {
-      background: rgba(155, 255, 0, 0.18);
-      color: $accent-lime;
-    }
-  }
-
-  &:focus-visible {
-    outline: 2px solid $accent-lime;
-    outline-offset: 2px;
-  }
-}
-
 // Projects Grid
 .grid {
   display: grid;
@@ -181,12 +442,13 @@
 }
 
 .card {
+  position: relative;
   background: $bg-card;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid $border-hairline;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   box-shadow: $shadow-card, $shadow-bevel;
@@ -195,6 +457,16 @@
     border-color $duration-medium $ease-out-expo,
     box-shadow $duration-medium $ease-out-expo;
 
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
   &:hover {
     transform: translateY(-4px);
     border-color: rgba(155, 255, 0, 0.4);
@@ -202,6 +474,11 @@
       0 16px 36px -10px rgba(0, 0, 0, 0.9),
       0 0 24px rgba(155, 255, 0, 0.1),
       $shadow-bevel-heavy;
+
+    &::after {
+      pointer-events: auto;
+      bottom: -8px;
+    }
 
     .imageContainer .projectImg.loaded {
       transform: scale(1.04);
@@ -220,6 +497,8 @@
   aspect-ratio: 16 / 10;
   width: 100%;
   overflow: hidden;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
   background:
     linear-gradient(
       110deg,
@@ -407,6 +686,23 @@
   border: 1px solid rgba(119, 137, 171, 0.22);
   padding: 3px 8px;
   border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: all $duration-micro $ease-out-expo;
+
+  &:hover {
+    color: $accent-lime;
+    border-color: rgba(155, 255, 0, 0.45);
+    background: rgba(155, 255, 0, 0.1);
+    transform: translateY(-1px);
+  }
+
+  &.tagActive {
+    color: $accent-lime;
+    border-color: rgba(155, 255, 0, 0.55);
+    background: rgba(155, 255, 0, 0.16);
+    box-shadow: 0 0 10px rgba(155, 255, 0, 0.15);
+  }
 }
 
 .description {
@@ -418,15 +714,20 @@
 
 // Action Buttons Bar
 .actionRow {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   padding: 12px 20px;
   background: rgba(4, 6, 8, 0.7);
   border-top: 1px solid $border-hairline;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
   gap: 10px;
 }
 
 .actionBtn {
+  position: relative;
   flex: 1;
   display: inline-flex;
   align-items: center;
@@ -445,6 +746,14 @@
     border-color $duration-micro $ease-out-expo,
     color $duration-micro $ease-out-expo;
 
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   .actionIcon {
     width: 14px;
     height: 14px;
@@ -457,6 +766,11 @@
     border-color: $border-hover;
     color: $accent-lime;
     transform: translateY(-1px);
+
+    &::after {
+      pointer-events: auto;
+      bottom: -4px;
+    }
 
     .actionIcon {
       color: $accent-lime;
@@ -566,6 +880,7 @@
 }
 
 .githubCtaBtn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -585,6 +900,14 @@
     background-color $duration-micro $ease-out-expo,
     color $duration-micro $ease-out-expo;
 
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   svg {
     width: 14px;
     height: 14px;
@@ -597,6 +920,11 @@
     border-color: rgba(155, 255, 0, 0.4);
     color: $accent-lime;
     transform: translateY(-2px);
+
+    &::after {
+      pointer-events: auto;
+      bottom: -6px;
+    }
 
     svg {
       transform: translate(2px, -2px);

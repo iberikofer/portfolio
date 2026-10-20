@@ -7,6 +7,8 @@ import carRent from '../assets/carRent.png';
 import glyanecImg from '../assets/glyanec.png';
 import quizImg from '../assets/quiz.png';
 import reactPhonebookImg from '../assets/reactPhonebook.png';
+import iceCreamImg from '../assets/iceCream.png';
+import bookshelfImg from '../assets/bookshelf.png';
 import type { StaticImageData } from 'next/image';
 
 export type ImageSource = string | StaticImageData;
@@ -143,7 +145,7 @@ export const DATA: AppData = {
     },
     {
       id: 5,
-      title: 'React phonebook',
+      title: 'Phonebook',
       photo: reactPhonebookImg,
       description:
         'React phonebook application with user authentication, Redux state management, and contact filtering.',
@@ -220,6 +222,7 @@ export const DATA: AppData = {
     {
       id: 11,
       title: 'Bookshelf',
+      photo: bookshelfImg,
       description:
         'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
       tags: ['TEAM', 'JAVASCRIPT', 'HTML', 'SCSS', 'REST API'],
@@ -230,6 +233,7 @@ export const DATA: AppData = {
     {
       id: 12,
       title: 'Ice Cream',
+      photo: iceCreamImg,
       description:
         'Modern responsive digital landing page for an ice cream brand, featuring Swiper carousels, customer review sliders, and interactive ordering popups built with a development team.',
       tags: ['TEAM', 'HTML', 'SCSS', 'JS', 'SWIPER'],

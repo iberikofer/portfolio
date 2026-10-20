@@ -226,11 +226,12 @@
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 20px rgba(155, 255, 0, 0.14));
-    transition: filter 0.4s $ease-out-expo;
+    filter: drop-shadow(0 2px 18px rgba(155, 255, 0, 0.12));
+    transition: filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 
     &:hover {
-      filter: drop-shadow(0 0 35px rgba(155, 255, 0, 0.75));
+      filter: drop-shadow(0 0 24px rgba(155, 255, 0, 0.34));
+      transition: filter 0.35s ease-out;
     }
   }
 }
@@ -340,7 +341,7 @@
 
 .primaryButton {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -359,6 +360,14 @@
     transform $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo,
     background-color $duration-micro $ease-out-expo;
+
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
 
   @media (max-width: 480px) {
     width: 100%;
@@ -391,9 +400,9 @@
     border-radius: 50%;
     background: radial-gradient(
       circle closest-side,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(255, 255, 255, 0.48) 35%,
-      rgba(180, 255, 50, 0.28) 65%,
+      rgba(200, 255, 100, 0.45) 0%,
+      rgba(155, 255, 0, 0.28) 45%,
+      rgba(155, 255, 0, 0.08) 75%,
       transparent 100%
     );
     opacity: 0;
@@ -417,6 +426,11 @@
       inset 0 1px 0 #ffffff,
       0 16px 36px -4px rgba(155, 255, 0, 0.65);
 
+    &::after {
+      pointer-events: auto;
+      bottom: -6px;
+    }
+
     .buttonIcon {
       transform: translateX(4px);
     }
@@ -435,7 +449,7 @@
 
 .secondaryButton {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -453,6 +467,14 @@
     background-color $duration-micro $ease-out-expo,
     border-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo;
+
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
 
   @media (max-width: 480px) {
     width: 100%;
@@ -501,6 +523,11 @@
 
     &::before {
       opacity: 1;
+    }
+
+    &::after {
+      pointer-events: auto;
+      bottom: -6px;
     }
 
     .buttonIcon {
@@ -738,6 +765,7 @@
     object-fit: cover;
     pointer-events: none;
     border-radius: inherit;
+    filter: contrast(1.08) brightness(0.95) saturate(1.06);
   }
 
   .imageShine {

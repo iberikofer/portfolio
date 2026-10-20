@@ -51,27 +51,45 @@
 .content {
   display: grid;
   grid-template-columns: 1.35fr 1fr;
-  gap: 28px;
+  gap: 20px 28px;
   align-items: stretch;
 
   @media (max-width: 1024px) {
     grid-template-columns: 1fr;
     gap: 20px;
-    align-items: flex-start;
-  }
-}
 
-.leftColumn,
-.rightColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    .skillsSection {
+      order: 1;
+    }
+    .bioCard {
+      order: 2;
+    }
+    .educationSection {
+      order: 3;
+      padding-top: 0;
+    }
+    .accentBox {
+      order: 4;
+    }
+  }
 }
 
 .skillsSection {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  height: 100%;
+}
+
+.educationSection {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: calc(1.05rem * 1.25 + 14px);
+
+  @media (max-width: 1024px) {
+    padding-top: 0;
+  }
 }
 
 .bioCard {
@@ -80,18 +98,18 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid $border-hairline;
   border-radius: 12px;
-  padding: 24px 28px;
+  padding: 22px 26px;
   box-shadow: $shadow-card, $shadow-bevel;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex: 1;
+  height: 100%;
 
   p {
-    font-size: 0.95rem;
-    line-height: 1.7;
+    font-size: 0.92rem;
+    line-height: 1.6;
     color: $text-secondary;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 
     &:last-child {
       margin-bottom: 0;
@@ -110,9 +128,11 @@
 
 .skillsHeading {
   font-size: 1.05rem;
+  line-height: 1.25;
   font-weight: 600;
   color: $text-primary;
   letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .skillsGrid {
@@ -126,6 +146,7 @@
 }
 
 .skillCard {
+  position: relative;
   background: $bg-card;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -138,12 +159,25 @@
     border-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo;
 
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
   &:hover {
     transform: translateY(-2px);
     border-color: rgba(155, 255, 0, 0.35);
     box-shadow:
       $shadow-bevel-heavy,
       0 8px 20px -4px rgba(0, 0, 0, 0.7);
+
+    &::after {
+      pointer-events: auto;
+      bottom: -6px;
+    }
   }
 }
 
@@ -212,28 +246,29 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid $border-hairline;
   border-radius: 12px;
-  padding: 22px 26px;
+  padding: 20px 24px;
   box-shadow: $shadow-card, $shadow-bevel;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .boxHeader {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 10px;
   color: $text-primary;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   letter-spacing: -0.01em;
 }
 
 .boxHeaderIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
   background: rgba(119, 137, 171, 0.1);
   border: 1px solid rgba(119, 137, 171, 0.25);
   display: flex;
@@ -243,37 +278,46 @@
   flex-shrink: 0;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 }
 
 .archiveDescription {
   color: $text-muted;
-  font-size: 0.88rem;
-  line-height: 1.6;
-  margin-bottom: 16px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
 }
 
 .archiveLink {
+  position: relative;
   margin-top: auto;
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: 7px 13px;
   background: rgba(155, 255, 0, 0.06);
   border: 1px solid rgba(155, 255, 0, 0.25);
   border-radius: 6px;
   color: $accent-lime;
   font-family: $font-mono;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
   box-shadow: $shadow-bevel;
   transition:
     transform $duration-micro $ease-out-expo,
     border-color $duration-micro $ease-out-expo,
     background-color $duration-micro $ease-out-expo;
+
+  // Anti-jitter hover bridge
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
 
   svg {
     width: 14px;
@@ -289,6 +333,11 @@
     background: rgba(155, 255, 0, 0.15);
     border-color: $accent-lime;
     transform: translateY(-1px);
+
+    &::after {
+      pointer-events: auto;
+      bottom: -4px;
+    }
 
     .arrowIcon {
       transform: translate(2px, -2px);
@@ -312,19 +361,22 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid $border-hairline;
   border-radius: 12px;
-  padding: 22px 24px;
+  padding: 16px 20px;
   box-shadow: $shadow-card, $shadow-bevel;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .timeline {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: space-between;
+  gap: 8px;
   position: relative;
-  padding-left: 20px;
-  margin-top: 14px;
+  padding-left: 18px;
+  margin-top: 4px;
+  flex: 1;
 
   &::before {
     content: '';
@@ -349,21 +401,22 @@
   &::before {
     content: '';
     position: absolute;
-    left: -20px;
-    top: 5px;
-    width: 10px;
-    height: 10px;
+    left: -18px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
     background: $bg-canvas;
     border: 2px solid $accent-lime;
     border-radius: 50%;
-    box-shadow: 0 0 8px $accent-lime;
+    box-shadow: 0 0 6px $accent-lime;
   }
 
   h4 {
     color: $text-primary;
-    font-size: 0.95rem;
-    margin: 4px 0 6px;
+    font-size: 0.88rem;
+    margin: 2px 0 2px;
     letter-spacing: -0.01em;
+    line-height: 1.25;
 
     a {
       color: inherit;
@@ -383,8 +436,8 @@
 
   p {
     color: $text-muted;
-    font-size: 0.85rem;
-    line-height: 1.55;
+    font-size: 0.8rem;
+    line-height: 1.4;
     margin: 0;
   }
 }
@@ -392,22 +445,22 @@
 .itemHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .date {
   font-family: $font-mono;
   color: $accent-slate;
-  font-size: 0.74rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.02em;
 }
 
 .statusPill {
   font-family: $font-mono;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  padding: 1px 7px;
+  padding: 1px 6px;
   border-radius: 999px;
   background: rgba(155, 255, 0, 0.12);
   border: 1px solid rgba(155, 255, 0, 0.3);
@@ -416,9 +469,9 @@
 
 .statusPillAlt {
   font-family: $font-mono;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  padding: 1px 7px;
+  padding: 1px 6px;
   border-radius: 999px;
   background: rgba(119, 137, 171, 0.12);
   border: 1px solid rgba(119, 137, 171, 0.3);

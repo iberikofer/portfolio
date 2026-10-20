@@ -337,7 +337,7 @@ const Hero: React.FC = () => {
             <div className={`${styles.metricsBar} ${styles.animateFadeIn}`}>
               <div className={styles.metricItem}>
                 <span className={styles.metricVal}>17+</span>
-                <span className={styles.metricLab}>Web Projects</span>
+                <span className={styles.metricLab}>Projects</span>
               </div>
               <div className={styles.metricDivider} />
               <div className={styles.metricItem}>
@@ -375,7 +375,21 @@ const Hero: React.FC = () => {
                 </svg>
               </a>
 
-              <a href="#contact" className={styles.secondaryButton}>
+              <a
+                href="#contact"
+                className={styles.secondaryButton}
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  e.currentTarget.style.setProperty(
+                    '--mouse-x',
+                    `${((e.clientX - rect.left) / rect.width) * 100}%`
+                  );
+                  e.currentTarget.style.setProperty(
+                    '--mouse-y',
+                    `${((e.clientY - rect.top) / rect.height) * 100}%`
+                  );
+                }}
+              >
                 <span className={styles.buttonLabel}>Get in Touch</span>
                 <svg
                   className={styles.buttonIcon}
