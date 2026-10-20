@@ -13,6 +13,7 @@ import fizzRushImg from '../assets/fizzRush.png';
 import agentTomImg from '../assets/agentTOM.png';
 import lethalLabyrinthsImg from '../assets/lethalLabyrinths.png';
 import tornadoGymImg from '../assets/tornadoGYM.png';
+import healthHubImg from '../assets/healthHub.png';
 import type { StaticImageData } from 'next/image';
 
 export type ImageSource = string | StaticImageData;
@@ -248,12 +249,15 @@ export const DATA: AppData = {
     {
       id: 13,
       title: 'HealthyHub',
+      photo: healthHubImg,
       description:
         'Comprehensive health and nutrition tracking web app with calorie budgeting, interactive Chart.js analytics, goal tracking, and persistent state management built with a team.',
       tags: ['TEAM', 'REACT', 'REDUX', 'CHART.JS', 'AXIOS'],
       link: 'https://github.com/AndriiZlt/healthyHub-frontend',
       pages: 'https://andriizlt.github.io/healthyHub-frontend/',
       status: 'Open',
+      objectFit: 'cover',
+      objectPosition: 'center',
     },
     {
       id: 14,
