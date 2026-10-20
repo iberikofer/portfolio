@@ -61,6 +61,10 @@
   backdrop-filter: blur(14px);
   overflow: hidden;
   max-width: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
 
   @media (max-width: 680px) {
     width: 100%;
@@ -457,11 +461,14 @@
     border-color $duration-medium $ease-out-expo,
     box-shadow $duration-medium $ease-out-expo;
 
-  // Anti-jitter hover bridge
+  // Anti-jitter hover bridge (anchored to bottom edge only, never covers card surface)
   &::after {
     content: '';
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 12px;
     pointer-events: none;
     z-index: 1;
     border-radius: inherit;
@@ -477,7 +484,6 @@
 
     &::after {
       pointer-events: auto;
-      bottom: -8px;
     }
 
     .imageContainer .projectImg.loaded {
@@ -656,6 +662,8 @@
 }
 
 .cardBody {
+  position: relative;
+  z-index: 2;
   padding: 20px 22px;
   flex: 1;
   display: flex;
@@ -667,6 +675,9 @@
   color: $text-primary;
   margin: 0 0 12px;
   letter-spacing: -0.02em;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 .tags {
@@ -710,6 +721,9 @@
   line-height: 1.6;
   color: $text-secondary;
   margin: 0;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 // Action Buttons Bar

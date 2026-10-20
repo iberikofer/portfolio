@@ -5,10 +5,11 @@ import About from '../sections/About';
 import Contact from '../sections/Contact';
 import Footer from '../sections/Footer';
 import ScrollToTop from '../components/ScrollToTop';
+import { LanguageProvider } from '../context/LanguageContext';
 
 export default function Home() {
   return (
-    <>
+    <LanguageProvider>
       <Header />
       <Hero />
       <main className="container">
@@ -18,6 +19,6 @@ export default function Home() {
       </main>
       <Footer />
       <ScrollToTop />
-    </>
+    </LanguageProvider>
   );
 }

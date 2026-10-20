@@ -12,6 +12,7 @@ import emailjs from '@emailjs/browser';
 import styles from './Contact.module.scss';
 import { DATA } from '../data/config';
 import { useButtonGlow } from '../hooks/useButtonGlow';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FlyingPlaneCoord {
   top: number;
@@ -47,6 +48,7 @@ const getHasSavedDraft = (): boolean => {
 };
 
 const Contact: React.FC = () => {
+  const { t } = useLanguage();
   const resumeBtnRef = useRef<HTMLAnchorElement>(null);
   const resumeGlowRef = useRef<HTMLSpanElement>(null);
   useButtonGlow(resumeBtnRef, resumeGlowRef);
@@ -267,7 +269,7 @@ const Contact: React.FC = () => {
 
     if (!userName || !message) {
       setSubmitState('validation-error');
-      setStatusFeedback('Please enter both your name and message.');
+      setStatusFeedback(t.contact.statusValidationRequired);
       setTimeout(() => {
         setIsAlertFading(true);
       }, 3000);
@@ -288,9 +290,7 @@ const Contact: React.FC = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
     if (userEmail && !emailRegex.test(userEmail)) {
       setSubmitState('validation-error');
-      setStatusFeedback(
-        'Please provide a valid email format (e.g. yourname@domain.com).',
-      );
+      setStatusFeedback(t.contact.statusValidationEmail);
       setTimeout(() => {
         setIsAlertFading(true);
       }, 3400);
@@ -358,7 +358,7 @@ const Contact: React.FC = () => {
       }
 
       setSubmitState('success');
-      setStatusFeedback('Message sent successfully! I will be in touch soon.');
+      setStatusFeedback(t.contact.statusSuccess);
       form.current?.reset();
       clearDraft();
       if (textareaRef.current) {
@@ -396,10 +396,10 @@ const Contact: React.FC = () => {
       const isTimeout = error instanceof Error && error.message === 'TIMEOUT';
       setStatusFeedback(
         isTimeout
-          ? 'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.'
+          ? t.contact.statusTimeout
           : errDetail && errDetail !== '[object Object]'
-            ? `Delivery issue (${errDetail}). Please reach me directly via email or Telegram.`
-            : 'Delivery issue with email service. Please reach me directly via email or Telegram.',
+            ? `${t.contact.statusIssue} (${errDetail})`
+            : t.contact.statusIssue,
       );
       setTimeout(() => {
         setIsAlertFading(true);
@@ -428,21 +428,19 @@ const Contact: React.FC = () => {
               <span className={styles.radarPing} />
               <span className={styles.radarDot} />
             </span>
-            <span>Available for new opportunities</span>
+            <span>{t.contact.pill}</span>
           </div>
 
-          <h2 className={styles.title}>Let's Build Something Exceptional</h2>
+          <h2 className={styles.title}>{t.contact.title}</h2>
           <p className={styles.description}>
-            Whether you have an ambitious web project, want to discuss software
-            engineering roles, or simply want to connect — my inbox is always
-            open.
+            {t.contact.subtitle}
           </p>
 
           {/* FullStack-JS Developer Resume Showcase Card */}
           <div className={styles.resumeCard}>
             <div className={styles.resumeRoleInfo}>
-              <span className={styles.roleLabel}>Specialization</span>
-              <h3 className={styles.roleTitle}>FullStack-JS Developer</h3>
+              <span className={styles.roleLabel}>{t.contact.specializationLabel}</span>
+              <h3 className={styles.roleTitle}>{t.contact.specializationRole}</h3>
             </div>
             <a
               ref={resumeBtnRef}
@@ -450,7 +448,7 @@ const Contact: React.FC = () => {
               target="_blank"
               rel="noreferrer"
               className={styles.resumeBtn}
-              title="Download Yaroslav Sych's Resume (PDF)"
+              title={t.contact.cvDesc}
             >
               <span className={styles.btnGlow} aria-hidden="true">
                 <span ref={resumeGlowRef} className={styles.glowSpot} />
@@ -468,7 +466,7 @@ const Contact: React.FC = () => {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <span>Download Resume</span>
+              <span>{t.contact.cvBtn}</span>
             </a>
           </div>
 
@@ -489,7 +487,7 @@ const Contact: React.FC = () => {
                 </svg>
               </div>
               <div className={styles.itemText}>
-                <span className={styles.itemLabel}>Email Address</span>
+                <span className={styles.itemLabel}>{t.contact.emailTitle}</span>
                 <span className={styles.itemVal}>{DATA.profile.email}</span>
               </div>
             </a>
@@ -506,7 +504,7 @@ const Contact: React.FC = () => {
                 </svg>
               </div>
               <div className={styles.itemText}>
-                <span className={styles.itemLabel}>Direct Line</span>
+                <span className={styles.itemLabel}>{t.contact.phoneTitle}</span>
                 <span className={styles.itemVal}>{DATA.profile.phone}</span>
               </div>
             </a>
@@ -524,9 +522,9 @@ const Contact: React.FC = () => {
                 </svg>
               </div>
               <div className={styles.itemText}>
-                <span className={styles.itemLabel}>Location</span>
+                <span className={styles.itemLabel}>{t.contact.locationTitle}</span>
                 <span className={styles.itemVal}>
-                  Vinnytsia, Ukraine (GMT+2)
+                  {t.contact.locationDesc}
                 </span>
               </div>
             </div>
@@ -543,13 +541,13 @@ const Contact: React.FC = () => {
           <div className={styles.laserScanBar} aria-hidden="true" />
 
           <div className={styles.formHeader}>
-            <h3 className={styles.formTitle}>Send a Direct Message</h3>
+            <h3 className={styles.formTitle}>{t.contact.formTitle}</h3>
             <p className={styles.formSubtitle}>
-              I respond promptly to inquiries and project propositions.
+              {t.contact.formSubtitle}
             </p>
             {hasDraftRestored && (
               <div className={styles.draftBadge}>
-                <span>Saved draft restored</span>
+                <span>{t.contact.draftRestored}</span>
                 <button
                   type="button"
                   onClick={() => {
@@ -561,7 +559,7 @@ const Contact: React.FC = () => {
                   }}
                   className={styles.clearDraftBtn}
                 >
-                  Clear draft
+                  {t.contact.draftClear}
                 </button>
               </div>
             )}
@@ -589,7 +587,7 @@ const Contact: React.FC = () => {
                     submitState === 'sending' || submitState === 'success'
                   }
                 />
-                <label htmlFor="user_name">Your Name</label>
+                <label htmlFor="user_name">{t.contact.nameLabel}</label>
               </div>
 
               <div
@@ -607,7 +605,7 @@ const Contact: React.FC = () => {
                     submitState === 'sending' || submitState === 'success'
                   }
                 />
-                <label htmlFor="user_email">Your Email</label>
+                <label htmlFor="user_email">{t.contact.emailLabel}</label>
               </div>
             </div>
 
@@ -626,7 +624,7 @@ const Contact: React.FC = () => {
                 }
                 autoComplete="off"
               />
-              <label htmlFor="subject">Subject</label>
+              <label htmlFor="subject">{t.contact.subjectLabel}</label>
             </div>
 
             <div
@@ -645,7 +643,7 @@ const Contact: React.FC = () => {
                 }
                 onInput={handleTextareaInput}
               />
-              <label htmlFor="message">Your Message...</label>
+              <label htmlFor="message">{t.contact.messageLabel}</label>
             </div>
 
             <div className={styles.formFooter}>
@@ -698,7 +696,7 @@ const Contact: React.FC = () => {
                 {/* State: IDLE */}
                 {submitState === 'idle' && (
                   <span className={styles.btnContent}>
-                    <span>Send Message</span>
+                    <span>{t.contact.btnIdle}</span>
                     <svg
                       ref={staticPlaneRef}
                       className={styles.planeIcon}
@@ -720,7 +718,7 @@ const Contact: React.FC = () => {
                   <span className={styles.btnContent}>
                     <span className={styles.transmittingRing} />
                     <span className={styles.transmittingText}>
-                      <span>Transmitting</span>
+                      <span>{t.contact.btnSending}</span>
                       <span className={styles.pulsingDots}>
                         <span>.</span>
                         <span>.</span>
@@ -757,7 +755,7 @@ const Contact: React.FC = () => {
                       </svg>
                     </div>
                     <span className={styles.successText}>
-                      Message Dispatched! ✨
+                      {t.contact.btnSuccess}
                     </span>
                   </span>
                 )}
@@ -769,8 +767,8 @@ const Contact: React.FC = () => {
                     <span className={styles.errorExclamation}>!</span>
                     <span>
                       {submitState === 'validation-error'
-                        ? 'Please Complete Fields'
-                        : 'Delivery Failed • Tap to Retry'}
+                        ? t.contact.btnValidation
+                        : t.contact.btnError}
                     </span>
                   </span>
                 )}

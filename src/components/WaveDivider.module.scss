@@ -9,6 +9,16 @@
   line-height: 0;
   pointer-events: none;
   z-index: 100;
+
+  @media (max-width: 900px) {
+    height: 260px;
+    transform: translateY(50%);
+  }
+
+  @media (max-width: 480px) {
+    height: 220px;
+    transform: translateY(50%);
+  }
 }
 
 .waveCanvas {

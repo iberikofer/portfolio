@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from 'react';
 import { DATA, Project, ImageSource } from '../data/config';
+import { useLanguage } from '../context/LanguageContext';
 import styles from './Projects.module.scss';
 
 type ScopeCategory = 'all' | 'solo' | 'team';
@@ -256,6 +257,7 @@ const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
 };
 
 const Projects: React.FC = () => {
+  const { t } = useLanguage();
   const [activeScope, setActiveScope] = useState<ScopeCategory>('all');
   const [selectedChips, setSelectedChips] = useState<TechChip[]>([]);
   const [matchMode, setMatchMode] = useState<'any' | 'all'>('any');
@@ -505,15 +507,18 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className={styles.projects}>
       <div className={styles.headerArea}>
-        <div className={styles.badge}>Featured Portfolio</div>
-        <h2 className={styles.sectionTitle}>Crafted Projects &amp; Software</h2>
+        <div className={styles.badge}>{t.projects.badge}</div>
+        <h2 className={styles.sectionTitle}>{t.projects.title}</h2>
         <p className={styles.sectionSubtitle}>
-          Production apps, full-stack backends, and responsive digital products
-          built with modern engineering standards.
+          {t.projects.subtitle}
         </p>
 
         {/* Two-tier Filter Controls: Unified Deck */}
-        <div className={styles.filterDeck}>
+        <div
+          className={styles.filterDeck}
+          onDragStart={(e) => e.preventDefault()}
+          draggable={false}
+        >
           {/* Row 1: Scope Bar (All / Solo / Team) */}
           <div
             ref={scopeBarRef}
@@ -536,6 +541,12 @@ const Projects: React.FC = () => {
 
             {SCOPE_TABS.map((tab) => {
               const isActive = activeScope === tab.id;
+              const tabLabel =
+                tab.id === 'all'
+                  ? t.projects.scopeAll
+                  : tab.id === 'solo'
+                    ? t.projects.scopeSolo
+                    : t.projects.scopeTeam;
               return (
                 <button
                   key={tab.id}
@@ -548,7 +559,7 @@ const Projects: React.FC = () => {
                   className={`${styles.scopeBtn} ${isActive ? styles.active : ''}`}
                   onClick={() => handleScopeSelect(tab.id)}
                 >
-                  <span>{tab.label}</span>
+                  <span>{tabLabel}</span>
                   <span className={styles.filterCount}>
                     {scopeCounts[tab.countKey]}
                   </span>
@@ -572,7 +583,7 @@ const Projects: React.FC = () => {
               onClick={handleClearChips}
               aria-pressed={selectedChips.length === 0}
             >
-              <span>All</span>
+              <span>{t.projects.chipAll}</span>
               <span className={styles.filterCount}>{techCounts.all}</span>
             </button>
 
@@ -604,11 +615,10 @@ const Projects: React.FC = () => {
           {selectedChips.length > 0 && (
             <div className={styles.deckRow} style={{ animation: 'fadeInDeck 0.22s ease both' }}>
               <span className={styles.activeChipsInfo}>
-                {selectedChips.length}{' '}
-                {selectedChips.length === 1 ? 'tag' : 'tags'} active ·{' '}
+                {selectedChips.length} {t.projects.activeWord} ·{' '}
                 <span className={styles.resultCount}>
                   {filteredProjects.length}{' '}
-                  {filteredProjects.length === 1 ? 'project' : 'projects'}
+                  {t.projects.projectsWord}
                 </span>
               </span>
 
@@ -660,7 +670,7 @@ const Projects: React.FC = () => {
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-                <span>Reset</span>
+                <span>{t.projects.resetFilters}</span>
               </button>
             </div>
           )}
@@ -685,9 +695,9 @@ const Projects: React.FC = () => {
               <line x1="8" y1="11" x2="14" y2="11" />
             </svg>
           </div>
-          <h3 className={styles.emptyTitle}>No matching projects found</h3>
+          <h3 className={styles.emptyTitle}>{t.projects.noMatchTitle}</h3>
           <p className={styles.emptyText}>
-            No projects in this scope match all selected tags together.
+            {t.projects.noMatchSubtitle}
           </p>
           <div className={styles.emptyActions}>
             {matchMode === 'all' && (
@@ -696,7 +706,7 @@ const Projects: React.FC = () => {
                 className={styles.switchModeBtn}
                 onClick={() => handleModeChange('any')}
               >
-                Switch to &quot;Any (OR)&quot; match
+                {t.projects.switchModeBtn}
               </button>
             )}
             <button
@@ -704,7 +714,7 @@ const Projects: React.FC = () => {
               className={styles.resetFiltersBtn}
               onClick={handleClearChips}
             >
-              Reset filters
+              {t.projects.clearFiltersBtn}
             </button>
           </div>
         </div>
@@ -837,11 +847,11 @@ const Projects: React.FC = () => {
               {/* Status Pill on Card */}
               {project.status === 'Closed' ? (
                 <div className={styles.cardStatusPill}>
-                  <span className={styles.statusClosed}>Archived</span>
+                  <span className={styles.statusClosed}>{t.projects.statusClosed}</span>
                 </div>
               ) : hasLiveDemo(project) ? (
                 <div className={styles.cardStatusPill}>
-                  <span className={styles.statusOpen}>Live Demo</span>
+                  <span className={styles.statusOpen}>{t.projects.statusOpen}</span>
                 </div>
               ) : null}
             </div>
@@ -889,7 +899,9 @@ const Projects: React.FC = () => {
                 })}
               </div>
 
-              <p className={styles.description}>{project.description}</p>
+              <p className={styles.description}>
+                {t.projects.descriptions[project.id] || project.description}
+              </p>
             </div>
 
             {/* Action Bar (Tactile Buttons) */}
@@ -912,7 +924,7 @@ const Projects: React.FC = () => {
                 >
                   <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
                 </svg>
-                <span>Code</span>
+                <span>{t.projects.sourceCode}</span>
               </a>
 
               {project.mockup && (
@@ -938,7 +950,7 @@ const Projects: React.FC = () => {
                     <path d="M5 19.5A3.5 3.5 0 0 1 8.5 16H12v3.5a3.5 3.5 0 1 1-7 0z" />
                     <path d="M5 12.5A3.5 3.5 0 0 1 8.5 9H12v7H8.5A3.5 3.5 0 0 1 5 12.5z" />
                   </svg>
-                  <span>Design</span>
+                  <span>{t.projects.designMockup}</span>
                 </a>
               )}
 
@@ -984,7 +996,9 @@ const Projects: React.FC = () => {
                       <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" />
                     </svg>
                     <span>
-                      {project.pages.includes('#readme') ? 'Docs' : 'Live'}
+                      {project.pages.includes('#readme')
+                        ? 'Docs'
+                        : t.projects.liveDemo}
                     </span>
                   </a>
                 ))}
@@ -1010,10 +1024,9 @@ const Projects: React.FC = () => {
             </svg>
           </div>
           <div>
-            <h4 className={styles.githubTitle}>Explore More Repositories</h4>
+            <h4 className={styles.githubTitle}>{t.projects.githubCardTitle}</h4>
             <p className={styles.githubDesc}>
-              Full commit history, experimentation with C++/Java/Python, and
-              open-source contributions.
+              {t.projects.githubCardDesc}
             </p>
           </div>
         </div>

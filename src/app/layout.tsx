@@ -4,13 +4,13 @@ import './globals.css';
 import '../styles/main.scss';
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   variable: '--font-inter',
   display: 'swap',
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   variable: '--font-mono',
   display: 'swap',
 });

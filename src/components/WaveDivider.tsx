@@ -20,18 +20,38 @@ export const WaveDivider: React.FC = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animationFrameId: number;
     let isVisible = true;
 
+    // Preallocated coordinate caches to eliminate 100% of per-frame heap allocations & GC pauses
+    const step = 8;
+    let width = 0;
+    let height = 0;
+    let cx = 0;
+    let cy = 0;
+    let numPoints = 0;
+    let topYArr = new Float32Array(0);
+    let botYArr = new Float32Array(0);
+
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      width = rect.width;
+      height = rect.height;
+      cx = width * 0.5;
+      cy = height * 0.5;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      numPoints = Math.ceil(width / step) + 1;
+      if (numPoints > topYArr.length) {
+        topYArr = new Float32Array(numPoints + 5);
+        botYArr = new Float32Array(numPoints + 5);
+      }
     };
 
     handleResize();
@@ -108,6 +128,7 @@ export const WaveDivider: React.FC = () => {
     const INTRO_CONNECT_DURATION = 1.25; // seconds for left and right ends to connect symmetrically in the center
     const WAVE_PROPAGATE_DURATION = 0.55; // seconds for wave undulation to ripple outward from center to edges
     const SHOCKWAVE_BURST_DURATION = 0.65; // seconds for central fusion spark & shockwave ring
+    const MOBILE_FADE_IN_DURATION = 1.0; // seconds for smooth wave fade-in on mobile (<900px)
 
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
@@ -117,26 +138,20 @@ export const WaveDivider: React.FC = () => {
 
     const render = (now: number) => {
       animationFrameId = requestAnimationFrame(render);
-      if (!isVisible) return;
+      if (!isVisible || width <= 0 || height <= 0) return;
 
       if (startTime === null) {
         startTime = now;
       }
 
-      const rect = canvas.getBoundingClientRect();
-      const width = rect.width;
-      const height = rect.height;
-      const cy = height * 0.5;
-      const cx = width * 0.5;
-
       ctx.clearRect(0, 0, width, height);
 
       const elapsed = prefersReducedMotion ? 100 : (now - startTime) * 0.001;
+      const isMobile = width < 900;
 
-      // Phase 1: Left and Right ends travel symmetrically towards the center
-      if (elapsed < INTRO_CONNECT_DURATION) {
+      // Phase 1 (Desktop only, >= 900px): Left and Right ends travel symmetrically towards the center
+      if (!isMobile && elapsed < INTRO_CONNECT_DURATION) {
         const p = elapsed / INTRO_CONNECT_DURATION;
-        // Smooth Kowalski cubic ease-in-out
         const easedP =
           p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 
@@ -151,6 +166,7 @@ export const WaveDivider: React.FC = () => {
         ctx.lineTo(rightHeadX, cy);
         ctx.strokeStyle = 'rgba(119, 137, 171, 0.4)';
         ctx.lineWidth = 1.2;
+        ctx.shadowBlur = 0;
         ctx.stroke();
 
         // Main Electric Lime glowing beam
@@ -162,51 +178,60 @@ export const WaveDivider: React.FC = () => {
         ctx.strokeStyle = 'rgba(155, 255, 0, 0.9)';
         ctx.lineWidth = 2.2;
         ctx.shadowColor = '#9BFF00';
-        ctx.shadowBlur = 14;
+        ctx.shadowBlur = 12;
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Radiant glowing heads on the traveling ends
-        ctx.save();
+        // Radiant glowing heads on traveling ends
         ctx.beginPath();
         ctx.arc(leftHeadX, cy, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.shadowColor = '#9BFF00';
-        ctx.shadowBlur = 18;
-        ctx.fill();
-
-        ctx.beginPath();
         ctx.arc(rightHeadX, cy, 3.5, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#9BFF00';
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 14;
         ctx.fill();
-        ctx.restore();
+        ctx.shadowBlur = 0;
 
         return;
       }
 
-      // Phase 2 & 3: Connection made! The wave animation is born and undulation begins
-      const waveElapsed = elapsed - INTRO_CONNECT_DURATION;
-      const t = waveElapsed * 1.6; // wave undulation speed (1.6 rad/s scale)
+      // Phase 2: Waves undulation
+      // On mobile (<900px): starts immediately at second 0
+      // On desktop (>=900px): starts after connection at INTRO_CONNECT_DURATION
+      const waveElapsed = isMobile ? elapsed : elapsed - INTRO_CONNECT_DURATION;
+      const t = waveElapsed * 1.6;
 
-      // Ripple wavefront expanding outward from center to both edges
+      // Ripple propagation: on mobile, waves are awake immediately across full screen width
       const rippleSpeed = cx / WAVE_PROPAGATE_DURATION;
-      const rippleRadius = waveElapsed * rippleSpeed;
-      const isFullyAwake = rippleRadius >= cx;
+      const rippleRadius = isMobile ? cx : waveElapsed * rippleSpeed;
+      const isFullyAwake = isMobile || rippleRadius >= cx;
 
-      const step = 6;
-      const numPoints = Math.ceil(width / step) + 1;
+      // Smooth fade-in on mobile (<900px) instead of sudden cut
+      if (isMobile) {
+        const fadeProgress = Math.min(
+          1,
+          Math.max(0, elapsed / MOBILE_FADE_IN_DURATION),
+        );
+        // Soft cubic ease-out fade
+        const alpha = 1 - Math.pow(1 - fadeProgress, 3);
+        ctx.globalAlpha = alpha;
+      } else {
+        ctx.globalAlpha = 1;
+      }
 
-      layers.forEach((layer) => {
-        const topPoints: { x: number; y: number }[] = [];
-        const botPoints: { x: number; y: number }[] = [];
+      // Responsive adjustments for mobile/tablet (<900px):
+      // Damped vertical amplitude (0.65x) and slight downward seating to keep crests safely below buttons
+      const ampScale = isMobile ? 0.65 : 1.0;
+      const waveCy = isMobile ? cy + 12 : cy;
 
+      for (let l = 0; l < layers.length; l++) {
+        const layer = layers[l];
+
+        // 1. Calculate and store coordinates in pre-allocated Float32Array (0 bytes heap garbage)
         for (let i = 0; i <= numPoints; i++) {
           const x = i * step;
           const distFromCenter = Math.abs(x - cx);
 
-          // Amplitude envelope: 0 before ripple hits, ramps smoothly to 1 behind the wavefront
           let amp = 1;
           if (!isFullyAwake) {
             if (distFromCenter > rippleRadius) {
@@ -217,24 +242,25 @@ export const WaveDivider: React.FC = () => {
             }
           }
 
-          const targetTopY = layer.getTopY(x, t, cy);
-          const topY = cy + (targetTopY - cy) * amp;
-          const thickness = layer.getThickness(x, t) * amp;
+          const targetTopY = layer.getTopY(x, t, waveCy);
+          const topY = waveCy + (targetTopY - waveCy) * amp * ampScale;
+          const thickness =
+            layer.getThickness(x, t) * amp * (isMobile ? 0.75 : 1.0);
           const botY = topY + thickness;
 
-          topPoints.push({ x, y: topY });
-          botPoints.push({ x, y: botY });
+          topYArr[i] = topY;
+          botYArr[i] = botY;
         }
 
-        // Draw layer fill (translucent ribbon body)
-        if (rippleRadius > 20) {
+        // 2. Draw layer fill (translucent ribbon body)
+        if (isMobile || rippleRadius > 20) {
           ctx.beginPath();
-          ctx.moveTo(topPoints[0].x, topPoints[0].y);
-          for (let i = 1; i < topPoints.length; i++) {
-            ctx.lineTo(topPoints[i].x, topPoints[i].y);
+          ctx.moveTo(0, topYArr[0]);
+          for (let i = 1; i <= numPoints; i++) {
+            ctx.lineTo(i * step, topYArr[i]);
           }
-          for (let i = botPoints.length - 1; i >= 0; i--) {
-            ctx.lineTo(botPoints[i].x, botPoints[i].y);
+          for (let i = numPoints; i >= 0; i--) {
+            ctx.lineTo(i * step, botYArr[i]);
           }
           ctx.closePath();
 
@@ -243,65 +269,69 @@ export const WaveDivider: React.FC = () => {
           ctx.fill();
         }
 
-        // Draw top ribbon stroke
+        // 3. Draw top ribbon stroke with glow
         ctx.beginPath();
-        ctx.moveTo(topPoints[0].x, topPoints[0].y);
-        for (let i = 1; i < topPoints.length; i++) {
-          ctx.lineTo(topPoints[i].x, topPoints[i].y);
+        ctx.moveTo(0, topYArr[0]);
+        for (let i = 1; i <= numPoints; i++) {
+          ctx.lineTo(i * step, topYArr[i]);
         }
         ctx.strokeStyle = layer.strokeColor;
-        ctx.lineWidth = layer.lineWidth;
+        ctx.lineWidth = isMobile ? layer.lineWidth * 0.9 : layer.lineWidth;
         if (layer.glowColor && layer.glowBlur) {
           ctx.shadowColor = layer.glowColor;
-          ctx.shadowBlur = layer.glowBlur;
+          ctx.shadowBlur = isMobile ? Math.min(6, layer.glowBlur) : layer.glowBlur;
         } else {
           ctx.shadowBlur = 0;
         }
         ctx.stroke();
 
-        // Draw bottom ribbon stroke (once thickness emerges)
-        if (rippleRadius > 20) {
+        // 4. Draw bottom ribbon stroke (once thickness emerges)
+        if (isMobile || rippleRadius > 20) {
           ctx.beginPath();
-          ctx.moveTo(botPoints[0].x, botPoints[0].y);
-          for (let i = 1; i < botPoints.length; i++) {
-            ctx.lineTo(botPoints[i].x, botPoints[i].y);
+          ctx.moveTo(0, botYArr[0]);
+          for (let i = 1; i <= numPoints; i++) {
+            ctx.lineTo(i * step, botYArr[i]);
           }
+          ctx.shadowBlur = 0;
           ctx.stroke();
         }
-      });
+      }
 
-      // Synergistic Central Fusion Spark & Expanding Shockwave Burst
-      if (waveElapsed < SHOCKWAVE_BURST_DURATION) {
+      // Central Fusion Spark & Expanding Shockwave Burst (Desktop only, >= 900px)
+      if (!isMobile && waveElapsed < SHOCKWAVE_BURST_DURATION) {
         const burstRatio = waveElapsed / SHOCKWAVE_BURST_DURATION;
         const fade = 1 - burstRatio;
         const ringRadius = burstRatio * Math.min(cx, 160);
 
-        ctx.save();
         // Expanding shockwave ring
         ctx.beginPath();
         ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(155, 255, 0, ${fade * 0.85})`;
         ctx.lineWidth = 2 * fade;
         ctx.shadowColor = '#9BFF00';
-        ctx.shadowBlur = 22 * fade;
+        ctx.shadowBlur = Math.min(14, 20 * fade);
         ctx.stroke();
 
-        // Secondary Steel Slate inner ring
+        // Secondary Steel Slate inner ring (no blur for GPU speedup)
         ctx.beginPath();
         ctx.arc(cx, cy, ringRadius * 0.65, 0, Math.PI * 2);
         ctx.strokeStyle = `rgba(119, 137, 171, ${fade * 0.6})`;
         ctx.lineWidth = 1.5 * fade;
+        ctx.shadowBlur = 0;
         ctx.stroke();
 
         // Center bright plasma spark at fusion point
         ctx.beginPath();
-        ctx.arc(cx, cy, 7 * fade, 0, Math.PI * 2);
+        ctx.arc(cx, cy, Math.max(0.1, 7 * fade), 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#9BFF00';
-        ctx.shadowBlur = 24 * fade;
+        ctx.shadowBlur = Math.min(16, 22 * fade);
         ctx.fill();
-        ctx.restore();
+        ctx.shadowBlur = 0;
       }
+
+      // Reset globalAlpha at end of frame
+      ctx.globalAlpha = 1;
     };
 
     animationFrameId = requestAnimationFrame(render);

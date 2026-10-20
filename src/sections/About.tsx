@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import styles from './About.module.scss';
 import { DATA } from '../data/config';
+import { useLanguage } from '../context/LanguageContext';
 
 const categoryIcons: Record<string, React.ReactNode> = {
   frontend: (
@@ -42,16 +45,16 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 const About: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="about" className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.headerArea}>
-          <div className={styles.badge}>Background &amp; Expertise</div>
-          <h2 className={styles.heading}>Engineering &amp; Foundations</h2>
+          <div className={styles.badge}>{t.about.badge}</div>
+          <h2 className={styles.heading}>{t.about.heading}</h2>
           <p className={styles.subheading}>
-            Fullstack development backed by university Computer Science studies,
-            disciplined code architecture, and a passion for crafting responsive
-            software.
+            {t.about.subheading}
           </p>
         </div>
 
@@ -59,7 +62,7 @@ const About: React.FC = () => {
           {/* Top Left: Technical Skills Bento Grid */}
           <div className={styles.skillsSection}>
             <h3 className={styles.skillsHeading}>
-              Core Competencies &amp; Tech Stack
+              {t.about.skillsHeading}
             </h3>
             <div className={styles.skillsGrid}>
               {Object.entries(DATA.skills).map(([category, items]) => (
@@ -108,16 +111,16 @@ const About: React.FC = () => {
                     <path d="M6 12v5c3 3 9 3 12 0v-5" />
                   </svg>
                 </div>
-                <span>Education &amp; Credentials</span>
+                <span>{t.about.eduHeading}</span>
               </div>
 
               <div className={styles.timeline}>
                 <div className={styles.item}>
                   <div className={styles.itemHeader}>
                     <span className={styles.date}>
-                      2025 — Present (Exp. 2029)
+                      {t.about.vntuDate}
                     </span>
-                    <span className={styles.statusPill}>In Progress</span>
+                    <span className={styles.statusPill}>{t.about.statusInProgress}</span>
                   </div>
                   <h4>
                     <a
@@ -125,19 +128,32 @@ const About: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Vinnytsia National Technical University
+                      <span>{t.about.vntuName}</span>
+                      <svg
+                        className={styles.externalLinkIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
                     </a>
                   </h4>
                   <p>
-                    Bachelor’s in Software Engineering — focus on data
-                    structures, algorithms, and modern computing.
+                    {t.about.vntuDesc}
                   </p>
                 </div>
 
                 <div className={styles.item}>
                   <div className={styles.itemHeader}>
                     <span className={styles.date}>2022 — 2024</span>
-                    <span className={styles.statusPillAlt}>Certified</span>
+                    <span className={styles.statusPillAlt}>{t.about.statusCertified}</span>
                   </div>
                   <h4>
                     <a
@@ -145,12 +161,25 @@ const About: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      GoIT Academy
+                      <span>{t.about.goitName}</span>
+                      <svg
+                        className={styles.externalLinkIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
                     </a>
                   </h4>
                   <p>
-                    Full-Stack Web Development Bootcamp (React, Node.js,
-                    TypeScript, REST APIs).
+                    {t.about.goitDesc}
                   </p>
                 </div>
 
@@ -164,10 +193,24 @@ const About: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Vinnytsia Trade and Economics College
+                      <span>{t.about.collegeName}</span>
+                      <svg
+                        className={styles.externalLinkIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
                     </a>
                   </h4>
-                  <p>Associate Degree in Tourism and Hospitality Management.</p>
+                  <p>{t.about.collegeDesc}</p>
                 </div>
 
                 <div className={styles.item}>
@@ -180,10 +223,24 @@ const About: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Humanities Lyceum of Vinnytsia №1
+                      <span>{t.about.lyceumName}</span>
+                      <svg
+                        className={styles.externalLinkIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                      </svg>
                     </a>
                   </h4>
-                  <p>Advanced studies in English and German languages.</p>
+                  <p>{t.about.lyceumDesc}</p>
                 </div>
               </div>
             </div>
@@ -192,18 +249,11 @@ const About: React.FC = () => {
           {/* Bottom Left: Greetings Bio Card */}
           <div className={styles.bioCard}>
             <p className={styles.leadText}>
-              <span className={styles.greetings}>Greetings!</span> I'm a
-              Fullstack Developer specializing in modern web experiences with
-              React, TypeScript, and Node.js. My passion for engineering began
-              with asking how software works at the deepest level, driving me
-              to explore both systems-level and high-level technologies.
+              <span className={styles.greetings}>{t.about.greetings}</span>{' '}
+              {t.about.bioLead}
             </p>
             <p>
-              Currently, I am sharpening my full-stack capabilities while
-              advancing in algorithms, mathematics, and systems programming
-              (C++, Java, Python) at Vinnytsia National Technical University.
-              I love turning complex logic into performant, visually
-              impeccable digital products.
+              {t.about.bioSub}
             </p>
           </div>
 
@@ -221,13 +271,10 @@ const About: React.FC = () => {
                   <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
                 </svg>
               </div>
-              <span>Academic Archive</span>
+              <span>{t.about.academicArchive}</span>
             </div>
             <p className={styles.archiveDescription}>
-              A curated repository of university coursework, lab assignments,
-              and computational projects across C++, Java, Python, and
-              JavaScript — documenting my academic progression across diverse
-              programming paradigms.
+              {t.about.archiveDesc}
             </p>
             <a
               href="https://github.com/iberikofer/academic-archive"

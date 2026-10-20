@@ -133,6 +133,9 @@
   color: $text-primary;
   letter-spacing: -0.02em;
   margin: 0;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 .skillsGrid {
@@ -159,11 +162,14 @@
     border-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo;
 
-  // Anti-jitter hover bridge
+  // Anti-jitter hover bridge (only underneath card)
   &::after {
     content: '';
     position: absolute;
-    inset: 0;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 10px;
     pointer-events: none;
   }
 
@@ -176,12 +182,13 @@
 
     &::after {
       pointer-events: auto;
-      bottom: -6px;
     }
   }
 }
 
 .skillCardHeader {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -214,12 +221,19 @@
   letter-spacing: 0.05em;
   color: $text-primary;
   margin: 0;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
 }
 
 .skillList {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 .skillItem {
@@ -228,6 +242,15 @@
   gap: 8px;
   font-size: 0.86rem;
   color: $text-secondary;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+
+  span:not(.bulletDot) {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+  }
 
   .bulletDot {
     width: 5px;
@@ -236,6 +259,8 @@
     background: $accent-lime;
     box-shadow: 0 0 4px $accent-lime;
     flex-shrink: 0;
+    user-select: none;
+    pointer-events: none;
   }
 }
 
@@ -420,10 +445,29 @@
 
     a {
       color: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       transition: color $duration-micro $ease-out-expo;
+
+      .externalLinkIcon {
+        width: 13px;
+        height: 13px;
+        color: $accent-lime;
+        opacity: 0.85;
+        flex-shrink: 0;
+        transition:
+          transform $duration-micro $ease-out-expo,
+          opacity $duration-micro $ease-out-expo;
+      }
 
       &:hover {
         color: $accent-lime;
+
+        .externalLinkIcon {
+          opacity: 1;
+          transform: translate(1px, -1px);
+        }
       }
 
       &:focus-visible {

@@ -2,12 +2,14 @@
 
 import React, { useRef, useCallback, useEffect } from 'react';
 import { DATA } from '../data/config';
+import { useLanguage } from '../context/LanguageContext';
 import styles from './Hero.module.scss';
 import developer from '../assets/yaroslav.png';
 import { WaveDivider } from '../components/WaveDivider';
 import { useButtonGlow } from '../hooks/useButtonGlow';
 
 const Hero: React.FC = () => {
+  const { t } = useLanguage();
   const viewProjectsRef = useRef<HTMLAnchorElement>(null);
   const viewProjectsGlowRef = useRef<HTMLSpanElement>(null);
   useButtonGlow(viewProjectsRef, viewProjectsGlowRef);
@@ -303,12 +305,12 @@ const Hero: React.FC = () => {
                 <span className={styles.radarDot} />
               </span>
               <span className={styles.statusText}>
-                Available for new opportunities
+                {t.hero.status}
               </span>
             </div>
 
             <p className={`${styles.intro} ${styles.animateFadeIn}`}>
-              <span className={styles.introPrefix}>//</span> Hi, my name is
+              <span className={styles.introPrefix}>//</span> {t.hero.intro}
             </p>
 
             <h1 className={`${styles.name} ${styles.animateFadeIn}`}>
@@ -322,32 +324,29 @@ const Hero: React.FC = () => {
                 onTouchMove={handleNameTouchMove}
                 onTouchEnd={handleNameTouchEnd}
               >
-                {DATA.profile.name}
+                {t.profile.name}
               </span>
             </h1>
 
             <p className={`${styles.bio} ${styles.animateFadeIn}`}>
-              Passionate engineer focused on the React and Node.js ecosystems.
-              Building fast, resilient, and visually refined web applications,
-              while advancing in systems programming, algorithms, and
-              mathematics at university.
+              {t.hero.bio}
             </p>
 
             {/* Quick Metrics Bar */}
             <div className={`${styles.metricsBar} ${styles.animateFadeIn}`}>
               <div className={styles.metricItem}>
                 <span className={styles.metricVal}>17+</span>
-                <span className={styles.metricLab}>Projects</span>
+                <span className={styles.metricLab}>{t.hero.metricProjects}</span>
               </div>
               <div className={styles.metricDivider} />
               <div className={styles.metricItem}>
                 <span className={styles.metricVal}>B2</span>
-                <span className={styles.metricLab}>English</span>
+                <span className={styles.metricLab}>{t.hero.metricEnglish}</span>
               </div>
               <div className={styles.metricDivider} />
               <div className={styles.metricItem}>
                 <span className={styles.metricVal}>B.Sc.</span>
-                <span className={styles.metricLab}>Software Eng.</span>
+                <span className={styles.metricLab}>{t.hero.metricDegree}</span>
               </div>
             </div>
 
@@ -361,7 +360,7 @@ const Hero: React.FC = () => {
                 <span className={styles.btnGlow} aria-hidden="true">
                   <span ref={viewProjectsGlowRef} className={styles.glowSpot} />
                 </span>
-                <span className={styles.buttonLabel}>View Projects</span>
+                <span className={styles.buttonLabel}>{t.hero.btnViewProjects}</span>
                 <svg
                   className={styles.buttonIcon}
                   viewBox="0 0 24 24"
@@ -390,7 +389,7 @@ const Hero: React.FC = () => {
                   );
                 }}
               >
-                <span className={styles.buttonLabel}>Get in Touch</span>
+                <span className={styles.buttonLabel}>{t.hero.btnGetInTouch}</span>
                 <svg
                   className={styles.buttonIcon}
                   viewBox="0 0 24 24"
@@ -442,7 +441,7 @@ const Hero: React.FC = () => {
                         ? developer
                         : (developer as { src: string }).src
                     }
-                    alt={DATA.profile.name}
+                    alt={t.profile.name}
                     width={500}
                     height={500}
                     loading="eager"

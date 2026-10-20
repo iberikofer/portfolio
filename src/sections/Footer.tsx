@@ -1,8 +1,12 @@
+'use client';
+
 import React from 'react';
 import { DATA } from '../data/config';
+import { useLanguage } from '../context/LanguageContext';
 import styles from './Footer.module.scss';
 
 const Footer: React.FC = () => {
+  const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -11,11 +15,11 @@ const Footer: React.FC = () => {
         <div className={styles.topRow}>
           <div className={styles.brand}>
             <span className={styles.brandPrefix}>~/</span>
-            <span className={styles.brandName}>{DATA.profile.name}</span>
+            <span className={styles.brandName}>{t.profile.name}</span>
           </div>
 
           <div className={styles.socialsSection}>
-            <span className={styles.socialsHeading}>Social Profiles</span>
+            <span className={styles.socialsHeading}>{t.contact.socialsTitle}</span>
             <div className={styles.socials}>
               <a
                 href={DATA.profile.linkedin}
@@ -90,7 +94,7 @@ const Footer: React.FC = () => {
 
         <div className={styles.bottomRow}>
           <p className={styles.copyright}>
-            &copy; {currentYear} {DATA.profile.name}. All rights reserved.
+            &copy; {currentYear} {t.profile.name}. {t.footer.copyright}
           </p>
 
           <div className={styles.techBadge}>

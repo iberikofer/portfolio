@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 import styles from './ScrollToTop.module.scss';
 
 const ScrollToTop: React.FC = () => {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -30,7 +32,7 @@ const ScrollToTop: React.FC = () => {
         type="button"
         className={styles.scrollToTop}
         onClick={scrollToTop}
-        aria-label="Scroll to top"
+        aria-label={t.scrollToTop.ariaLabel}
       >
         <svg
           viewBox="0 0 24 24"

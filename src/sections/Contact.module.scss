@@ -162,6 +162,12 @@
     background-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo;
 
+  &::selection,
+  *::selection {
+    background: rgba(119, 137, 171, 0.75);
+    color: #ffffff;
+  }
+
   // Anti-jitter hover bridge: inert when idle (no phantom hit area beneath button), extends on hover
   &::after {
     content: '';
@@ -246,9 +252,9 @@
   border-radius: 50%;
   background: radial-gradient(
     circle closest-side,
-    rgba(200, 255, 100, 0.45) 0%,
-    rgba(155, 255, 0, 0.28) 45%,
-    rgba(155, 255, 0, 0.08) 75%,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.48) 35%,
+    rgba(180, 255, 50, 0.28) 65%,
     transparent 100%
   );
   opacity: 0;
@@ -629,7 +635,8 @@
   border-radius: 9px;
   border: 1px solid rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  user-select: none;
+  user-select: text;
+  -webkit-user-select: text;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     0 8px 22px -4px $accent-lime-glow;
@@ -640,6 +647,12 @@
     border-color 0.22s $ease-out-expo,
     color 0.2s ease;
 
+  &::selection,
+  *::selection {
+    background: rgba(119, 137, 171, 0.75);
+    color: #ffffff;
+  }
+
   .btnContent {
     position: relative;
     z-index: 2;
@@ -648,6 +661,9 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: pointer;
   }
 
   // Plane Icon (Idle state hover motion)
