@@ -15,7 +15,8 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-const basePath = process.env.NODE_ENV === 'production' ? '/portfolio' : '';
+const isGithubPages = process.env.GITHUB_ACTIONS === 'true';
+const basePath = isGithubPages ? '/portfolio' : '';
 
 export const metadata: Metadata = {
   title: 'Yaroslav Sych',
