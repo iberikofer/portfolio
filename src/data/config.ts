@@ -139,7 +139,7 @@ export const DATA: AppData = {
     },
     {
       id: 4,
-      title: 'Car rental service',
+      title: 'Car rental',
       photo: carRent,
       description:
         'Interactive car rental platform built with React and modern frontend tools.',
@@ -198,13 +198,13 @@ export const DATA: AppData = {
     },
     {
       id: 9,
-      title: 'Feedback calculator',
+      title: 'Feedback page',
       photo: feedbackPage,
       description:
         'Interactive feedback and statistics web app built with React, featuring state-driven rating metrics and dynamic statistics.',
       tags: ['REACT', 'HOOKS', 'JS'],
-      link: 'https://github.com/iberikofer/react-feedback-page',
-      pages: 'https://iberikofer.github.io/react-feedback-page',
+      link: 'https://github.com/iberikofer/feedback-page',
+      pages: 'https://iberikofer.github.io/feedback-page',
       status: 'Open',
     },
     {
@@ -254,7 +254,7 @@ export const DATA: AppData = {
         'Comprehensive health and nutrition tracking web app with calorie budgeting, interactive Chart.js analytics, goal tracking, and persistent state management built with a team.',
       tags: ['TEAM', 'REACT', 'REDUX', 'CHART.JS', 'AXIOS'],
       link: 'https://github.com/AndriiZlt/healthyHub-frontend',
-      pages: 'https://andriizlt.github.io/healthyHub-frontend/',
+      pages: 'https://iberikofer.github.io/healthyHub-page/',
       status: 'Open',
       objectFit: 'cover',
       objectPosition: 'center',

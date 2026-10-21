@@ -49,14 +49,11 @@ const Hero: React.FC = () => {
 
       const s = nameBeamRef.current;
       if (s.isHovering) {
-        // Fluid tracking toward cursor position
-        const diffX = s.targetPos - s.pos;
-        s.pos += diffX * Math.min(1, dt * 22);
-
-        const diffY = s.targetY - s.currentY;
-        s.currentY += diffY * Math.min(1, dt * 18);
-
-        s.beamRadius += (210 - s.beamRadius) * Math.min(1, dt * 10);
+        // Natural spring lag factor (0.16) matching useButtonGlow
+        const springLag = 1 - Math.pow(1 - 0.16, dt * 60);
+        s.pos += (s.targetPos - s.pos) * springLag;
+        s.currentY += (s.targetY - s.currentY) * springLag;
+        s.beamRadius += (210 - s.beamRadius) * springLag;
       } else {
         // Continuous traveling beam advancing in current direction
         s.pos += s.direction * speed * dt;
@@ -68,8 +65,9 @@ const Hero: React.FC = () => {
           s.pos = maxBound;
         }
 
-        s.currentY += (50 - s.currentY) * Math.min(1, dt * 6);
-        s.beamRadius += (160 - s.beamRadius) * Math.min(1, dt * 8);
+        const idleLag = 1 - Math.pow(1 - 0.10, dt * 60);
+        s.currentY += (50 - s.currentY) * idleLag;
+        s.beamRadius += (160 - s.beamRadius) * idleLag;
       }
 
       el.style.setProperty('--beam-x', `${s.pos.toFixed(2)}%`);
@@ -210,8 +208,6 @@ const Hero: React.FC = () => {
         0,
         Math.min(100, ((e.clientX - rect.left) / rect.width) * 100),
       );
-      s.pos = exitX;
-      s.targetPos = exitX;
 
       // Determine exit direction:
       // If exited right edge: resume right (1)

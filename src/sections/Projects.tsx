@@ -146,60 +146,57 @@ const SCOPE_STORAGE_KEY = 'portfolio_filter_scope';
 const CHIPS_STORAGE_KEY = 'portfolio_filter_chips';
 const MODE_STORAGE_KEY = 'portfolio_filter_mode';
 
-const getSavedScope = (): ScopeCategory => {
-  if (typeof window === 'undefined') return 'all';
-  try {
-    const urlParam = new URLSearchParams(window.location.search).get('scope');
-    if (urlParam && (VALID_SCOPES as string[]).includes(urlParam)) {
-      return urlParam as ScopeCategory;
-    }
-    const stored = localStorage.getItem(SCOPE_STORAGE_KEY);
-    if (stored && (VALID_SCOPES as string[]).includes(stored)) {
-      return stored as ScopeCategory;
-    }
-  } catch {
-    // Ignore storage errors
+const getInitialFilterState = (): {
+  scope: ScopeCategory;
+  chips: TechChip[];
+  mode: 'any' | 'all';
+} => {
+  if (typeof window === 'undefined') {
+    return { scope: 'all', chips: [], mode: 'any' };
   }
-  return 'all';
+
+  try {
+    const searchParams = new URLSearchParams(window.location.search);
+    const hasScopeParam = searchParams.has('scope');
+    const hasTagsParam = searchParams.has('tags');
+    const hasModeParam = searchParams.has('mode');
+
+    // If ANY filter parameter is present in the URL query string, the URL has absolute priority.
+    // Explicitly missing filter parameters in the URL mean "no filter" (do NOT resurrect from localStorage).
+    if (hasScopeParam || hasTagsParam || hasModeParam) {
+      const scopeParam = searchParams.get('scope');
+      const tagsParam = searchParams.get('tags');
+      const modeParam = searchParams.get('mode');
+
+      const scope: ScopeCategory =
+        scopeParam && (VALID_SCOPES as string[]).includes(scopeParam)
+          ? (scopeParam as ScopeCategory)
+          : 'all';
+
+      const chips: TechChip[] = tagsParam
+        ? tagsParam
+            .split(',')
+            .filter((p): p is TechChip => (VALID_CHIPS as string[]).includes(p))
+        : [];
+
+      const mode: 'any' | 'all' =
+        modeParam === 'all' || modeParam === 'any' ? modeParam : 'any';
+
+      return { scope, chips, mode };
+    }
+
+    // If the URL has NO filter parameters at all, we do NOT restore stale filters from localStorage,
+    // ensuring clean URL navigation always loads clean unfiltered state.
+  } catch {
+    // Ignore storage/URL errors
+  }
+
+  return { scope: 'all', chips: [], mode: 'any' };
 };
 
-const getSavedChips = (): TechChip[] => {
-  if (typeof window === 'undefined') return [];
-  try {
-    const urlParam = new URLSearchParams(window.location.search).get('tags');
-    if (urlParam) {
-      const parts = urlParam
-        .split(',')
-        .filter((p): p is TechChip => (VALID_CHIPS as string[]).includes(p));
-      if (parts.length > 0) return parts;
-    }
-    const stored = localStorage.getItem(CHIPS_STORAGE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed)) {
-        return parsed.filter((p): p is TechChip =>
-          (VALID_CHIPS as string[]).includes(p),
-        );
-      }
-    }
-  } catch {
-    // Ignore storage errors
-  }
-  return [];
-};
-
-const getSavedMode = (): 'any' | 'all' => {
-  if (typeof window === 'undefined') return 'any';
-  try {
-    const urlParam = new URLSearchParams(window.location.search).get('mode');
-    if (urlParam === 'all' || urlParam === 'any') return urlParam;
-    const stored = localStorage.getItem(MODE_STORAGE_KEY);
-    if (stored === 'all' || stored === 'any') return stored;
-  } catch {
-    // Ignore
-  }
-  return 'any';
-};
+const getSavedScope = (): ScopeCategory => getInitialFilterState().scope;
+const getSavedChips = (): TechChip[] => getInitialFilterState().chips;
+const getSavedMode = (): 'any' | 'all' => getInitialFilterState().mode;
 
 const hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
@@ -387,26 +384,32 @@ const Projects: React.FC = () => {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [updateScopeIndicator]);
 
-  // Restore saved filter state on mount from URL params / localStorage
+  // Restore filter state on mount strictly from URL params
   useEffect(() => {
     if (hasRestoredRef.current) return;
 
     const timer = setTimeout(() => {
       hasRestoredRef.current = true;
-      const savedScope = getSavedScope();
-      const savedChips = getSavedChips();
-      const savedMode = getSavedMode();
+      const initial = getInitialFilterState();
 
-      if (savedScope !== 'all') {
-        activeScopeRef.current = savedScope;
-        setActiveScope(savedScope);
-        updateScopeIndicator(savedScope);
-      }
-      if (savedChips.length > 0) {
-        setSelectedChips(savedChips);
-      }
-      if (savedMode !== 'any') {
-        setMatchMode(savedMode);
+      activeScopeRef.current = initial.scope;
+      setActiveScope(initial.scope);
+      setSelectedChips(initial.chips);
+      setMatchMode(initial.mode);
+      updateScopeIndicator(initial.scope);
+
+      // If URL has no filter query params, sync/clean localStorage so stale filters never persist
+      if (typeof window !== 'undefined') {
+        const searchParams = new URLSearchParams(window.location.search);
+        if (!searchParams.has('scope') && !searchParams.has('tags') && !searchParams.has('mode')) {
+          try {
+            localStorage.removeItem(SCOPE_STORAGE_KEY);
+            localStorage.removeItem(CHIPS_STORAGE_KEY);
+            localStorage.removeItem(MODE_STORAGE_KEY);
+          } catch {
+            // Ignore
+          }
+        }
       }
     }, 0);
 
