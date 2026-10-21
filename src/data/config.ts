@@ -122,8 +122,8 @@ export const DATA: AppData = {
       description:
         'A dynamic React web application for discovering movies, searching titles, and viewing detailed cast and reviews via TMDB API.',
       tags: ['REACT', 'JS', 'FETCH'],
-      link: 'https://github.com/iberikofer/react-movie-finder',
-      pages: 'https://iberikofer.github.io/react-movie-finder',
+      link: 'https://github.com/iberikofer/movie-finder',
+      pages: 'https://movies-series-finder.vercel.app/',
       status: 'Open',
     },
     {
@@ -133,8 +133,8 @@ export const DATA: AppData = {
       description:
         'React-based image search application powered by Pixabay API featuring state management, infinite scroll/pagination, and modal views.',
       tags: ['REACT', 'JS', 'AXIOS'],
-      link: 'https://github.com/iberikofer/react-image-finder',
-      pages: 'https://iberikofer.github.io/react-image-finder',
+      link: 'https://github.com/iberikofer/image-finder',
+      pages: 'https://image-finder-iberikofer.vercel.app/',
       status: 'Open',
     },
     {
@@ -144,8 +144,8 @@ export const DATA: AppData = {
       description:
         'Interactive car rental platform built with React and modern frontend tools.',
       tags: ['REACT', 'JS', 'AXIOS'],
-      link: 'https://github.com/iberikofer/car-rent-react-node',
-      pages: 'https://iberikofer.github.io/car-rent-react-node',
+      link: 'https://github.com/iberikofer/car-rental',
+      pages: 'https://car-rental-service-react.vercel.app/',
       status: 'Open',
     },
     {
@@ -156,7 +156,7 @@ export const DATA: AppData = {
         'React phonebook application with user authentication, Redux state management, and contact filtering.',
       tags: ['FULLSTACK', 'BACKEND', 'REACT', 'REDUX', 'JS'],
       link: 'https://github.com/iberikofer/react-phonebook',
-      pages: 'https://iberikofer.github.io/react-phonebook/',
+      pages: 'https://react-phonebook-iberikofer.vercel.app/',
       status: 'Open',
     },
     {
