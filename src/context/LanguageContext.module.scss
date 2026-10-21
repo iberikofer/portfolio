@@ -38,3 +38,9 @@
     }
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .transitionOverlay {
+    display: none !important;
+  }
+}

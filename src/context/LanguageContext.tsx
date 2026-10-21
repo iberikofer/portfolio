@@ -51,6 +51,11 @@ export function getLangFromPathname(): Language | null {
   return null;
 }
 
+interface BatteryManagerLike extends EventTarget {
+  charging: boolean;
+  level: number;
+}
+
 interface LanguageProviderProps {
   children: ReactNode;
   initialLang?: Language;
@@ -67,6 +72,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   const [isButtonBlocked, setIsButtonBlocked] = useState<boolean>(false);
 
   const isTransitioningRef = useRef<boolean>(false);
+  const isBatteryLowRef = useRef<boolean>(false);
   const darkenTimerRef = useRef<NodeJS.Timeout | null>(null);
   const unblockTimerRef = useRef<NodeJS.Timeout | null>(null);
   const finishTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -80,6 +86,39 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   useEffect(() => {
     return () => clearAllTimers();
   }, [clearAllTimers]);
+
+  // Track battery state when Battery Status API is available (Chromium-based browsers)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('getBattery' in navigator)) return;
+
+    let batteryInstance: BatteryManagerLike | null = null;
+
+    const handleBatteryChange = () => {
+      if (!batteryInstance) return;
+      // Heuristic: running on battery (not charging) with level <= 20%
+      isBatteryLowRef.current =
+        !batteryInstance.charging && batteryInstance.level <= 0.2;
+    };
+
+    (navigator as unknown as { getBattery: () => Promise<BatteryManagerLike> })
+      .getBattery()
+      .then((battery) => {
+        batteryInstance = battery;
+        handleBatteryChange();
+        battery.addEventListener('levelchange', handleBatteryChange);
+        battery.addEventListener('chargingchange', handleBatteryChange);
+      })
+      .catch(() => {
+        // Battery API rejected or restricted
+      });
+
+    return () => {
+      if (batteryInstance) {
+        batteryInstance.removeEventListener('levelchange', handleBatteryChange);
+        batteryInstance.removeEventListener('chargingchange', handleBatteryChange);
+      }
+    };
+  }, []);
 
   // Synchronize on mount and update storage + document lang
   useEffect(() => {
@@ -110,9 +149,67 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     return () => window.removeEventListener('popstate', handlePopState);
   }, [lang]);
 
+  const shouldSkipTransition = useCallback((): boolean => {
+    if (typeof window === 'undefined') return false;
+
+    // 1. Accessibility / OS-level setting: animation effects disabled or reduced motion
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return true;
+      }
+    } catch {
+      // Ignore evaluation errors
+    }
+
+    // 2. Battery saver heuristic (running on battery <= 20%)
+    if (isBatteryLowRef.current) {
+      return true;
+    }
+
+    // 3. Data saver / power saving indicator
+    try {
+      const nav = navigator as unknown as { connection?: { saveData?: boolean } };
+      if (nav.connection?.saveData) {
+        return true;
+      }
+    } catch {
+      // Ignore
+    }
+
+    return false;
+  }, []);
+
+  const switchInstant = useCallback(
+    (targetLang: Language) => {
+      clearAllTimers();
+      setPhase('idle');
+      setIsInteractive(false);
+      setIsButtonBlocked(false);
+      isTransitioningRef.current = false;
+
+      setLangState(targetLang);
+      try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, targetLang);
+        document.documentElement.lang = targetLang;
+
+        const targetUrl = getLocalizedUrl(targetLang);
+        window.history.pushState(null, '', targetUrl);
+      } catch {
+        // Ignore
+      }
+    },
+    [clearAllTimers],
+  );
+
   const switchWithTransition = useCallback(
     (targetLang: Language) => {
       if (isTransitioningRef.current || targetLang === lang) return;
+
+      // Skip blackout animation if system has reduced motion or low-power mode active
+      if (shouldSkipTransition()) {
+        switchInstant(targetLang);
+        return;
+      }
 
       clearAllTimers();
 
@@ -152,7 +249,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         }, 1000);
       }, 1000);
     },
-    [lang, clearAllTimers],
+    [lang, clearAllTimers, shouldSkipTransition, switchInstant],
   );
 
   const setLang = useCallback(
