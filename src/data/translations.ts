@@ -1,4 +1,4 @@
-export type Language = 'en' | 'uk';
+export type Language = 'en' | 'uk' | 'es';
 
 export interface TranslationData {
   profile: {
@@ -137,7 +137,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       navProjects: 'Projects',
       navAbout: 'About',
       navContact: 'Contact',
-      toggleLangLabel: 'Switch to Ukrainian',
+      toggleLangLabel: 'Switch to Ukrainian (UK)',
     },
     hero: {
       status: 'Available for new opportunities',
@@ -298,7 +298,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       navProjects: 'Проєкти',
       navAbout: 'Про мене',
       navContact: 'Контакти',
-      toggleLangLabel: 'Перемкнути на англійську',
+      toggleLangLabel: 'Перемкнути на іспанську (ES)',
     },
     hero: {
       status: 'Відкритий до нових пропозицій',
@@ -446,6 +446,167 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
     },
     scrollToTop: {
       ariaLabel: 'Прокрутити вгору',
+    },
+  },
+  es: {
+    profile: {
+      name: 'Yaroslav Sych',
+      title: 'Desarrollador Fullstack JS',
+      location: 'Ucrania',
+      bio: 'Desarrollador apasionado con enfoque en el ecosistema React y Node.js. Actualmente ampliando mis horizontes con C++, Java y Python en la universidad.',
+    },
+    header: {
+      navProjects: 'Proyectos',
+      navAbout: 'Sobre mí',
+      navContact: 'Contacto',
+      toggleLangLabel: 'Cambiar a inglés (EN)',
+    },
+    hero: {
+      status: 'Disponible para nuevas oportunidades',
+      intro: 'Hola, mi nombre es',
+      bio: 'Ingeniero de software centrado en los ecosistemas React y Node.js. Construyendo aplicaciones web rápidas, resilientes y visualmente refinadas, mientras avanzo en programación de sistemas, algoritmos y matemáticas en la universidad.',
+      metricProjects: 'Proyectos',
+      metricEnglish: 'Inglés',
+      metricDegree: 'Ing. de Software',
+      btnViewProjects: 'Ver Proyectos',
+      btnGetInTouch: 'Ponerse en Contacto',
+    },
+    projects: {
+      badge: 'Portafolio Destacado',
+      title: 'Proyectos y Software Diseñado',
+      subtitle:
+        'Aplicaciones en producción, backends full-stack y productos digitales responsivos construidos bajo modernos estándares de ingeniería.',
+      scopeAll: 'Todos',
+      scopeSolo: 'Proyectos individuales',
+      scopeTeam: 'Proyectos en equipo',
+      chipAll: 'Todos',
+      showing: 'Mostrando',
+      of: 'de',
+      projectsWord: 'proyectos',
+      resetFilters: 'Restablecer filtros',
+      matchAny: 'Coincidir con CUALQUIER etiqueta',
+      matchAll: 'Coincidir con TODAS las etiquetas',
+      liveDemo: 'Demo en Vivo',
+      sourceCode: 'Código Fuente',
+      designMockup: 'Mockup de Diseño',
+      statusLabel: 'Estado',
+      statusOpen: 'Activo',
+      statusClosed: 'Cerrado',
+      noMatchTitle: 'No hay proyectos que coincidan con los criterios seleccionados.',
+      clearFiltersBtn: 'Limpiar todos los filtros',
+      githubCardTitle: 'Explora Más Repositorios',
+      githubCardDesc:
+        'Historial de commits completo, experimentación con C++/Java/Python y contribuciones de código abierto.',
+      activeWord: 'activos',
+      noMatchSubtitle:
+        'Ningún proyecto en esta categoría coincide con todas las etiquetas seleccionadas simultáneamente.',
+      switchModeBtn: 'Cambiar al modo "Cualquiera (OR)"',
+      descriptions: {
+        1: 'Plataforma full-stack Quiz Builder para crear cuestionarios personalizados con varios tipos de preguntas, panel interactivo y vista de inspección.',
+        2: 'Moderna plataforma responsiva de descubrimiento de películas construida con React, Vite y Tailwind CSS. Explora películas en tendencia, busca miles de títulos vía TMDB y reproduce tráileres de alta calidad.',
+        3: 'Buscador de imágenes impulsado por la API de Pixabay, con paginación infinita, ventanas modales lightbox y búsqueda por palabras clave.',
+        4: 'Servicio full-stack de alquiler de coches con filtros personalizados, catálogo responsivo paginado y modal para reservar vehículos.',
+        5: 'Aplicación de agenda telefónica en React con autenticación de usuarios, gestión de estado con Redux y filtrado de contactos.',
+        6: 'API RESTful para servicio de libreta de contactos construida con Node.js, Express, MongoDB, autenticación JWT, subida de avatares y verificación de correo.',
+        7: 'Mi primer sitio web: página web moderna y totalmente responsiva de varias páginas para un estudio digital, creada con HTML5 semántico, CSS3 y JavaScript.',
+        8: 'Página de aterrizaje responsiva construida con HTML puro, CSS y JavaScript mínimo. Incluye layouts móviles a medida y animaciones interactivas basadas en Figma.',
+        9: 'Aplicación web interactiva de feedback y estadísticas creada con React, con métricas de calificación dinámicas y estadísticas en tiempo real.',
+        10: 'Plataforma de simulación interactiva de entrevistas diseñada para preparar a la próxima generación de ingenieros en entrevistas técnicas, conductuales y en inglés.',
+        11: 'Aplicación colaborativa de descubrimiento de libros y lectura electrónica creada en equipo. Incluye categorías de libros, lista de compras con paginación y vista modal de detalles.',
+        12: 'Moderna landing page responsiva para una marca de helados, con carruseles Swiper, sliders de reseñas de clientes y popups interactivos para pedidos creada con un equipo.',
+        13: 'Aplicación web completa de control de nutrición y calorías con presupuesto energético, analíticas interactivas con Chart.js, seguimiento de metas y persistencia de datos en equipo.',
+        14: 'Sistema de agentes de IA autónomos (TOMAS) diseñado para la generación determinista de documentos y flujos de trabajo automatizados con optimización de tokens y enrutamiento multimodelos.',
+        15: 'Juego de acción 2D de ritmo rápido creado con C++ y SFML. Esquiva, rueda y escapa de enemigos y jefes con física personalizada, soporte para mando y localización completa.',
+        16: 'Inspirado en Lethal Company: simulador interactivo de optimización de rutas y recolección de chatarra desarrollado con C++20, SFML y Dear ImGui. Implementa algoritmos A*, Dijkstra, BFS, heurística TSP 2-Opt, DP mochila y generación procedural de laberintos BSP.',
+        17: 'Sistema de software orientado a objetos gamificado que modela gimnasios, atletas y equipamiento en Java bajo estrictos principios de POO, diagramas de estado UML y mecánicas interactivas de simulación.',
+      },
+    },
+    about: {
+      badge: 'Experiencia y Habilidades',
+      heading: 'Ingeniería y Fundamentos',
+      subheading:
+        'Desarrollo full-stack respaldado por estudios universitarios en Ciencias de la Computación, arquitectura de código disciplinada y pasión por crear software responsivo.',
+      skillsHeading: 'Competencias Clave y Tecnologías',
+      eduHeading: 'Educación y Credenciales',
+      statusInProgress: 'En curso',
+      statusCertified: 'Certificado',
+      vntuName: 'Universidad Técnica Nacional de Vinnytsia',
+      vntuDesc:
+        'Licenciatura en Ingeniería de Software: enfoque en estructuras de datos, algoritmos y computación moderna.',
+      vntuDate: '2025 — Presente (Graduación estimada 2029)',
+      goitName: 'GoIT Academy',
+      goitDesc:
+        'Bootcamp de Desarrollo Web Full-Stack (React, Node.js, TypeScript, REST APIs).',
+      collegeName: 'Colegio de Comercio y Economía de Vinnytsia',
+      collegeDesc:
+        'Grado Asociado en Gestión de Turismo y Hostelería.',
+      lyceumName: 'Liceo de Humanidades №1 de Vinnytsia',
+      lyceumDesc: 'Estudios avanzados de idiomas inglés y alemán.',
+      greetings: '¡Hola!',
+      bioLead:
+        'Soy un Desarrollador Fullstack especializado en experiencias web modernas con React, TypeScript y Node.js. Mi pasión por la ingeniería comenzó preguntándome cómo funciona el software en el nivel más profundo, impulsándome a explorar tanto tecnologías a nivel de sistema como de alto nivel.',
+      bioSub:
+        'Actualmente estoy perfeccionando mis habilidades full-stack mientras avanzo en algoritmos, matemáticas superiores y programación de sistemas (C++, Java, Python) en la Universidad Técnica Nacional de Vinnytsia. Me encanta transformar lógica compleja en productos digitales de alto rendimiento e impecable estética.',
+      academicArchive: 'Archivo Académico',
+      archiveDesc:
+        'Un repositorio de trabajos universitarios, prácticas de laboratorio y proyectos computacionales en C++, Java, Python y JavaScript, documentando mi progreso académico a través de diversos paradigmas de programación.',
+    },
+    contact: {
+      pill: 'Disponible para oportunidades',
+      title: 'Construyamos Algo Excepcional',
+      subtitle:
+        'Ya sea que tengas una idea de producto ambiciosa, una oportunidad de ingeniería o necesites un desarrollador full-stack dedicado, mi bandeja de entrada está abierta.',
+      specializationLabel: 'Especialización',
+      specializationRole: 'Desarrollador FullStack-JS',
+      emailTitle: 'Correo Electrónico',
+      phoneTitle: 'Teléfono Directo',
+      locationTitle: 'Ubicación',
+      locationDesc: 'Ucrania • Disponible para trabajo remoto en todo el mundo',
+      cvTitle: 'Curriculum Vitae',
+      cvDesc: 'Descarga el currículum profesional completo en formato PDF',
+      cvBtn: 'Descargar CV (PDF)',
+      socialsTitle: 'Redes Sociales',
+      formTitle: 'Enviar Mensaje Directo',
+      formSubtitle:
+        'Respondo rápidamente a consultas y propuestas de proyectos.',
+      nameLabel: 'Tu Nombre',
+      emailLabel: 'Tu Correo Electrónico',
+      subjectLabel: 'Asunto',
+      messageLabel: 'Tu Mensaje...',
+      btnIdle: 'Enviar Mensaje',
+      btnSending: 'Transmitiendo',
+      btnSuccess: '¡Mensaje Enviado! ✨',
+      btnError: 'Error al Enviar • Toca para Reintentar',
+      btnValidation: 'Completa los Campos',
+      btnCooldown: 'Espera {time}',
+      btnRateLimited: 'Límite: 1 msj / 5 min',
+      statusSuccess:
+        '¡Mensaje enviado con éxito! Me pondré en contacto contigo pronto.',
+      statusValidationRequired:
+        'Por favor, ingresa tanto tu nombre como el mensaje.',
+      statusValidationEmail:
+        'Por favor, proporciona un correo válido (ej. tunombre@dominio.com).',
+      statusTimeout:
+        'Tiempo de espera agotado: el servicio de correo tardó demasiado en responder. Por favor, contáctame directamente por email o Telegram.',
+      statusIssue:
+        'Problema en el servicio de correo. Por favor, contáctame directamente por email o Telegram.',
+      statusRateLimited:
+        'Por favor, espera {time} antes de enviar otro mensaje.',
+      cooldownBadge:
+        'Límite de envío: 1 mensaje cada 5 min (disponible en {time})',
+      draftRestored: 'Borrador restaurado',
+      draftClear: 'limpiar',
+    },
+    footer: {
+      status: 'Disponible para nuevos proyectos',
+      navProjects: 'Proyectos',
+      navAbout: 'Sobre mí',
+      navContact: 'Contacto',
+      navBackToTop: 'Arriba',
+      copyright: 'Diseñado y construido con pasión y precisión.',
+    },
+    scrollToTop: {
+      ariaLabel: 'Volver arriba',
     },
   },
 };

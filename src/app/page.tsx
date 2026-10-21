@@ -8,20 +8,22 @@ export default function RootRedirect() {
     let lang = 'en';
     try {
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-      if (saved === 'uk' || saved === 'en') {
+      if (saved === 'uk' || saved === 'en' || saved === 'es') {
         lang = saved;
-      } else if (
-        navigator.language &&
-        navigator.language.toLowerCase().startsWith('uk')
-      ) {
-        lang = 'uk';
+      } else if (navigator.language) {
+        const navLang = navigator.language.toLowerCase();
+        if (navLang.startsWith('uk')) {
+          lang = 'uk';
+        } else if (navLang.startsWith('es')) {
+          lang = 'es';
+        }
       }
     } catch {
       // fallback to en
     }
 
-    const isProd = process.env.NODE_ENV === 'production';
-    const basePath = isProd ? '/portfolio' : '';
+    const isGithubPages = process.env.GITHUB_ACTIONS === 'true';
+    const basePath = isGithubPages ? '/portfolio' : '';
     const targetUrl = `${basePath}/${lang}${window.location.search}${window.location.hash}`;
     window.location.replace(targetUrl);
   }, []);
@@ -42,7 +44,14 @@ export default function RootRedirect() {
             (function() {
               try {
                 var saved = localStorage.getItem('portfolio_filter_lang');
-                var lang = (saved === 'uk' || (!saved && navigator.language && navigator.language.toLowerCase().indexOf('uk') === 0)) ? 'uk' : 'en';
+                var lang = 'en';
+                if (saved === 'uk' || saved === 'en' || saved === 'es') {
+                  lang = saved;
+                } else if (navigator.language) {
+                  var nl = navigator.language.toLowerCase();
+                  if (nl.indexOf('uk') === 0) lang = 'uk';
+                  else if (nl.indexOf('es') === 0) lang = 'es';
+                }
                 var isProd = window.location.pathname.indexOf('/portfolio') === 0;
                 var base = isProd ? '/portfolio' : '';
                 window.location.replace(base + '/' + lang + window.location.search + window.location.hash);

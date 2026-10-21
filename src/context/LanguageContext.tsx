@@ -42,6 +42,9 @@ export function getLangFromPathname(): Language | null {
   if (path.endsWith('/uk') || path.includes('/uk/') || path.includes('/uk?')) {
     return 'uk';
   }
+  if (path.endsWith('/es') || path.includes('/es/') || path.includes('/es?')) {
+    return 'es';
+  }
   if (path.endsWith('/en') || path.includes('/en/') || path.includes('/en?')) {
     return 'en';
   }
@@ -161,7 +164,12 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
 
   const toggleLang = useCallback(() => {
     if (isTransitioningRef.current) return;
-    const next: Language = lang === 'en' ? 'uk' : 'en';
+    const cycleMap: Record<Language, Language> = {
+      en: 'uk',
+      uk: 'es',
+      es: 'en',
+    };
+    const next: Language = cycleMap[lang] || 'en';
     switchWithTransition(next);
   }, [lang, switchWithTransition]);
 

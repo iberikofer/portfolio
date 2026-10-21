@@ -4,7 +4,7 @@ import PortfolioView from '../../components/PortfolioView';
 import type { Metadata } from 'next';
 
 export function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'uk' }];
+  return [{ lang: 'en' }, { lang: 'uk' }, { lang: 'es' }];
 }
 
 export async function generateMetadata({
@@ -13,12 +13,24 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const isUk = lang === 'uk';
+  if (lang === 'uk') {
+    return {
+      title: 'Ярослав Сич',
+      description:
+        'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.',
+    };
+  }
+  if (lang === 'es') {
+    return {
+      title: 'Yaroslav Sych',
+      description:
+        'Portafolio de Yaroslav Sych — Desarrollador Fullstack JavaScript/TypeScript especializado en React, Node.js y aplicaciones web modernas.',
+    };
+  }
   return {
-    title: isUk ? 'Ярослав Сич' : 'Yaroslav Sych',
-    description: isUk
-      ? 'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.'
-      : 'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
+    title: 'Yaroslav Sych',
+    description:
+      'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
   };
 }
 
@@ -28,11 +40,37 @@ export default async function LangPage({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  if (lang !== 'en' && lang !== 'uk') {
+  if (lang !== 'en' && lang !== 'uk' && lang !== 'es') {
     notFound();
   }
 
   const isUk = lang === 'uk';
+  const isEs = lang === 'es';
+
+  const jobTitle = isUk
+    ? 'Fullstack JS Розробник'
+    : isEs
+      ? 'Desarrollador Fullstack JS'
+      : 'Fullstack JS Developer';
+
+  const siteName = isUk
+    ? 'Портфоліо Ярослава Сича'
+    : isEs
+      ? 'Portafolio de Yaroslav Sych'
+      : 'Yaroslav Sych Portfolio';
+
+  const profilePageName = isUk
+    ? 'Ярослав Сич | Профіль'
+    : isEs
+      ? 'Yaroslav Sych | Perfil'
+      : 'Yaroslav Sych | Profile';
+
+  const metaDesc = isUk
+    ? 'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.'
+    : isEs
+      ? 'Portafolio de Yaroslav Sych — Desarrollador Fullstack JavaScript/TypeScript especializado en React, Node.js y aplicaciones web modernas.'
+      : 'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.';
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -40,7 +78,7 @@ export default async function LangPage({
         '@type': 'Person',
         '@id': 'https://iberikofer.github.io/portfolio/#person',
         name: isUk ? 'Ярослав Сич' : 'Yaroslav Sych',
-        jobTitle: isUk ? 'Fullstack JS Розробник' : 'Fullstack JS Developer',
+        jobTitle,
         url: 'https://iberikofer.github.io/portfolio',
         sameAs: [
           'https://github.com/iberikofer',
@@ -61,16 +99,14 @@ export default async function LangPage({
           'Java',
           'Python',
         ],
-        description: isUk
-          ? 'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.'
-          : 'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
+        description: metaDesc,
       },
       {
         '@type': 'WebSite',
         '@id': 'https://iberikofer.github.io/portfolio/#website',
         url: 'https://iberikofer.github.io/portfolio',
-        name: isUk ? 'Портфоліо Ярослава Сича' : 'Yaroslav Sych Portfolio',
-        inLanguage: ['en', 'uk'],
+        name: siteName,
+        inLanguage: ['en', 'uk', 'es'],
         author: {
           '@id': 'https://iberikofer.github.io/portfolio/#person',
         },
@@ -79,7 +115,7 @@ export default async function LangPage({
         '@type': 'ProfilePage',
         '@id': `https://iberikofer.github.io/portfolio/${lang}#profilepage`,
         url: `https://iberikofer.github.io/portfolio/${lang}`,
-        name: isUk ? 'Ярослав Сич | Профіль' : 'Yaroslav Sych | Profile',
+        name: profilePageName,
         mainEntity: {
           '@id': 'https://iberikofer.github.io/portfolio/#person',
         },

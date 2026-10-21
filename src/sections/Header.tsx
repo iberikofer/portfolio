@@ -6,7 +6,7 @@ import { trackEvent } from '../lib/analytics';
 import styles from './Header.module.scss';
 
 const Header: React.FC = () => {
-  const { t, toggleLang, isTransitioning } = useLanguage();
+  const { lang, setLang, t, isTransitioning } = useLanguage();
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
@@ -81,33 +81,43 @@ const Header: React.FC = () => {
             </li>
           </ul>
 
-          <button
-            type="button"
-            className={`${styles.langToggleBtn} ${isTransitioning ? styles.busy : ''}`}
-            onClick={() => {
-              trackEvent('toggle_language');
-              toggleLang();
-            }}
-            disabled={isTransitioning}
-            aria-busy={isTransitioning}
-            aria-label={t.header.toggleLangLabel}
-            title={t.header.toggleLangLabel}
+          <div
+            className={`${styles.langSwitcher} ${isTransitioning ? styles.busy : ''}`}
+            role="group"
+            aria-label="Language selection"
           >
-            <svg
-              className={styles.langIcon}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-          </button>
+            {(
+              [
+                { code: 'en', label: 'EN', hint: 'English' },
+                { code: 'uk', label: 'UK', hint: 'Ukrainian' },
+                { code: 'es', label: 'ES', hint: 'Español' },
+              ] as const
+            ).map(({ code, label, hint }) => {
+              const isActive = lang === code;
+              return (
+                <div key={code} className={styles.langItem}>
+                  <button
+                    type="button"
+                    className={`${styles.langBtn} ${isActive ? styles.active : ''}`}
+                    onClick={() => {
+                      if (!isActive && !isTransitioning) {
+                        trackEvent('toggle_language', { target: code });
+                        setLang(code);
+                      }
+                    }}
+                    disabled={isTransitioning}
+                    aria-pressed={isActive}
+                    aria-label={`Select ${hint}`}
+                  >
+                    {label}
+                  </button>
+                  <span className={styles.tooltip} role="tooltip">
+                    {hint}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </nav>
     </header>
