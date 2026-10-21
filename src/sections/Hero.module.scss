@@ -432,7 +432,8 @@
     transition: transform $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: $accent-lime-hover;
     transform: translateY(-2px) scale(1.02);
     box-shadow:
@@ -532,7 +533,8 @@
     z-index: 1;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-2px);
     background: rgba(155, 255, 0, 0.12);
     border-color: rgba(155, 255, 0, 0.45);

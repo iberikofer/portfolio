@@ -135,7 +135,8 @@
       color $duration-micro $ease-out-expo;
   }
 
-  &:hover:not(.active) {
+  &:hover:not(.active),
+  &:focus-visible:not(.active) {
     color: $text-primary;
     background: rgba(119, 137, 171, 0.08);
   }
@@ -199,7 +200,8 @@
       color $duration-micro $ease-out-expo;
   }
 
-  &:hover:not(.active) {
+  &:hover:not(.active),
+  &:focus-visible:not(.active) {
     color: $text-primary;
     background: rgba(119, 137, 171, 0.08);
   }
@@ -360,13 +362,13 @@
   flex-shrink: 0;
   transition: all $duration-micro $ease-out-expo;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: #ff6b6b;
     border-color: rgba(255, 107, 107, 0.35);
     background: rgba(255, 107, 107, 0.08);
   }
 }
-
 
 // Empty state
 .emptyState {
@@ -432,7 +434,8 @@
     border: 1px solid $border-hairline;
     color: $text-secondary;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       background: rgba(255, 255, 255, 0.06);
       color: $text-primary;
     }
@@ -520,7 +523,8 @@
     border-radius: inherit;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     transform: translateY(-4px);
     border-color: rgba(155, 255, 0, 0.4);
     box-shadow:
@@ -821,7 +825,8 @@
     transition: transform $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba(119, 137, 171, 0.14);
     border-color: $border-hover;
     color: $accent-lime;
@@ -858,7 +863,8 @@
     color: $accent-lime;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba(155, 255, 0, 0.2);
     border-color: $accent-lime;
     color: #ffffff;
@@ -975,7 +981,8 @@
     transition: transform $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba(155, 255, 0, 0.08);
     border-color: rgba(155, 255, 0, 0.4);
     color: $accent-lime;

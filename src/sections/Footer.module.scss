@@ -109,7 +109,8 @@
     pointer-events: none;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: $accent-lime;
     border-color: $border-hover;
     background: rgba(155, 255, 0, 0.08);

@@ -142,7 +142,8 @@
       padding: 6px 10px;
     }
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       color: $accent-lime;
       background-color: rgba(155, 255, 0, 0.05);
       border-color: rgba(155, 255, 0, 0.2);
@@ -235,7 +236,8 @@
     padding: 3px 6px;
   }
 
-  &:hover:not(.active) {
+  &:hover:not(.active),
+  &:focus-visible:not(.active) {
     color: $text-primary;
     background: rgba(255, 255, 255, 0.06);
     border-color: rgba(255, 255, 255, 0.12);
@@ -302,4 +304,3 @@
     border-left: 1px solid rgba(155, 255, 0, 0.3);
   }
 }
-

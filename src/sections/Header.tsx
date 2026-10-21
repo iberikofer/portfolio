@@ -89,7 +89,7 @@ const Header: React.FC = () => {
             {(
               [
                 { code: 'en', label: 'EN', hint: 'English' },
-                { code: 'uk', label: 'UK', hint: 'Ukrainian' },
+                { code: 'uk', label: 'UK', hint: 'Українська' },
                 { code: 'es', label: 'ES', hint: 'Español' },
               ] as const
             ).map(({ code, label, hint }) => {

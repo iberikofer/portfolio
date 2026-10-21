@@ -173,7 +173,8 @@
     pointer-events: none;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     transform: translateY(-2px);
     border-color: rgba(155, 255, 0, 0.35);
     box-shadow:
@@ -354,7 +355,8 @@
     transition: transform $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     background: rgba(155, 255, 0, 0.15);
     border-color: $accent-lime;
     transform: translateY(-1px);
@@ -461,7 +463,8 @@
           opacity $duration-micro $ease-out-expo;
       }
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         color: $accent-lime;
 
         .externalLinkIcon {

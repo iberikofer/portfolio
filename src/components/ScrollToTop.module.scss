@@ -65,7 +65,8 @@
     transition: transform $duration-micro $ease-out-expo;
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     transform: translateY(-3px);
     border-color: rgba(155, 255, 0, 0.5);
     background: rgba(18, 22, 30, 0.95);
