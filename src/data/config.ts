@@ -317,5 +317,14 @@ export const DATA: AppData = {
       status: 'Open',
       objectPosition: 'center 25%',
     },
+    {
+      id: 18,
+      title: 'Windows Startup & Battery Automator',
+      description:
+        'A custom smart automation script for Windows 10/11 that dynamically manages background apps, Bluetooth, and OS visual performance based on the active power source (AC vs Battery).',
+      tags: ['AUTOMATION', 'SCRIPT', 'POWERSHELL', 'WINDOWS', 'CLI', 'TOOLS'],
+      link: 'https://github.com/iberikofer/win-startup-and-battery-automator',
+      status: 'Open',
+    },
   ],
 };

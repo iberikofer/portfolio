@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import Image from 'next/image';
 import { DATA, Project, ImageSource } from '../data/config';
 import { useLanguage } from '../context/LanguageContext';
 import { trackEvent } from '../lib/analytics';
@@ -38,7 +39,7 @@ const TECH_CHIPS: ChipDefinition[] = [
   { id: 'fullstack', label: 'Fullstack', countKey: 'fullstack' },
   { id: 'frontend', label: 'Front-end', countKey: 'frontend' },
   { id: 'backend', label: 'Back-end', countKey: 'backend' },
-  { id: 'ai-tools', label: 'AI & Tools', countKey: 'aiTools' },
+  { id: 'ai-tools', label: 'Tools', countKey: 'aiTools' },
   { id: 'games', label: 'Games/Simulators', countKey: 'games' },
 ];
 
@@ -89,7 +90,11 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
         t.includes('CLI') ||
         t.includes('LLM') ||
         t.includes('AUTOMATION') ||
-        t.includes('PYTHON')
+        t.includes('PYTHON') ||
+        t.includes('TOOL') ||
+        t.includes('TOOLS') ||
+        t.includes('SCRIPT') ||
+        t.includes('POWERSHELL')
       );
     case 'games':
       return t.includes('GAME') || t.includes('SIMULATOR');
@@ -133,7 +138,20 @@ const mapTagToChip = (tag: string): TechChip | null => {
   ) {
     return 'frontend';
   }
-  if (['AI', 'AI AGENT', 'CLI', 'LLM', 'AUTOMATION', 'PYTHON'].includes(t)) {
+  if (
+    [
+      'AI',
+      'AI AGENT',
+      'CLI',
+      'LLM',
+      'AUTOMATION',
+      'PYTHON',
+      'TOOL',
+      'TOOLS',
+      'SCRIPT',
+      'POWERSHELL',
+    ].includes(t)
+  ) {
     return 'ai-tools';
   }
   if (['GAME', 'SIMULATOR'].includes(t)) {
@@ -211,44 +229,32 @@ const hasLiveDemo = (project: Project): boolean => {
   return true;
 };
 
-const getImgSrc = (photo?: ImageSource): string => {
-  if (!photo) return '';
-  return typeof photo === 'string'
-    ? photo
-    : (photo as { src: string }).src || '';
-};
-
-const ProjectImage: React.FC<{ project: Project }> = ({ project }) => {
+const ProjectImage: React.FC<{ project: Project; priority?: boolean }> = ({
+  project,
+  priority = false,
+}) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const photo = project.photo;
+  if (!photo) return null;
 
-  useEffect(() => {
-    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
-      const rafId = requestAnimationFrame(() => {
-        setIsLoaded(true);
-      });
-      return () => cancelAnimationFrame(rafId);
-    }
-  }, [project.photo]);
+  const isStatic = typeof photo !== 'string';
+  const blurData = isStatic && 'blurDataURL' in photo ? photo.blurDataURL : undefined;
 
   return (
-    <img
-      ref={imgRef}
-      src={getImgSrc(project.photo)}
+    <Image
+      src={photo}
       alt={`${project.title} — ${project.tags.join(', ')} project preview`}
-      width={500}
-      height={320}
-      loading="lazy"
-      decoding="async"
+      fill
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      priority={priority}
+      loading={priority ? 'eager' : 'lazy'}
+      placeholder={blurData ? 'blur' : 'empty'}
+      blurDataURL={blurData}
       onLoad={() => setIsLoaded(true)}
       className={`${styles.projectImg} ${isLoaded ? styles.loaded : ''}`}
       style={{
-        ...(project.objectPosition && {
-          objectPosition: project.objectPosition,
-        }),
-        ...(project.objectFit && {
-          objectFit: project.objectFit,
-        }),
+        objectFit: project.objectFit || 'cover',
+        objectPosition: project.objectPosition || 'top center',
       }}
     />
   );
@@ -642,7 +648,7 @@ const Projects: React.FC = () => {
                   {isSelected && (
                     <span className={styles.activeDot} aria-hidden="true" />
                   )}
-                  <span>{chip.label}</span>
+                  <span>{t.projects.chips[chip.id] || chip.label}</span>
                   <span className={styles.filterCount}>{count}</span>
                 </button>
               );
@@ -784,7 +790,7 @@ const Projects: React.FC = () => {
               }
             >
               {project.photo ? (
-                <ProjectImage project={project} />
+                <ProjectImage project={project} priority={idx < 2} />
               ) : (
                 <div className={styles.placeholderImage}>
                   {project.tags.includes('SIMULATOR') ? (
@@ -847,6 +853,27 @@ const Projects: React.FC = () => {
                       </svg>
                       <span className={styles.placeholderText}>
                         AI Agent System
+                      </span>
+                    </>
+                  ) : project.tags.includes('AUTOMATION') || project.tags.includes('SCRIPT') || project.tags.includes('POWERSHELL') ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect width="20" height="14" x="2" y="3" rx="2" />
+                        <line x1="8" x2="16" y1="21" y2="21" />
+                        <line x1="12" x2="12" y1="17" y2="21" />
+                        <polyline points="7 8 10 10 7 12" />
+                        <line x1="12" x2="16" y1="12" y2="12" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        Custom Automation Script
                       </span>
                     </>
                   ) : project.tags.includes('TEAM') ? (

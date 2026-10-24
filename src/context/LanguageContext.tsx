@@ -120,11 +120,14 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     };
   }, []);
 
-  // Synchronize on mount and update storage + document lang
+  // Synchronize on mount and update storage + document lang + title
   useEffect(() => {
     try {
       localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
       document.documentElement.lang = lang;
+      if (typeof document !== 'undefined') {
+        document.title = TRANSLATIONS[lang].meta.title;
+      }
     } catch {
       // Ignore storage write issues
     }
@@ -191,6 +194,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
       try {
         localStorage.setItem(LANGUAGE_STORAGE_KEY, targetLang);
         document.documentElement.lang = targetLang;
+        document.title = TRANSLATIONS[targetLang].meta.title;
 
         const targetUrl = getLocalizedUrl(targetLang);
         window.history.pushState(null, '', targetUrl);
@@ -225,6 +229,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
         try {
           localStorage.setItem(LANGUAGE_STORAGE_KEY, targetLang);
           document.documentElement.lang = targetLang;
+          document.title = TRANSLATIONS[targetLang].meta.title;
 
           const targetUrl = getLocalizedUrl(targetLang);
           window.history.pushState(null, '', targetUrl);

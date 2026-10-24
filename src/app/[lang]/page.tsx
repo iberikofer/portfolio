@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Language } from '../../data/translations';
+import { Language, TRANSLATIONS } from '../../data/translations';
 import PortfolioView from '../../components/PortfolioView';
 import type { Metadata } from 'next';
 
@@ -13,24 +13,12 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  if (lang === 'uk') {
-    return {
-      title: 'Ярослав Сич',
-      description:
-        'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.',
-    };
-  }
-  if (lang === 'es') {
-    return {
-      title: 'Yaroslav Sych',
-      description:
-        'Portafolio de Yaroslav Sych — Desarrollador Fullstack JavaScript/TypeScript especializado en React, Node.js y aplicaciones web modernas.',
-    };
-  }
+  const currentLang: Language =
+    lang === 'uk' || lang === 'es' || lang === 'en' ? lang : 'en';
+  const t = TRANSLATIONS[currentLang];
   return {
-    title: 'Yaroslav Sych',
-    description:
-      'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
+    title: t.meta.title,
+    description: t.meta.description,
   };
 }
 

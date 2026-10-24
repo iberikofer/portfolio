@@ -1,6 +1,10 @@
 export type Language = 'en' | 'uk' | 'es';
 
 export interface TranslationData {
+  meta: {
+    title: string;
+    description: string;
+  };
   profile: {
     name: string;
     title: string;
@@ -31,6 +35,13 @@ export interface TranslationData {
     scopeSolo: string;
     scopeTeam: string;
     chipAll: string;
+    chips: {
+      fullstack: string;
+      frontend: string;
+      backend: string;
+      'ai-tools': string;
+      games: string;
+    };
     showing: string;
     of: string;
     projectsWord: string;
@@ -127,6 +138,11 @@ export interface TranslationData {
 
 export const TRANSLATIONS: Record<Language, TranslationData> = {
   en: {
+    meta: {
+      title: 'Yaroslav Sych',
+      description:
+        'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
+    },
     profile: {
       name: 'Yaroslav Sych',
       title: 'Fullstack JS Developer',
@@ -158,6 +174,13 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       scopeSolo: 'Solo projects',
       scopeTeam: 'Team projects',
       chipAll: 'All',
+      chips: {
+        fullstack: 'Fullstack',
+        frontend: 'Front-end',
+        backend: 'Back-end',
+        'ai-tools': 'Tools',
+        games: 'Games/Simulators',
+      },
       showing: 'Showing',
       of: 'of',
       projectsWord: 'projects',
@@ -197,6 +220,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         15: 'A fast-paced 2D action game built with C++ and SFML. Dodge, roll, and escape from chasing enemies and bosses with custom physics, gamepad support, and full localization.',
         16: 'Inspired by Lethal Company — interactive route optimization and scrap-gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
         17: 'Gamified object-oriented software system modeling fitness gym facilities, athletes, and equipment. Architected with strict OOP principles, UML state machines, and interactive Java simulation mechanics.',
+        18: 'A custom smart automation script for Windows 10/11 that dynamically manages background apps, Bluetooth, and OS visual performance based on the active power source (AC vs Battery).',
       },
     },
     about: {
@@ -288,6 +312,11 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
     },
   },
   uk: {
+    meta: {
+      title: 'Ярослав Сич',
+      description:
+        'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.',
+    },
     profile: {
       name: 'Ярослав Сич',
       title: 'Fullstack JS розробник',
@@ -319,6 +348,13 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       scopeSolo: 'Соло проєкти',
       scopeTeam: 'Командні проєкти',
       chipAll: 'Всі',
+      chips: {
+        fullstack: 'Фулстак',
+        frontend: 'Фронт-енд',
+        backend: 'Бек-енд',
+        'ai-tools': 'Інструменти',
+        games: 'Ігри/Симулятори',
+      },
       showing: 'Показано',
       of: 'з',
       projectsWord: 'проєктів',
@@ -358,6 +394,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         15: 'Динамічна 2D-екшн гра на C++ та SFML. Ухиляння, перекати та втеча від переслідувачів і босів із власною фізикою, підтримкою геймпада та повною локалізацією.',
         16: 'Інтерактивний симулятор оптимізації маршрутів і збору луту за мотивами гри Lethal Company, створений на C++20, SFML та Dear ImGui. Алгоритми A*, Dijkstra, BFS, евристика TSP 2-Opt, DP рюкзак та процедурна BSP-генерація лабіринтів.',
         17: 'Гейміфікована обʼєктно-орієнтована система моделювання фітнес-залу, спортсменів та інвентарю на Java за принципами ООП, UML-діаграмами станів та симуляційними механіками.',
+        18: 'Кастомний скрипт автоматизації для Windows 10/11, що динамічно оптимізує фонові програми, Bluetooth та візуальні ефекти системи залежно від джерела живлення (мережа чи батарея).',
       },
     },
     about: {
@@ -449,6 +486,11 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
     },
   },
   es: {
+    meta: {
+      title: 'Yaroslav Sych',
+      description:
+        'Portafolio de Yaroslav Sych — Desarrollador Fullstack JavaScript/TypeScript especializado en React, Node.js y aplicaciones web modernas.',
+    },
     profile: {
       name: 'Yaroslav Sych',
       title: 'Desarrollador Fullstack JS',
@@ -480,6 +522,13 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       scopeSolo: 'Proyectos individuales',
       scopeTeam: 'Proyectos en equipo',
       chipAll: 'Todos',
+      chips: {
+        fullstack: 'Fullstack',
+        frontend: 'Front-end',
+        backend: 'Back-end',
+        'ai-tools': 'Herramientas',
+        games: 'Juegos/Simuladores',
+      },
       showing: 'Mostrando',
       of: 'de',
       projectsWord: 'proyectos',
@@ -519,6 +568,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         15: 'Juego de acción 2D de ritmo rápido creado con C++ y SFML. Esquiva, rueda y escapa de enemigos y jefes con física personalizada, soporte para mando y localización completa.',
         16: 'Inspirado en Lethal Company: simulador interactivo de optimización de rutas y recolección de chatarra desarrollado con C++20, SFML y Dear ImGui. Implementa algoritmos A*, Dijkstra, BFS, heurística TSP 2-Opt, DP mochila y generación procedural de laberintos BSP.',
         17: 'Sistema de software orientado a objetos gamificado que modela gimnasios, atletas y equipamiento en Java bajo estrictos principios de POO, diagramas de estado UML y mecánicas interactivas de simulación.',
+        18: 'Script de automatización inteligente para Windows 10/11 que gestiona dinámicamente aplicaciones en segundo plano, Bluetooth y efectos visuales según la fuente de energía (CA o batería).',
       },
     },
     about: {

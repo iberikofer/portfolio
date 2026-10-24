@@ -21,7 +21,7 @@ const basePath = isGithubPages ? '/portfolio' : '';
 export const metadata: Metadata = {
   title: 'Yaroslav Sych',
   description:
-    'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
+    'Portfolio of Yaroslav Sych — Developer specializing in React, Node.js, and modern high-craft web applications.',
   icons: {
     icon: [
       {
