@@ -1,7 +1,6 @@
 import webStudioImg from '../assets/webStudio.png';
 import nodePhonebookImg from '../assets/nodePhonebook.jpg';
 import imageFinder from '../assets/imageFinder.png';
-import feedbackPage from '../assets/feedbackPage.png';
 import movieFinder from '../assets/movieFinder.png';
 import carRent from '../assets/carRent.png';
 import glyanecImg from '../assets/glyanec.png';
@@ -194,17 +193,6 @@ export const DATA: AppData = {
       link: 'https://github.com/iberikofer/Glyanec',
       mockup: 'https://www.figma.com/file/UBkIfuekqFDAJBdq44UzVS',
       pages: 'https://iberikofer.github.io/Glyanec',
-      status: 'Open',
-    },
-    {
-      id: 9,
-      title: 'Feedback page',
-      photo: feedbackPage,
-      description:
-        'Interactive feedback and statistics web app built with React, featuring state-driven rating metrics and dynamic statistics.',
-      tags: ['REACT', 'HOOKS', 'JS'],
-      link: 'https://github.com/iberikofer/feedback-page',
-      pages: 'https://iberikofer.github.io/feedback-page',
       status: 'Open',
     },
     {

@@ -66,6 +66,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
   initialLang = 'en',
 }) => {
   const [lang, setLangState] = useState<Language>(initialLang);
+  const t = useMemo(() => TRANSLATIONS[lang], [lang]);
 
   const [phase, setPhase] = useState<TransitionPhase>('idle');
   const [isInteractive, setIsInteractive] = useState<boolean>(false);
@@ -274,8 +275,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({
     const next: Language = cycleMap[lang] || 'en';
     switchWithTransition(next);
   }, [lang, switchWithTransition]);
-
-  const t = useMemo(() => TRANSLATIONS[lang], [lang]);
 
   const value = useMemo(
     () => ({
