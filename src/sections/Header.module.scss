@@ -67,6 +67,9 @@
   white-space: nowrap;
   min-height: 1.5em;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
 
   .logoPrefix {
     color: $accent-lime;
@@ -131,6 +134,10 @@
     display: inline-flex;
     align-items: center;
     position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
     transition:
       color $duration-micro $ease-out-expo,
       background-color $duration-micro $ease-out-expo,
@@ -222,6 +229,9 @@
   align-items: center;
   justify-content: center;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   transition:
     color $duration-micro $ease-out-expo,
     background-color $duration-micro $ease-out-expo,

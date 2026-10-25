@@ -72,9 +72,17 @@ ul {
   list-style: none;
 }
 
-button {
+button,
+[role="button"] {
   font-family: inherit;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
 }
+
 
 // Global Container
 .container {

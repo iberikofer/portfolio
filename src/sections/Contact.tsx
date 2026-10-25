@@ -580,6 +580,7 @@ const Contact: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.resumeBtn}
+              draggable={false}
               title={t.contact.cvDesc}
               onClick={() =>
                 trackEvent('download_resume', {

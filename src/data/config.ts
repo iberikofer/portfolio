@@ -126,14 +126,14 @@ export const DATA: AppData = {
       status: 'Open',
     },
     {
-      id: 3,
-      title: 'Image finder',
-      photo: imageFinder,
+      id: 5,
+      title: 'Phonebook',
+      photo: reactPhonebookImg,
       description:
-        'React-based image search application powered by Pixabay API featuring state management, infinite scroll/pagination, and modal views.',
-      tags: ['REACT', 'JS', 'AXIOS'],
-      link: 'https://github.com/iberikofer/image-finder',
-      pages: 'https://image-finder-iberikofer.vercel.app/',
+        'React phonebook application with user authentication, Redux state management, and contact filtering.',
+      tags: ['FRONTEND', 'REST API', 'REACT', 'REDUX', 'JS'],
+      link: 'https://github.com/iberikofer/react-phonebook',
+      pages: 'https://react-phonebook-iberikofer.vercel.app/',
       status: 'Open',
     },
     {
@@ -148,14 +148,14 @@ export const DATA: AppData = {
       status: 'Open',
     },
     {
-      id: 5,
-      title: 'Phonebook',
-      photo: reactPhonebookImg,
+      id: 3,
+      title: 'Image finder',
+      photo: imageFinder,
       description:
-        'React phonebook application with user authentication, Redux state management, and contact filtering.',
-      tags: ['FULLSTACK', 'BACKEND', 'REACT', 'REDUX', 'JS'],
-      link: 'https://github.com/iberikofer/react-phonebook',
-      pages: 'https://react-phonebook-iberikofer.vercel.app/',
+        'React-based image search application powered by Pixabay API featuring state management, infinite scroll/pagination, and modal views.',
+      tags: ['REACT', 'JS', 'AXIOS'],
+      link: 'https://github.com/iberikofer/image-finder',
+      pages: 'https://image-finder-iberikofer.vercel.app/',
       status: 'Open',
     },
     {

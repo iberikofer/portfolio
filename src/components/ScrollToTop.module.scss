@@ -38,6 +38,10 @@
   height: 44px;
   border-radius: 10px;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   box-shadow:
     $shadow-bevel,
     0 8px 24px -4px rgba(0, 0, 0, 0.8);

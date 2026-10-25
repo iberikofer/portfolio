@@ -352,6 +352,7 @@ const Hero: React.FC = () => {
                 ref={viewProjectsRef}
                 href="#projects"
                 className={styles.primaryButton}
+                draggable={false}
               >
                 <span className={styles.btnGlow} aria-hidden="true">
                   <span ref={viewProjectsGlowRef} className={styles.glowSpot} />
@@ -373,6 +374,7 @@ const Hero: React.FC = () => {
               <a
                 href="#contact"
                 className={styles.secondaryButton}
+                draggable={false}
                 onMouseMove={(e) => {
                   const rect = e.currentTarget.getBoundingClientRect();
                   e.currentTarget.style.setProperty(

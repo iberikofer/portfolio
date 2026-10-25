@@ -157,16 +157,14 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     0 4px 14px -2px $accent-lime-glow;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   transition:
     transform $duration-micro $ease-out-expo,
     background-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo;
-
-  &::selection,
-  *::selection {
-    background: rgba(119, 137, 171, 0.75);
-    color: #ffffff;
-  }
 
   // Anti-jitter hover bridge: inert when idle (no phantom hit area beneath button), extends on hover
   &::after {
@@ -671,10 +669,11 @@
   font-size: 0.94rem;
   padding: 14px 28px;
   border-radius: 9px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  user-select: text;
-  -webkit-user-select: text;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     0 8px 22px -4px $accent-lime-glow;
@@ -685,12 +684,6 @@
     border-color 0.22s $ease-out-expo,
     color 0.2s ease;
 
-  &::selection,
-  *::selection {
-    background: rgba(119, 137, 171, 0.75);
-    color: #ffffff;
-  }
-
   .btnContent {
     position: relative;
     z-index: 2;
@@ -699,8 +692,10 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    user-select: text;
-    -webkit-user-select: text;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    user-drag: none;
     cursor: pointer;
   }
 

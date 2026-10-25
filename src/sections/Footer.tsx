@@ -27,6 +27,7 @@ const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 className={styles.socialBtn}
+                draggable={false}
                 title="LinkedIn"
               >
                 <svg
@@ -46,6 +47,7 @@ const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 aria-label="Telegram"
                 className={styles.socialBtn}
+                draggable={false}
                 title="Telegram"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor">
@@ -58,6 +60,7 @@ const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 aria-label="Instagram"
                 className={styles.socialBtn}
+                draggable={false}
                 title="Instagram"
               >
                 <svg
@@ -77,6 +80,7 @@ const Footer: React.FC = () => {
                 rel="noopener noreferrer"
                 aria-label="GitHub"
                 className={styles.socialBtn}
+                draggable={false}
                 title="GitHub"
               >
                 <svg

@@ -985,6 +985,7 @@ const Projects: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.actionBtn}
+                draggable={false}
                 title="View GitHub Repository"
                 onClick={() =>
                   trackEvent('view_project_source', {
@@ -1013,6 +1014,7 @@ const Projects: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.actionBtn}
+                  draggable={false}
                   title="View Figma Mockup"
                   onClick={() =>
                     trackEvent('view_project_mockup', {
@@ -1064,6 +1066,7 @@ const Projects: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${styles.actionBtn} ${styles.primaryActionBtn}`}
+                    draggable={false}
                     title={
                       project.pages.includes('#readme')
                         ? 'View Documentation'

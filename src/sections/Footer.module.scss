@@ -89,6 +89,10 @@
   justify-content: center;
   color: $text-secondary;
   box-shadow: $shadow-bevel;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  user-drag: none;
   transition:
     transform $duration-micro $ease-out-expo,
     color $duration-micro $ease-out-expo,

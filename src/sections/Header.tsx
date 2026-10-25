@@ -71,13 +71,13 @@ const Header: React.FC = () => {
         <div className={styles.navRight}>
           <ul className={styles.menu}>
             <li>
-              <a href="#projects">{t.header.navProjects}</a>
+              <a href="#projects" draggable={false}>{t.header.navProjects}</a>
             </li>
             <li>
-              <a href="#about">{t.header.navAbout}</a>
+              <a href="#about" draggable={false}>{t.header.navAbout}</a>
             </li>
             <li>
-              <a href="#contact">{t.header.navContact}</a>
+              <a href="#contact" draggable={false}>{t.header.navContact}</a>
             </li>
           </ul>
 
