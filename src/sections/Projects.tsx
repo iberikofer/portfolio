@@ -15,7 +15,7 @@ import styles from './Projects.module.scss';
 
 type ScopeCategory = 'all' | 'solo' | 'team';
 
-type TechChip = 'fullstack' | 'frontend' | 'backend' | 'ai-tools' | 'games';
+type TechChip = 'fullstack' | 'frontend' | 'backend' | 'tools' | 'games';
 
 interface ScopeTab {
   id: ScopeCategory;
@@ -32,14 +32,14 @@ const SCOPE_TABS: ScopeTab[] = [
 interface ChipDefinition {
   id: TechChip;
   label: string;
-  countKey: 'fullstack' | 'frontend' | 'backend' | 'aiTools' | 'games';
+  countKey: 'fullstack' | 'frontend' | 'backend' | 'tools' | 'games';
 }
 
 const TECH_CHIPS: ChipDefinition[] = [
   { id: 'fullstack', label: 'Fullstack', countKey: 'fullstack' },
   { id: 'frontend', label: 'Front-end', countKey: 'frontend' },
   { id: 'backend', label: 'Back-end', countKey: 'backend' },
-  { id: 'ai-tools', label: 'Tools', countKey: 'aiTools' },
+  { id: 'tools', label: 'Tools', countKey: 'tools' },
   { id: 'games', label: 'Games/Simulators', countKey: 'games' },
 ];
 
@@ -48,7 +48,7 @@ const VALID_CHIPS: TechChip[] = [
   'fullstack',
   'frontend',
   'backend',
-  'ai-tools',
+  'tools',
   'games',
 ];
 
@@ -70,7 +70,9 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
         t.includes('CSS') ||
         t.includes('SCSS') ||
         t.includes('JS') ||
-        t.includes('JAVASCRIPT')
+        t.includes('JAVASCRIPT') ||
+        t.includes('TS') ||
+        t.includes('TYPESCRIPT')
       );
     case 'backend':
       return (
@@ -83,14 +85,10 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
         t.includes('SQLITE') ||
         t.includes('PRISMA')
       );
-    case 'ai-tools':
+    case 'tools':
       return (
-        t.includes('AI') ||
-        t.includes('AI AGENT') ||
         t.includes('CLI') ||
-        t.includes('LLM') ||
         t.includes('AUTOMATION') ||
-        t.includes('PYTHON') ||
         t.includes('TOOL') ||
         t.includes('TOOLS') ||
         t.includes('SCRIPT') ||
@@ -134,25 +132,27 @@ const mapTagToChip = (tag: string): TechChip | null => {
       'TYPESCRIPT',
       'TAILWIND',
       'SWIPER',
+      'REDUX',
+      'MUI',
+      'EMOTION',
+      'PWA',
+      'REACT ROUTER',
+      'CSS MODULES',
     ].includes(t)
   ) {
     return 'frontend';
   }
   if (
     [
-      'AI',
-      'AI AGENT',
       'CLI',
-      'LLM',
       'AUTOMATION',
-      'PYTHON',
       'TOOL',
       'TOOLS',
       'SCRIPT',
       'POWERSHELL',
     ].includes(t)
   ) {
-    return 'ai-tools';
+    return 'tools';
   }
   if (['GAME', 'SIMULATOR'].includes(t)) {
     return 'games';
@@ -194,6 +194,7 @@ const getInitialFilterState = (): {
       const chips: TechChip[] = tagsParam
         ? tagsParam
             .split(',')
+            .map((p) => (p === 'ai-tools' ? 'tools' : p))
             .filter((p): p is TechChip => (VALID_CHIPS as string[]).includes(p))
         : [];
 
@@ -355,7 +356,7 @@ const Projects: React.FC = () => {
 
   const handleCardTagClick = (chip: TechChip) => {
     // If this chip is already the only one active, reset to all.
-    // Otherwise, filter specifically by this chip, clearing unrelated chips like ai-tools.
+    // Otherwise, filter specifically by this chip, clearing unrelated chips like tools.
     const isClearing = selectedChips.length === 1 && selectedChips[0] === chip;
     trackEvent('filter_tag_toggle', { chip, active: !isClearing });
     const next = isClearing ? [] : [chip];
@@ -491,7 +492,7 @@ const Projects: React.FC = () => {
       fullstack: scoped.filter((p) => matchesChip(p, 'fullstack')).length,
       frontend: scoped.filter((p) => matchesChip(p, 'frontend')).length,
       backend: scoped.filter((p) => matchesChip(p, 'backend')).length,
-      aiTools: scoped.filter((p) => matchesChip(p, 'ai-tools')).length,
+      tools: scoped.filter((p) => matchesChip(p, 'tools')).length,
       games: scoped.filter((p) => matchesChip(p, 'games')).length,
     };
   }, [activeScope]);

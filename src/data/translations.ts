@@ -39,7 +39,7 @@ export interface TranslationData {
       fullstack: string;
       frontend: string;
       backend: string;
-      'ai-tools': string;
+      tools: string;
       games: string;
     };
     showing: string;
@@ -178,7 +178,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         fullstack: 'Fullstack',
         frontend: 'Front-end',
         backend: 'Back-end',
-        'ai-tools': 'Tools',
+        tools: 'Tools',
         games: 'Games/Simulators',
       },
       showing: 'Showing',
@@ -351,7 +351,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         fullstack: 'Фулстак',
         frontend: 'Фронт-енд',
         backend: 'Бек-енд',
-        'ai-tools': 'Інструменти',
+        tools: 'Інструменти',
         games: 'Ігри/Симулятори',
       },
       showing: 'Показано',
@@ -524,7 +524,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         fullstack: 'Fullstack',
         frontend: 'Front-end',
         backend: 'Back-end',
-        'ai-tools': 'Herramientas',
+        tools: 'Herramientas',
         games: 'Juegos/Simuladores',
       },
       showing: 'Mostrando',
