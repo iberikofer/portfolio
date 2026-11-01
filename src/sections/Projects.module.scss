@@ -94,8 +94,69 @@
   flex-wrap: nowrap;
   justify-content: center;
 
-  @media (max-width: 520px) {
-    flex-wrap: wrap;
+  @media (max-width: 520px) and (min-width: 426px) {
+    flex-wrap: nowrap;
+  }
+
+  @media (max-width: 425.98px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+
+    .scopeBtn {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: 0.78rem;
+      white-space: normal;
+      text-align: center;
+
+      &[data-scope='all'],
+      &.scopeBtn_all {
+        grid-column: 1 / -1;
+      }
+
+      &[data-scope='solo'],
+      &.scopeBtn_solo,
+      &[data-scope='team'],
+      &.scopeBtn_team {
+        grid-column: span 1;
+      }
+    }
+  }
+}
+
+// Row 2: Chips bar — tech filters
+.deckRowChips {
+  @media (max-width: 425.98px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 6px 4px;
+
+    .chipBtnAll {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: auto;
+      min-width: 90px;
+      padding: 6px 14px;
+    }
+
+    .chipBtn {
+      width: 100%;
+      justify-content: center;
+      padding: 6px 6px;
+      font-size: 0.76rem;
+      gap: 5px;
+
+      &[data-chip='games'] {
+        grid-column: 1 / -1;
+        justify-self: center;
+        width: auto;
+        min-width: 140px;
+        max-width: 100%;
+        padding: 6px 14px;
+      }
+    }
   }
 }
 

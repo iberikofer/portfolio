@@ -578,7 +578,8 @@ const Projects: React.FC = () => {
                   type="button"
                   role="tab"
                   aria-selected={isActive}
-                  className={`${styles.scopeBtn} ${isActive ? styles.active : ''}`}
+                  data-scope={tab.id}
+                  className={`${styles.scopeBtn} ${styles[`scopeBtn_${tab.id}`]} ${isActive ? styles.active : ''}`}
                   onClick={() => handleScopeSelect(tab.id)}
                 >
                   <span>{tabLabel}</span>
@@ -592,14 +593,14 @@ const Projects: React.FC = () => {
 
           {/* Row 2: Chips Bar (Tech tag filters) */}
           <div
-            className={styles.deckRow}
+            className={`${styles.deckRow} ${styles.deckRowChips}`}
             role="group"
             aria-label="Filter projects by tags (multi-select)"
           >
             {/* All / Reset Button */}
             <button
               type="button"
-              className={`${styles.chipBtn} ${
+              data-chip="all" className={`${styles.chipBtn} ${styles.chipBtnAll} ${
                 selectedChips.length === 0 ? styles.active : ''
               }`}
               onClick={handleClearChips}
@@ -617,6 +618,7 @@ const Projects: React.FC = () => {
                 <button
                   key={chip.id}
                   type="button"
+                  data-chip={chip.id}
                   className={`${styles.chipBtn} ${
                     isSelected ? styles.active : ''
                   } ${count === 0 ? styles.emptyCategory : ''}`}

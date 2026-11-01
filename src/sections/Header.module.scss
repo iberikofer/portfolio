@@ -23,7 +23,7 @@
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.8);
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 768.98px) {
     padding: 14px 0;
   }
 }
@@ -81,7 +81,7 @@
     color: $text-primary;
 
     .lastName {
-      @media (max-width: 425px) {
+      @media (max-width: 425.98px) {
         display: none;
       }
     }
@@ -115,8 +115,8 @@
   align-items: center;
   gap: 8px;
 
-  @media (max-width: 480px) {
-    gap: 4px;
+  @media (max-width: 768.98px) {
+    display: none;
   }
 
   li {
@@ -144,11 +144,6 @@
       border-color $duration-micro $ease-out-expo,
       transform $duration-micro $ease-out-expo;
 
-    @media (max-width: 480px) {
-      font-size: 0.8rem;
-      padding: 6px 10px;
-    }
-
     &:hover,
     &:focus-visible {
       color: $accent-lime;
@@ -174,8 +169,8 @@
   align-items: center;
   gap: 10px;
 
-  @media (max-width: 480px) {
-    gap: 6px;
+  @media (max-width: 768.98px) {
+    gap: 0;
   }
 }
 
@@ -191,9 +186,12 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
+  @media (max-width: 768.98px) {
+    display: none;
+  }
+
   &.busy {
     pointer-events: none;
-    opacity: 0.6;
     cursor: wait;
   }
 }
@@ -238,13 +236,6 @@
     border-color $duration-micro $ease-out-expo,
     box-shadow $duration-micro $ease-out-expo,
     transform $duration-micro $ease-out-expo;
-
-  @media (max-width: 480px) {
-    font-size: 0.68rem;
-    min-width: 28px;
-    height: 24px;
-    padding: 3px 6px;
-  }
 
   &:hover:not(.active),
   &:focus-visible:not(.active) {
@@ -313,4 +304,339 @@
     border-top: 1px solid rgba(155, 255, 0, 0.3);
     border-left: 1px solid rgba(155, 255, 0, 0.3);
   }
+}
+
+// ─── Mobile Burger Menu (< 769px) ─────────────────────────────────────────────
+
+.burgerBtn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo;
+
+  @media (max-width: 768.98px) {
+    display: inline-flex;
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(155, 255, 0, 0.08);
+    border-color: rgba(155, 255, 0, 0.4);
+    box-shadow: 0 0 12px rgba(155, 255, 0, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+
+  &.burgerActive {
+    background: rgba(155, 255, 0, 0.12);
+    border-color: rgba(155, 255, 0, 0.5);
+    box-shadow: 0 0 16px rgba(155, 255, 0, 0.25);
+
+    .burgerBar {
+      background-color: $accent-lime;
+
+      &:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+    }
+  }
+}
+
+.burgerBar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: $text-primary;
+  border-radius: 2px;
+  transform-origin: center;
+  transition:
+    transform 0.24s $ease-out-expo,
+    opacity 0.18s $ease-out-expo,
+    background-color 0.18s;
+}
+
+// Backdrop dimmer over page content
+.mobileBackdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: -1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.24s $ease-out-expo,
+    visibility 0.24s;
+
+  @media (max-width: 768.98px) {
+    display: block;
+
+    &.backdropVisible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+  }
+}
+
+// Mobile Dropdown Drawer Panel
+.mobileDrawer {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(8, 11, 16, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(155, 255, 0, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.9),
+    0 0 25px rgba(155, 255, 0, 0.06);
+  padding: 20px 24px 28px;
+  box-sizing: border-box;
+  max-height: calc(100dvh - 70px);
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition:
+    opacity 0.24s $ease-out-expo,
+    transform 0.24s $ease-out-expo,
+    visibility 0.24s;
+
+  @media (max-width: 768.98px) {
+    display: block;
+
+    &.drawerOpen {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  }
+}
+
+.mobileDrawerInner {
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+// Mobile Anchor Links
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    width: 100%;
+  }
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: $text-primary;
+  font-size: 1rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    transform $duration-micro $ease-out-expo;
+
+  .mobileNavIcon {
+    font-family: $font-mono;
+    color: $accent-lime;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: $accent-lime;
+    background: rgba(155, 255, 0, 0.06);
+    border-color: rgba(155, 255, 0, 0.25);
+    transform: translateX(4px);
+  }
+
+  &:active {
+    transform: translateX(2px) scale(0.99);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+// Subtle divider between anchor links and language selection
+.mobileDivider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(155, 255, 0, 0.3) 30%,
+    rgba(119, 137, 171, 0.3) 70%,
+    transparent 100%
+  );
+  margin: 18px 0 16px;
+}
+
+// Mobile Language Selection: Format [Code — Name]
+.mobileLangList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  &.busy {
+    pointer-events: none;
+    cursor: wait;
+  }
+}
+
+.mobileLangBtn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(119, 137, 171, 0.16);
+  color: $text-secondary;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  gap: 12px;
+  transition:
+    color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo,
+    transform $duration-micro $ease-out-expo;
+
+  &:hover:not(.mobileLangActive),
+  &:focus-visible:not(.mobileLangActive) {
+    color: $text-primary;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  &.mobileLangActive {
+    background: rgba(155, 255, 0, 0.08);
+    border-color: rgba(155, 255, 0, 0.45);
+    box-shadow:
+      0 0 16px rgba(155, 255, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    .mobileLangCode {
+      color: $accent-lime;
+      font-weight: 700;
+    }
+
+    .mobileLangDash {
+      color: $accent-lime;
+    }
+
+    .mobileLangName {
+      color: #ffffff;
+      font-weight: 600;
+    }
+  }
+
+  &:active:not(.mobileLangActive) {
+    transform: scale(0.99);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: wait;
+  }
+}
+
+.mobileLangCode {
+  font-family: $font-mono;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: $text-primary;
+  min-width: 28px;
+  text-align: left;
+}
+
+.mobileLangDash {
+  font-family: $font-mono;
+  font-size: 0.9rem;
+  color: $accent-slate;
+}
+
+.mobileLangName {
+  font-family: $font-main;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: $text-secondary;
+  flex: 1;
+  text-align: left;
+}
+
+.mobileLangActiveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $accent-lime;
+  box-shadow: 0 0 8px $accent-lime;
+  margin-left: auto;
 }
