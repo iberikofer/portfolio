@@ -94,140 +94,415 @@
   margin-bottom: 24px;
 }
 
-// FullStack-JS Developer Resume Card
-.resumeCard {
+// Tactile Resume Dropdown Button Card (Matching Contact Cards)
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotateBeamAngle {
+  0% {
+    --beam-angle: 0deg;
+  }
+  100% {
+    --beam-angle: 360deg;
+  }
+}
+
+@keyframes borderBeamMotion {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+// Unified Card Container for Resume Button & Dropdown
+.resumeDropdownWrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
   background: $bg-card;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(155, 255, 0, 0.25);
-  border-radius: 12px;
-  padding: 16px 20px;
+  border: 1px solid rgba(119, 137, 171, 0.2);
+  border-radius: 10px;
+  box-shadow: $shadow-bevel;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+  // Intentionally no overflow: hidden on container so the border beam corners are never clipped
+
+  // Smooth linear perimeter border beam (uniform linear velocity around all edges and corners)
+  .borderBeamTrack {
+    position: absolute;
+    inset: -1px;
+    border-radius: 10px;
+    padding: 1.5px;
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .borderBeamLight {
+    position: absolute;
+    width: 72px;
+    height: 18px;
+    opacity: 0;
+    animation: borderBeamInitialFade 1.6s ease-in-out forwards;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(155, 255, 0, 0.05) 15%,
+      rgba(155, 255, 0, 0.35) 45%,
+      rgba(155, 255, 0, 0.8) 75%,
+      $accent-lime 90%,
+      #ffffff 97%,
+      transparent 100%
+    );
+    offset-path: rect(0 100% 100% 0 round 10px);
+    offset-path: xywh(0 0 100% 100% round 10px);
+    offset-anchor: 85% 50%;
+    offset-rotate: auto;
+    will-change: offset-distance;
+    transform: translateZ(0);
+    transition: background 0.25s ease;
+  }
+
+  // Fallback for browsers without rect/xywh motion path support
+  @supports not (offset-path: xywh(0 0 100% 100% round 10px)) {
+    .borderBeamTrack {
+      background: conic-gradient(
+        from var(--beam-angle, 0deg),
+        rgba(119, 137, 171, 0.15) 0deg,
+        rgba(119, 137, 171, 0.15) 60deg,
+        rgba(155, 255, 0, 0.7) 85deg,
+        $accent-lime 95deg,
+        rgba(155, 255, 0, 0.7) 105deg,
+        rgba(119, 137, 171, 0.15) 130deg,
+        rgba(119, 137, 171, 0.15) 360deg
+      );
+      animation: rotateBeamAngle 5s linear infinite;
+    }
+
+    .borderBeamLight {
+      display: none;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-2px);
+    background: $bg-card-hover;
+
+    .borderBeamLight {
+      // Faster energetic glide driven continuously by playbackRate ramping
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(155, 255, 0, 0.08) 15%,
+        rgba(155, 255, 0, 0.35) 45%,
+        rgba(155, 255, 0, 0.85) 75%,
+        $accent-lime 90%,
+        #ffffff 97%,
+        transparent 100%
+      );
+    }
+  }
+
+  &.open {
+    transform: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+@keyframes borderBeamInitialFade {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  45% {
+    opacity: 0.15;
+  }
+  70% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.resumeDropdownBtn {
+  position: relative;
+  width: 100%;
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 24px;
-  box-shadow:
-    $shadow-bevel,
-    0 8px 24px -4px rgba(0, 0, 0, 0.6),
-    0 0 18px rgba(155, 255, 0, 0.06);
-
-  @media (max-width: 500px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.resumeRoleInfo {
-  display: flex;
-  flex-direction: column;
-}
-
-.roleLabel {
-  font-family: $font-mono;
-  font-size: 0.68rem;
-  color: $accent-slate;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 3px;
-}
-
-.roleTitle {
-  font-size: 1.05rem;
-  color: $text-primary;
-  margin: 0;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.resumeBtn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 20px;
-  background: $accent-lime;
-  color: #000000;
-  font-weight: 700;
-  font-size: 0.84rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  white-space: nowrap;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 4px 14px -2px $accent-lime-glow;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  border-radius: 10px 10px 0 0;
   cursor: pointer;
+  color: $text-primary;
+  font-family: inherit;
+  text-align: left;
   user-select: none;
   -webkit-user-select: none;
-  -webkit-user-drag: none;
-  user-drag: none;
+  z-index: 2;
   transition:
-    transform $duration-micro $ease-out-expo,
-    background-color $duration-micro $ease-out-expo,
-    box-shadow $duration-micro $ease-out-expo;
-
-  // Anti-jitter hover bridge: inert when idle (no phantom hit area beneath button), extends on hover
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  // Prevent event fluttering across child nodes
-  * {
-    pointer-events: none;
-  }
-
-  .resumeBtnIcon,
-  span:not(.btnGlow):not(.glowSpot) {
-    position: relative;
-    z-index: 2;
-  }
-
-  .resumeBtnIcon {
-    width: 17px;
-    height: 17px;
-    flex-shrink: 0;
-    transition: transform $duration-micro $ease-out-expo;
-  }
+    background-color 0.25s ease,
+    border-bottom-color 0.28s ease;
 
   &:hover,
   &:focus-visible {
-    background: $accent-lime-hover;
-    transform: translateY(-2px);
-    box-shadow:
-      inset 0 1px 0 #ffffff,
-      0 10px 24px -3px rgba(155, 255, 0, 0.5);
-
-    &::after {
-      pointer-events: auto;
-      bottom: -6px;
+    .resumeBtnText {
+      color: $text-primary;
     }
 
-    .resumeBtnIcon {
-      transform: translateY(-2px);
+    .resumeChevron {
+      color: $accent-lime;
+    }
+  }
+
+  &.open {
+    border-bottom-color: rgba(119, 137, 171, 0.25);
+
+    .resumeChevron {
+      color: $accent-lime;
     }
   }
 
   &:active {
-    transform: scale(0.97) translateY(0);
-    box-shadow: 0 2px 8px -2px $accent-lime-glow;
+    transform: scale(0.99);
+  }
 
-    .resumeBtnIcon {
-      transform: translateY(0);
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: -2px;
+  }
+}
+
+.resumeBtnLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.resumeBtnText {
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: $text-secondary;
+  line-height: 1.2;
+  transition: color $duration-micro $ease-out-expo;
+}
+
+// Download button icon: strictly static without hover/focus jump
+.resumeBtnIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.chevronBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-muted;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.resumeChevron {
+  width: 18px;
+  height: 18px;
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.2s ease;
+
+  &.rotate {
+    transform: rotate(180deg);
+    color: $accent-lime;
+  }
+}
+
+// Smooth Collapsible Accordion Drawer
+.resumeMenuCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.28s ease;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0 0 10px 10px;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+// Dropdown Options Menu (Nested within the accordion drawer)
+.resumeMenu {
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+}
+
+@keyframes resumeMenuDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resumeMenuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  text-decoration: none;
+  color: $text-primary;
+  background: transparent;
+  transition: background-color 0.2s ease;
+
+  // Thin gray dividing line between the two resume options
+  &:not(:last-child) {
+    border-bottom: 1px solid rgba(119, 137, 171, 0.25);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(155, 255, 0, 0.08);
+
+    .menuItemTitle {
+      color: $accent-lime;
+    }
+
+    .menuItemIcon {
+      color: $accent-lime;
+      animation: iconFloatSlow 1.0s ease-in-out infinite;
     }
   }
 
   &:focus-visible {
     outline: 2px solid $accent-lime;
-    outline-offset: 3px;
+    outline-offset: -2px;
   }
+}
 
-  @media (max-width: 500px) {
-    width: 100%;
-    justify-content: center;
+@keyframes iconFloatSlow {
+  0%, 100% {
+    transform: translateY(0);
   }
+  50% {
+    transform: translateY(4.5px);
+  }
+}
+
+.menuItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItemTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menuItemBadge {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(155, 255, 0, 0.12);
+  color: $accent-lime;
+  border: 1px solid rgba(155, 255, 0, 0.35);
+  letter-spacing: 0.04em;
+
+  &.badgeFrontend {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    border-color: rgba(56, 189, 248, 0.35);
+  }
+}
+
+.menuItemTitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $text-primary;
+  transition: color 0.15s ease;
+}
+
+.menuItemDesc {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  color: $text-muted;
+}
+
+.menuItemIconBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  transform: translateY(0);
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.menuItemIcon {
+  width: 18px;
+  height: 18px;
+  color: $text-muted;
+  flex-shrink: 0;
+  transform: translateY(0);
+  transition:
+    transform 0.65s cubic-bezier(0.25, 1, 0.5, 1),
+    color 0.25s ease;
 }
 
 // Dynamic cursor-following glow for bright buttons (Resume & Submit)
@@ -1231,8 +1506,27 @@
   }
 }
 
-// Accessibility: Prefers Reduced Motion
+// Accessibility & Eco Mode / Low Power Mode
 @media (prefers-reduced-motion: reduce) {
+  .borderBeamTrack {
+    display: none !important;
+  }
+
+  .resumeDropdownWrapper {
+    border-color: rgba(155, 255, 0, 0.3);
+    transition: background-color 0.2s ease, border-color 0.2s ease !important;
+
+    &:hover,
+    &:focus-within {
+      transform: none !important;
+      border-color: $accent-lime;
+    }
+  }
+
+  .resumeMenuCollapse {
+    transition: opacity 0.2s ease !important;
+  }
+
   .submitBtn,
   .laserScanBar,
   .flyingPlaneCarrier,

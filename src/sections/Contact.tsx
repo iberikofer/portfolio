@@ -27,7 +27,7 @@ const COOLDOWN_STORAGE_KEY = 'portfolio_contact_last_sent';
 const COOLDOWN_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
 // Base64 encoded contacts to prevent scrapers from harvesting plaintext emails/numbers from static HTML
-const ENCODED_EMAIL = 'c3ljaC55YXJvc2xhdi53b3JrQGdtYWlsLmNvbQ==';
+const ENCODED_EMAIL = 'eWFyb3NsYXYuc3ljaC5vZmZpY2lhbEBnbWFpbC5jb20=';
 const ENCODED_PHONE = 'KzM4MCAoNjgpIDcxMi03OS03NQ==';
 const ENCODED_TEL_HREF = 'KzM4MDY4NzEyNzk3NQ==';
 
@@ -99,14 +99,112 @@ const getHasSavedDraft = (): boolean => {
 };
 
 const Contact: React.FC = () => {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const resumeWrapperRef = useRef<HTMLDivElement>(null);
   const { t } = useLanguage();
-  const resumeBtnRef = useRef<HTMLAnchorElement>(null);
+const resumeBtnRef = useRef<HTMLButtonElement>(null);
   const resumeGlowRef = useRef<HTMLSpanElement>(null);
   useButtonGlow(resumeBtnRef, resumeGlowRef);
+
+  useEffect(() => {
+    if (!isResumeOpen) return;
+
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (
+        resumeWrapperRef.current &&
+        !resumeWrapperRef.current.contains(e.target as Node)
+      ) {
+        setIsResumeOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsResumeOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isResumeOpen]);
 
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const submitGlowRef = useRef<HTMLSpanElement>(null);
   useButtonGlow(submitBtnRef, submitGlowRef);
+
+  const [isHoveredOrFocused, setIsHoveredOrFocused] = useState(false);
+  const borderBeamLightRef = useRef<HTMLDivElement>(null);
+  const borderAnimationRef = useRef<Animation | null>(null);
+
+  useEffect(() => {
+    const el = borderBeamLightRef.current;
+    if (!el || typeof el.animate !== 'function') return;
+
+    // Eco-mode / reduced motion: pause continuous loop to save battery and GPU cycles
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) {
+      return;
+    }
+
+    // Web Animations API: dynamic playbackRate scales speed smoothly
+    // while keeping exact current path position continuously synchronized (zero jumping)
+    const animation = el.animate(
+      [
+        { offsetDistance: '0%' },
+        { offsetDistance: '100%' },
+      ],
+      {
+        duration: 5000,
+        iterations: Infinity,
+        easing: 'linear',
+      },
+    );
+
+    borderAnimationRef.current = animation;
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      if (e.matches) {
+        animation.pause();
+      } else {
+        animation.play();
+      }
+    };
+    mediaQuery.addEventListener('change', handleMotionChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMotionChange);
+      animation.cancel();
+    };
+  }, []);
+
+  useEffect(() => {
+    const anim = borderAnimationRef.current;
+    if (!anim) return;
+
+    const targetRate = isHoveredOrFocused || isResumeOpen ? 2.6 : 1.0;
+    let rafId: number;
+
+    const ramp = () => {
+      const current = anim.playbackRate;
+      const diff = targetRate - current;
+      if (Math.abs(diff) > 0.04) {
+        anim.playbackRate = current + diff * 0.16;
+        rafId = requestAnimationFrame(ramp);
+      } else {
+        anim.playbackRate = targetRate;
+      }
+    };
+
+    rafId = requestAnimationFrame(ramp);
+    return () => cancelAnimationFrame(rafId);
+  }, [isHoveredOrFocused, isResumeOpen]);
 
   const form = useRef<HTMLFormElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -568,44 +666,159 @@ const Contact: React.FC = () => {
             {t.contact.subtitle}
           </p>
 
-          {/* FullStack-JS Developer Resume Showcase Card */}
-          <div className={styles.resumeCard}>
-            <div className={styles.resumeRoleInfo}>
-              <span className={styles.roleLabel}>{t.contact.specializationLabel}</span>
-              <h3 className={styles.roleTitle}>{t.contact.specializationRole}</h3>
+          {/* Resume Dropdown Button Card */}
+          <div
+            ref={resumeWrapperRef}
+            className={`${styles.resumeDropdownWrapper} ${
+              isResumeOpen ? styles.open : ''
+            }`}
+            onMouseEnter={() => setIsHoveredOrFocused(true)}
+            onMouseLeave={() => setIsHoveredOrFocused(false)}
+          >
+            <div className={styles.borderBeamTrack} aria-hidden="true">
+              <div ref={borderBeamLightRef} className={styles.borderBeamLight} />
             </div>
-            <a
+
+            <button
               ref={resumeBtnRef}
-              href="resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.resumeBtn}
-              draggable={false}
+              type="button"
+              className={`${styles.resumeDropdownBtn} ${
+                isResumeOpen ? styles.open : ''
+              }`}
               title={t.contact.cvDesc}
-              onClick={() =>
-                trackEvent('download_resume', {
-                  role: 'FullStack-JS Developer',
-                })
-              }
+              aria-haspopup="true"
+              aria-expanded={isResumeOpen}
+              onClick={() => setIsResumeOpen((prev) => !prev)}
+              onFocus={() => setIsHoveredOrFocused(true)}
+              onBlur={() => setIsHoveredOrFocused(false)}
             >
-              <span className={styles.btnGlow} aria-hidden="true">
-                <span ref={resumeGlowRef} className={styles.glowSpot} />
-              </span>
-              <svg
-                className={styles.resumeBtnIcon}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span>{t.contact.cvBtn}</span>
-            </a>
+              <div className={styles.resumeBtnLeft}>
+                <div className={styles.itemIcon}>
+                  <svg
+                    className={styles.resumeBtnIcon}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                </div>
+                <span className={styles.resumeBtnText}>{t.contact.cvBtn}</span>
+              </div>
+              <div className={styles.chevronBox}>
+                <svg
+                  className={`${styles.resumeChevron} ${
+                    isResumeOpen ? styles.rotate : ''
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+            </button>
+
+            {/* Smooth Collapsible Accordion Drawer */}
+            <div
+              className={`${styles.resumeMenuCollapse} ${
+                isResumeOpen ? styles.expanded : ''
+              }`}
+              aria-hidden={!isResumeOpen}
+            >
+              <div className={styles.resumeMenu} role="menu">
+                <a
+                  href="resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.resumeMenuItem}
+                  role="menuitem"
+                  tabIndex={isResumeOpen ? 0 : -1}
+                  onClick={() => {
+                    trackEvent('download_resume', { role: 'FullStack' });
+                    setIsResumeOpen(false);
+                  }}
+                >
+                  <div className={styles.menuItemContent}>
+                    <div className={styles.menuItemTitleRow}>
+                      <span className={styles.menuItemBadge}>FullStack</span>
+                      <span className={styles.menuItemTitle}>
+                        {t.contact.resumeFullStack}
+                      </span>
+                    </div>
+                    <span className={styles.menuItemDesc}>
+                      {t.contact.resumeFullStackDesc}
+                    </span>
+                  </div>
+                  <div className={styles.menuItemIconBox}>
+                    <svg
+                      className={styles.menuItemIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </div>
+                </a>
+
+                <a
+                  href="resume-frontend.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.resumeMenuItem}
+                  role="menuitem"
+                  tabIndex={isResumeOpen ? 0 : -1}
+                  onClick={() => {
+                    trackEvent('download_resume', { role: 'Front-End' });
+                    setIsResumeOpen(false);
+                  }}
+                >
+                  <div className={styles.menuItemContent}>
+                    <div className={styles.menuItemTitleRow}>
+                      <span className={`${styles.menuItemBadge} ${styles.badgeFrontend}`}>
+                        Front-End
+                      </span>
+                      <span className={styles.menuItemTitle}>
+                        {t.contact.resumeFrontend}
+                      </span>
+                    </div>
+                    <span className={styles.menuItemDesc}>
+                      {t.contact.resumeFrontendDesc}
+                    </span>
+                  </div>
+                  <div className={styles.menuItemIconBox}>
+                    <svg
+                      className={styles.menuItemIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            </div>
           </div>
 
           <div className={styles.contactCards}>
@@ -634,7 +847,7 @@ const Contact: React.FC = () => {
               </div>
               <div className={styles.itemText}>
                 <span className={styles.itemLabel}>{t.contact.emailTitle}</span>
-                <span className={styles.itemVal}>{safeEmail || 'sych.•••@gmail.com'}</span>
+                <span className={styles.itemVal}>{safeEmail || 'yaroslav.•••@gmail.com'}</span>
               </div>
             </a>
 

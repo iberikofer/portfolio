@@ -41,6 +41,7 @@ lerna-debug.log*
 *.sln
 *.sw?
 .agents/
+AGENTS.md
 
 # OS metadata
 .DS_Store

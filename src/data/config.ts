@@ -26,7 +26,9 @@ export interface Project {
   link: string;
   mockup?: string;
   pages?: string;
-  status: 'Open' | 'Closed';
+  status: 'Open' | 'Closed' | 'In Development';
+  isTeam?: boolean;
+  category?: 'fullstack' | 'frontend' | 'backend' | 'tools' | 'games';
   objectPosition?: string;
   objectFit?: 'cover' | 'contain' | 'fill';
   containerBg?: string;
@@ -59,7 +61,7 @@ export const DATA: AppData = {
     title: 'Fullstack JS Developer',
     location: 'Ukraine',
     bio: 'Passionate developer with a focus on the React/Node.js ecosystem. Currently expanding my horizons with C++, Java and Python at university.',
-    email: 'sych521@gmail.com',
+    email: 'yaroslav.sych.official@gmail.com',
     phone: '+38 (068) 712-79-75',
     github: 'https://github.com/iberikofer',
     linkedin: 'https://www.linkedin.com/in/yaroslav-sych/',
@@ -95,11 +97,11 @@ export const DATA: AppData = {
     {
       id: 1,
       title: 'Quiz builder',
+      category: 'fullstack',
       photo: quizImg,
       description:
         'My first full-stack app - Quiz Builder that allows users to create custom quizzes with various question types, interactive dashboard, and question inspection.',
       tags: [
-        'FULLSTACK',
         'REACT',
         'NODE.JS',
         'TS',
@@ -137,11 +139,11 @@ export const DATA: AppData = {
     {
       id: 5,
       title: 'Phonebook',
+      category: 'frontend',
       photo: reactPhonebookImg,
       description:
         'React phonebook application with user authentication, Redux state management, and contact filtering.',
       tags: [
-        'FRONTEND',
         'REACT',
         'TS',
         'REDUX',
@@ -188,11 +190,11 @@ export const DATA: AppData = {
     {
       id: 6,
       title: 'Node.js phonebook',
+      category: 'backend',
       photo: nodePhonebookImg,
       description:
         'RESTful API for a phonebook service built with Node.js, Express, MongoDB, JWT auth, avatar uploads, and email verification.',
       tags: [
-        'BACKEND',
         'NODE.JS',
         'TS',
         'EXPRESS',
@@ -233,11 +235,11 @@ export const DATA: AppData = {
     {
       id: 10,
       title: 'Dev Dialogue',
+      isTeam: true,
+      category: 'fullstack',
       description:
         'An interactive interview simulation platform crafted to prepare next-generation software engineers for technical, behavioral, and English interviews.',
       tags: [
-        'TEAM',
-        'FULLSTACK',
         'AI',
         'LLM',
         'NEXT.JS',
@@ -247,16 +249,17 @@ export const DATA: AppData = {
       ],
       link: 'https://github.com/iberikofer/dev-dialogue',
       pages: 'https://dev-dialogue-web.onrender.com/',
-      status: 'Open',
+      status: 'In Development',
     },
     {
       id: 11,
       title: 'Bookshelf',
+      isTeam: true,
+      category: 'frontend',
       photo: bookshelfImg,
       description:
         'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
       tags: [
-        'TEAM',
         'JS',
         'HTML',
         'SCSS',
@@ -272,10 +275,12 @@ export const DATA: AppData = {
     {
       id: 12,
       title: 'Ice Cream',
+      isTeam: true,
+      category: 'frontend',
       photo: iceCreamImg,
       description:
         'Modern responsive digital landing page for an ice cream brand, featuring Swiper carousels, customer review sliders, and interactive ordering popups built with a development team.',
-      tags: ['TEAM', 'HTML', 'SCSS', 'JS', 'SWIPER'],
+      tags: ['HTML', 'SCSS', 'JS', 'SWIPER'],
       link: 'https://github.com/lezver/team-13-ice-cream',
       pages: 'https://lezver.github.io/team-13-ice-cream/',
       status: 'Open',
@@ -283,10 +288,12 @@ export const DATA: AppData = {
     {
       id: 13,
       title: 'HealthyHub',
+      isTeam: true,
+      category: 'frontend',
       photo: healthHubImg,
       description:
         'Comprehensive health and nutrition tracking web app with calorie budgeting, interactive Chart.js analytics, goal tracking, and persistent state management built with a team.',
-      tags: ['TEAM', 'REACT', 'JS', 'REDUX', 'CHART.JS', 'REST API', 'AXIOS'],
+      tags: ['REACT', 'JS', 'REDUX', 'CHART.JS', 'REST API', 'AXIOS'],
       link: 'https://github.com/AndriiZlt/healthyHub-frontend',
       pages: 'https://iberikofer.github.io/healthyHub-page/',
       status: 'Open',
@@ -296,13 +303,15 @@ export const DATA: AppData = {
     {
       id: 14,
       title: 'Agent For TOM',
+      isTeam: true,
+      category: 'tools',
       photo: agentTomImg,
       description:
         'Autonomous AI agent system (TOMAS) engineered for deterministic document generation and automated workflows with token optimization and multi-model routing.',
-      tags: ['TEAM', 'AI', 'AUTOMATION', 'PYTHON', 'AI AGENT', 'CLI', 'LLM'],
+      tags: ['AI', 'AUTOMATION', 'PYTHON', 'AI AGENT', 'CLI', 'LLM'],
       link: 'https://github.com/oleksandkov/Agent-For-TOM',
       pages: 'https://github.com/oleksandkov/Agent-For-TOM#readme',
-      status: 'Open',
+      status: 'In Development',
       objectFit: 'cover',
       objectPosition: 'center',
     },
@@ -315,7 +324,7 @@ export const DATA: AppData = {
       tags: ['GAME', 'C++', 'SFML', '2D GAME', 'DESKTOP'],
       link: 'https://github.com/iberikofer/fizz-rush',
       pages: 'https://github.com/iberikofer/fizz-rush#readme',
-      status: 'Open',
+      status: 'In Development',
     },
     {
       id: 16,
@@ -335,7 +344,7 @@ export const DATA: AppData = {
       link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp#readme',
       pages:
         'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp/docs#readme',
-      status: 'Open',
+      status: 'In Development',
       objectPosition: 'center',
     },
     {
@@ -357,7 +366,7 @@ export const DATA: AppData = {
       description:
         'A custom smart automation script for Windows 10/11 that dynamically manages background apps, Bluetooth, and OS visual performance based on the active power source (AC vs Battery).',
       tags: ['AUTOMATION', 'SCRIPT', 'POWERSHELL', 'WINDOWS', 'CLI', 'TOOLS'],
-      link: 'https://github.com/iberikofer/win-startup-and-battery-automator',
+      link: 'https://github.com/iberikofer/win-battery-automator',
       status: 'Open',
     },
   ],

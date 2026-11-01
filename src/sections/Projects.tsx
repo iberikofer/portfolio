@@ -53,15 +53,23 @@ const VALID_CHIPS: TechChip[] = [
 ];
 
 const matchesChip = (project: Project, chip: TechChip): boolean => {
+  if (project.category === chip) return true;
+  if (chip === 'frontend' && project.category === 'fullstack') return true;
+  if (chip === 'backend' && project.category === 'fullstack') return true;
+  if (chip === 'frontend' && project.category === 'backend') return false;
+
   const t = project.tags.map((tag) => tag.toUpperCase());
   switch (chip) {
     case 'fullstack':
       return (
-        t.includes('FULLSTACK') ||
-        (t.includes('REACT') && t.includes('NODE.JS')) ||
+        project.category === 'fullstack' ||
+        (t.includes('REACT') && (t.includes('NODE.JS') || t.includes('EXPRESS'))) ||
         (t.includes('NEXT.JS') && t.includes('.NET'))
       );
-    case 'frontend':
+    case 'frontend': {
+      if (t.includes('BACKEND') && !t.includes('FRONTEND')) {
+        return false;
+      }
       return (
         t.includes('FRONTEND') ||
         t.includes('REACT') ||
@@ -69,13 +77,22 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
         t.includes('HTML') ||
         t.includes('CSS') ||
         t.includes('SCSS') ||
-        t.includes('JS') ||
-        t.includes('JAVASCRIPT') ||
-        t.includes('TS') ||
-        t.includes('TYPESCRIPT')
+        t.includes('TAILWIND') ||
+        t.includes('SWIPER') ||
+        t.includes('REDUX') ||
+        t.includes('MUI') ||
+        t.includes('EMOTION') ||
+        t.includes('PWA') ||
+        t.includes('REACT ROUTER') ||
+        t.includes('CSS MODULES') ||
+        (t.includes('JS') && !t.includes('NODE.JS')) ||
+        (t.includes('TS') && !t.includes('NODE.JS'))
       );
+    }
     case 'backend':
       return (
+        project.category === 'backend' ||
+        project.category === 'fullstack' ||
         t.includes('BACKEND') ||
         t.includes('NODE.JS') ||
         t.includes('EXPRESS') ||
@@ -87,6 +104,7 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
       );
     case 'tools':
       return (
+        project.category === 'tools' ||
         t.includes('CLI') ||
         t.includes('AUTOMATION') ||
         t.includes('TOOL') ||
@@ -95,69 +113,10 @@ const matchesChip = (project: Project, chip: TechChip): boolean => {
         t.includes('POWERSHELL')
       );
     case 'games':
-      return t.includes('GAME') || t.includes('SIMULATOR');
+      return project.category === 'games' || t.includes('GAME') || t.includes('SIMULATOR');
     default:
       return true;
   }
-};
-
-const mapTagToChip = (tag: string): TechChip | null => {
-  const t = tag.toUpperCase();
-  if (t === 'FULLSTACK') return 'fullstack';
-  if (
-    [
-      'BACKEND',
-      'NODE.JS',
-      'EXPRESS',
-      '.NET',
-      'POSTGRESQL',
-      'MONGODB',
-      'SQLITE',
-      'PRISMA',
-    ].includes(t)
-  ) {
-    return 'backend';
-  }
-  if (
-    [
-      'FRONTEND',
-      'REACT',
-      'NEXT.JS',
-      'HTML',
-      'CSS',
-      'SCSS',
-      'JS',
-      'JAVASCRIPT',
-      'TS',
-      'TYPESCRIPT',
-      'TAILWIND',
-      'SWIPER',
-      'REDUX',
-      'MUI',
-      'EMOTION',
-      'PWA',
-      'REACT ROUTER',
-      'CSS MODULES',
-    ].includes(t)
-  ) {
-    return 'frontend';
-  }
-  if (
-    [
-      'CLI',
-      'AUTOMATION',
-      'TOOL',
-      'TOOLS',
-      'SCRIPT',
-      'POWERSHELL',
-    ].includes(t)
-  ) {
-    return 'tools';
-  }
-  if (['GAME', 'SIMULATOR'].includes(t)) {
-    return 'games';
-  }
-  return null;
 };
 
 const SCOPE_STORAGE_KEY = 'portfolio_filter_scope';
@@ -168,9 +127,10 @@ const getInitialFilterState = (): {
   scope: ScopeCategory;
   chips: TechChip[];
   mode: 'any' | 'all';
+  tag: string | null;
 } => {
   if (typeof window === 'undefined') {
-    return { scope: 'all', chips: [], mode: 'any' };
+    return { scope: 'all', chips: [], mode: 'any', tag: null };
   }
 
   try {
@@ -201,7 +161,10 @@ const getInitialFilterState = (): {
       const mode: 'any' | 'all' =
         modeParam === 'all' || modeParam === 'any' ? modeParam : 'any';
 
-      return { scope, chips, mode };
+      const tagParam = searchParams.get('tag');
+      const tag = tagParam ? tagParam.trim().toUpperCase() : null;
+
+      return { scope, chips, mode, tag };
     }
 
     // If the URL has NO filter parameters at all, we do NOT restore stale filters from localStorage,
@@ -210,12 +173,13 @@ const getInitialFilterState = (): {
     // Ignore storage/URL errors
   }
 
-  return { scope: 'all', chips: [], mode: 'any' };
+  return { scope: 'all', chips: [], mode: 'any', tag: null };
 };
 
 const getSavedScope = (): ScopeCategory => getInitialFilterState().scope;
 const getSavedChips = (): TechChip[] => getInitialFilterState().chips;
 const getSavedMode = (): 'any' | 'all' => getInitialFilterState().mode;
+const getSavedTag = (): string | null => getInitialFilterState().tag;
 
 const hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
@@ -266,6 +230,7 @@ const Projects: React.FC = () => {
   const [activeScope, setActiveScope] = useState<ScopeCategory>('all');
   const [selectedChips, setSelectedChips] = useState<TechChip[]>([]);
   const [matchMode, setMatchMode] = useState<'any' | 'all'>('any');
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const [scopeIndicator, setScopeIndicator] = useState<{
     x: number;
@@ -285,7 +250,7 @@ const Projects: React.FC = () => {
   const scopeBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const syncFilterState = useCallback(
-    (scope: ScopeCategory, chips: TechChip[], mode: 'any' | 'all') => {
+    (scope: ScopeCategory, chips: TechChip[], mode: 'any' | 'all', tag?: string | null) => {
       if (typeof window === 'undefined') return;
       try {
         localStorage.setItem(SCOPE_STORAGE_KEY, scope);
@@ -309,6 +274,13 @@ const Projects: React.FC = () => {
           url.searchParams.set('mode', 'all');
         } else {
           url.searchParams.delete('mode');
+        }
+
+        const effectiveTag = tag !== undefined ? tag : activeTag;
+        if (effectiveTag) {
+          url.searchParams.set('tag', effectiveTag.toLowerCase());
+        } else {
+          url.searchParams.delete('tag');
         }
 
         window.history.replaceState(
@@ -341,7 +313,7 @@ const Projects: React.FC = () => {
     activeScopeRef.current = id;
     setActiveScope(id);
     updateScopeIndicator(id);
-    syncFilterState(id, selectedChips, matchMode);
+    syncFilterState(id, selectedChips, matchMode, activeTag);
   };
 
   const handleChipToggle = (chip: TechChip) => {
@@ -351,28 +323,27 @@ const Projects: React.FC = () => {
       ? [...selectedChips, chip]
       : selectedChips.filter((c) => c !== chip);
     setSelectedChips(next);
-    syncFilterState(activeScope, next, matchMode);
+    syncFilterState(activeScope, next, matchMode, activeTag);
   };
 
-  const handleCardTagClick = (chip: TechChip) => {
-    // If this chip is already the only one active, reset to all.
-    // Otherwise, filter specifically by this chip, clearing unrelated chips like tools.
-    const isClearing = selectedChips.length === 1 && selectedChips[0] === chip;
-    trackEvent('filter_tag_toggle', { chip, active: !isClearing });
-    const next = isClearing ? [] : [chip];
-    setSelectedChips(next);
-    syncFilterState(activeScope, next, matchMode);
+  const handleCardTagClick = (tag: string) => {
+    const norm = tag.toUpperCase();
+    const next = activeTag === norm ? null : norm;
+    setActiveTag(next);
+    trackEvent('filter_tag_toggle', { tag: norm, active: Boolean(next) });
+    syncFilterState(activeScope, selectedChips, matchMode, next);
   };
 
   const handleClearChips = () => {
     trackEvent('filter_reset');
     setSelectedChips([]);
-    syncFilterState(activeScope, [], matchMode);
+    setActiveTag(null);
+    syncFilterState(activeScope, [], matchMode, null);
   };
 
   const handleModeChange = (mode: 'any' | 'all') => {
     setMatchMode(mode);
-    syncFilterState(activeScope, selectedChips, mode);
+    syncFilterState(activeScope, selectedChips, mode, activeTag);
   };
 
   // Sync state if user clicks Back / Forward in browser history
@@ -381,10 +352,12 @@ const Projects: React.FC = () => {
       const scope = getSavedScope();
       const chips = getSavedChips();
       const mode = getSavedMode();
+      const tag = getSavedTag();
       activeScopeRef.current = scope;
       setActiveScope(scope);
       setSelectedChips(chips);
       setMatchMode(mode);
+      setActiveTag(tag);
       updateScopeIndicator(scope);
     };
     window.addEventListener('popstate', handlePopState);
@@ -403,6 +376,7 @@ const Projects: React.FC = () => {
       setActiveScope(initial.scope);
       setSelectedChips(initial.chips);
       setMatchMode(initial.mode);
+      setActiveTag(initial.tag);
       updateScopeIndicator(initial.scope);
 
       // If URL has no filter query params, sync/clean localStorage so stale filters never persist
@@ -469,9 +443,7 @@ const Projects: React.FC = () => {
 
   const scopeCounts = useMemo(() => {
     const list = DATA.projects;
-    const team = list.filter((p) =>
-      p.tags.map((t) => t.toUpperCase()).includes('TEAM'),
-    ).length;
+    const team = list.filter((p) => Boolean(p.isTeam || p.tags.map((t) => t.toUpperCase()).includes('TEAM'))).length;
     return {
       all: list.length,
       solo: list.length - team,
@@ -481,7 +453,7 @@ const Projects: React.FC = () => {
 
   const techCounts = useMemo(() => {
     const scoped = DATA.projects.filter((p) => {
-      const isTeam = p.tags.map((t) => t.toUpperCase()).includes('TEAM');
+      const isTeam = Boolean(p.isTeam || p.tags.map((t) => t.toUpperCase()).includes('TEAM'));
       if (activeScope === 'team') return isTeam;
       if (activeScope === 'solo') return !isTeam;
       return true;
@@ -500,13 +472,18 @@ const Projects: React.FC = () => {
   const filteredProjects = useMemo(() => {
     return DATA.projects.filter((project) => {
       const tagsUpper = project.tags.map((t) => t.toUpperCase());
-      const isTeam = tagsUpper.includes('TEAM');
+      const isTeam = Boolean(project.isTeam || tagsUpper.includes('TEAM'));
 
       // 1. Scope filter (All / Solo / Team)
       if (activeScope === 'team' && !isTeam) return false;
       if (activeScope === 'solo' && isTeam) return false;
 
-      // 2. Multi-tag Chips filter
+      // 2. Exact specific tag filter (Approach 1)
+      if (activeTag && !tagsUpper.includes(activeTag)) {
+        return false;
+      }
+
+      // 3. Multi-tag Chips filter
       if (selectedChips.length === 0) return true;
 
       if (matchMode === 'any') {
@@ -517,9 +494,9 @@ const Projects: React.FC = () => {
         return selectedChips.every((chip) => matchesChip(project, chip));
       }
     });
-  }, [activeScope, selectedChips, matchMode]);
+  }, [activeScope, selectedChips, matchMode, activeTag]);
 
-  const hasActiveChips = selectedChips.length > 0;
+  const hasActiveChips = selectedChips.length > 0 || Boolean(activeTag);
   const [cachedActionInfo, setCachedActionInfo] = useState({
     chipsCount: selectedChips.length,
     filteredCount: filteredProjects.length,
@@ -666,7 +643,7 @@ const Projects: React.FC = () => {
             <div className={styles.actionBarInner}>
               <div className={`${styles.deckRow} ${styles.deckRowAction}`}>
                 <span className={styles.activeChipsInfo}>
-                  {displayedChipsCount} {t.projects.activeWord} ·{' '}
+                  
                   <span className={styles.resultCount}>
                     {displayedFilteredCount} {t.projects.projectsWord}
                   </span>
@@ -685,9 +662,9 @@ const Projects: React.FC = () => {
                         displayedMatchMode === 'any' ? styles.activeMode : ''
                       }`}
                       onClick={() => handleModeChange('any')}
-                      title="Match projects with ANY of the selected tags"
+                      title={t.projects.matchAny || 'Match projects with ANY of the selected tags'}
                     >
-                      Any (OR)
+                      {t.projects.modeAny}
                     </button>
                     <button
                       type="button"
@@ -696,9 +673,9 @@ const Projects: React.FC = () => {
                         displayedMatchMode === 'all' ? styles.activeMode : ''
                       }`}
                       onClick={() => handleModeChange('all')}
-                      title="Match projects that have ALL selected tags"
+                      title={t.projects.matchAll || 'Match projects that have ALL selected tags'}
                     >
-                      All (AND)
+                      {t.projects.modeAll}
                     </button>
                   </div>
                 )}
@@ -775,11 +752,12 @@ const Projects: React.FC = () => {
       ) : (
 
       <div className={styles.grid}>
-        {filteredProjects.map((project: Project, idx) => (
+        {filteredProjects.map((project: Project, idx) => {
+          const isTeam = Boolean(project.isTeam || project.tags.map((t) => t.toUpperCase()).includes('TEAM'));
+          return (
           <article
             key={project.id}
             className={styles.card}
-            style={{ animationDelay: `${idx * 50}ms` }}
           >
             {/* Visual Preview Frame */}
             <div
@@ -924,7 +902,11 @@ const Projects: React.FC = () => {
                 <div className={styles.cardStatusPill}>
                   <span className={styles.statusClosed}>{t.projects.statusClosed}</span>
                 </div>
-              ) : hasLiveDemo(project) ? (
+              ) : project.status === 'In Development' ? (
+                <div className={styles.cardStatusPill}>
+                  <span className={styles.statusInDev}>{t.projects.statusInDev}</span>
+                </div>
+              ) : project.status === 'Open' ? (
                 <div className={styles.cardStatusPill}>
                   <span className={styles.statusOpen}>{t.projects.statusOpen}</span>
                 </div>
@@ -933,40 +915,68 @@ const Projects: React.FC = () => {
 
             {/* Project Content */}
             <div className={styles.cardBody}>
-              <h3 className={styles.projectTitle}>{project.title}</h3>
+              <div className={styles.titleRow}>
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <div
+                  className={styles.scopeBadge}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={isTeam ? t.projects.teamProject : t.projects.soloProject}
+                  onClick={(e) => {
+                    e.currentTarget.classList.toggle(styles.activeTooltip);
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.classList.remove(styles.activeTooltip);
+                  }}
+                >
+                  {isTeam ? (
+                    <svg
+                      className={styles.scopeIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  ) : (
+                    <svg
+                      className={styles.scopeIcon}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  )}
+                  <span className={styles.scopeTooltip} role="tooltip">
+                    {isTeam ? t.projects.teamProject : t.projects.soloProject}
+                  </span>
+                </div>
+              </div>
 
               <div className={styles.tags}>
                 {project.tags.map((tag) => {
-                  const upper = tag.toUpperCase();
-                  const isTeamTag = upper === 'TEAM';
-                  const mappedChip = mapTagToChip(tag);
-                  const isTagActive = isTeamTag
-                    ? activeScope === 'team'
-                    : mappedChip
-                      ? selectedChips.includes(mappedChip)
-                      : false;
+                  const isTagActive = activeTag === tag.toUpperCase();
 
                   return (
                     <button
                       key={tag}
                       type="button"
-                      onClick={() => {
-                        if (isTeamTag) {
-                          handleScopeSelect(
-                            activeScope === 'team' ? 'all' : 'team',
-                          );
-                        } else if (mappedChip) {
-                          handleCardTagClick(mappedChip);
-                        }
-                      }}
+                      onClick={() => handleCardTagClick(tag)}
                       className={`${styles.tag} ${isTagActive ? styles.tagActive : ''}`}
-                      title={
-                        isTeamTag
-                          ? `Filter: Team projects (${activeScope === 'team' ? 'Active - click to reset' : 'Click to filter'})`
-                          : mappedChip
-                            ? `Filter: ${tag} (${isTagActive ? 'Active - click to remove' : 'Click to filter'})`
-                            : tag
-                      }
+                      title={`Filter: ${tag} (${isTagActive ? 'Active - click to remove' : 'Click to filter'})`}
                     >
                       {tag}
                     </button>
@@ -1105,7 +1115,8 @@ const Projects: React.FC = () => {
                 ))}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
       )}
 

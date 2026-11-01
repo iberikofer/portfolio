@@ -253,23 +253,23 @@
   pointer-events: none;
   will-change: grid-template-rows;
   transition:
-    grid-template-rows 0.36s cubic-bezier(0.32, 0.72, 0, 1),
-    visibility 0.36s;
+    grid-template-rows 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.26s;
 
   &.actionBarVisible {
     grid-template-rows: 1fr;
     visibility: visible;
     pointer-events: auto;
     transition:
-      grid-template-rows 0.44s cubic-bezier(0.32, 0.72, 0, 1),
+      grid-template-rows 0.26s cubic-bezier(0.16, 1, 0.3, 1),
       visibility 0s;
 
     .deckRowAction {
       opacity: 1;
       transform: translateY(0);
       transition:
-        opacity 0.32s cubic-bezier(0.25, 1, 0.5, 1) 0.08s,
-        transform 0.44s cubic-bezier(0.32, 0.72, 0, 1);
+        opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
     }
   }
 }
@@ -493,6 +493,7 @@
 // Projects Grid
 .grid {
   display: grid;
+  contain: layout;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 28px;
   margin-bottom: 48px;
@@ -511,6 +512,8 @@
 .card {
   position: relative;
   background: $bg-card;
+  transform: translateZ(0);
+  contain: paint;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid $border-hairline;
@@ -705,6 +708,22 @@
     }
   }
 
+  .statusInDev {
+    background: rgba(26, 17, 3, 0.9);
+    border: 1px solid rgba(245, 158, 11, 0.6);
+    color: #fbbf24;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 6px #f59e0b;
+    }
+  }
+
   .statusClosed {
     background: rgba(9, 13, 19, 0.88);
     border: 1px solid rgba(119, 137, 171, 0.45);
@@ -730,14 +749,110 @@
   flex-direction: column;
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
 .projectTitle {
   font-size: 1.15rem;
   color: $text-primary;
-  margin: 0 0 12px;
+  margin: 0;
   letter-spacing: -0.02em;
   user-select: text;
   -webkit-user-select: text;
   cursor: text;
+}
+
+.scopeBadge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: $text-muted;
+  background: rgba(119, 137, 171, 0.08);
+  border: 1px solid rgba(119, 137, 171, 0.2);
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo,
+    transform $duration-micro $ease-out-expo;
+
+  &:hover,
+  &:focus-visible,
+  &.activeTooltip {
+    color: $accent-lime;
+    border-color: rgba(155, 255, 0, 0.4);
+    background: rgba(155, 255, 0, 0.1);
+    transform: translateY(-1px);
+
+    .scopeTooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -6px);
+      pointer-events: auto;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+.scopeIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.scopeTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: rgba(13, 18, 24, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: $text-primary;
+  border: 1px solid rgba(155, 255, 0, 0.35);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.75),
+    0 0 12px rgba(155, 255, 0, 0.1);
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 40;
+  transition:
+    opacity 0.2s $ease-out-expo,
+    transform 0.2s $ease-out-expo,
+    visibility 0.2s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgba(155, 255, 0, 0.35) transparent transparent transparent;
+  }
 }
 
 .tags {

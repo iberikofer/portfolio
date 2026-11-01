@@ -48,11 +48,16 @@ export interface TranslationData {
     resetFilters: string;
     matchAny: string;
     matchAll: string;
+    modeAny: string;
+    modeAll: string;
+    teamProject: string;
+    soloProject: string;
     liveDemo: string;
     sourceCode: string;
     designMockup: string;
     statusLabel: string;
     statusOpen: string;
+    statusInDev: string;
     statusClosed: string;
     noMatchTitle: string;
     clearFiltersBtn: string;
@@ -99,6 +104,10 @@ export interface TranslationData {
     cvTitle: string;
     cvDesc: string;
     cvBtn: string;
+    resumeFullStack: string;
+    resumeFullStackDesc: string;
+    resumeFrontend: string;
+    resumeFrontendDesc: string;
     socialsTitle: string;
     formTitle: string;
     formSubtitle: string;
@@ -187,11 +196,16 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resetFilters: 'Reset filters',
       matchAny: 'Match ANY tag',
       matchAll: 'Match ALL tags',
+      modeAny: 'Any (OR)',
+      modeAll: 'All (AND)',
+      teamProject: 'Team project',
+      soloProject: 'Solo project',
       liveDemo: 'Live Demo',
       sourceCode: 'Source Code',
       designMockup: 'Design Mockup',
       statusLabel: 'Status',
-      statusOpen: 'Open',
+      statusOpen: 'Active',
+      statusInDev: 'In Development',
       statusClosed: 'Closed',
       noMatchTitle: 'No projects match the selected criteria.',
       clearFiltersBtn: 'Clear all filters',
@@ -258,7 +272,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       subtitle:
         'Whether you have an ambitious product idea, an engineering opportunity, or need a dedicated full-stack developer, my inbox is open.',
       specializationLabel: 'Specialization',
-      specializationRole: 'FullStack-JS Developer',
+      specializationRole: 'FullStack',
       emailTitle: 'Direct Email',
       phoneTitle: 'Direct Number',
       locationTitle: 'Location',
@@ -266,6 +280,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       cvTitle: 'Curriculum Vitae',
       cvDesc: 'Download full professional resume in PDF format',
       cvBtn: 'Download Resume (PDF)',
+      resumeFullStack: 'FullStack Resume (PDF) ⚡',
+      resumeFullStackDesc: 'React • Node.js • PostgreSQL',
+      resumeFrontend: 'Front-End Resume (PDF) 🎨',
+      resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Social Profiles',
       formTitle: 'Send a Direct Message',
       formSubtitle:
@@ -360,11 +378,16 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resetFilters: 'Скинути фільтри',
       matchAny: 'Збіг за БУДЬ-ЯКИМ тегом',
       matchAll: 'Збіг за ВСІМА тегами',
+      modeAny: 'Будь-який (АБО)',
+      modeAll: 'Всі (ТА)',
+      teamProject: 'Командний проєкт',
+      soloProject: 'Соло проєкт',
       liveDemo: 'Демо онлайн',
       sourceCode: 'Вихідний код',
       designMockup: 'Макет дизайну',
       statusLabel: 'Статус',
       statusOpen: 'Активний',
+      statusInDev: 'В розробці',
       statusClosed: 'Закритий',
       noMatchTitle: 'Не знайдено проєктів за обраними критеріями.',
       clearFiltersBtn: 'Очистити всі фільтри',
@@ -431,7 +454,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       subtitle:
         'Якщо у вас є амбітна ідея продукту, пропозиція роботи чи потрібен відданий full-stack розробник — я завжди на звʼязку.',
       specializationLabel: 'Спеціалізація',
-      specializationRole: 'FullStack-JS Розробник',
+      specializationRole: 'FullStack',
       emailTitle: 'Прямий Email',
       phoneTitle: 'Прямий номер',
       locationTitle: 'Локація',
@@ -439,6 +462,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       cvTitle: 'Резюме',
       cvDesc: 'Завантажити повне професійне резюме у форматі PDF',
       cvBtn: 'Завантажити резюме (PDF)',
+      resumeFullStack: 'FullStack Резюме (PDF) ⚡',
+      resumeFullStackDesc: 'React • Node.js • PostgreSQL',
+      resumeFrontend: 'Front-End Резюме (PDF) 🎨',
+      resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Соціальні мережі',
       formTitle: 'Надіслати пряме повідомлення',
       formSubtitle:
@@ -533,11 +560,16 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resetFilters: 'Restablecer filtros',
       matchAny: 'Coincidir con CUALQUIER etiqueta',
       matchAll: 'Coincidir con TODAS las etiquetas',
+      modeAny: 'Cualquiera (O)',
+      modeAll: 'Todos (Y)',
+      teamProject: 'Proyecto en equipo',
+      soloProject: 'Proyecto individual',
       liveDemo: 'Demo en Vivo',
       sourceCode: 'Código Fuente',
       designMockup: 'Mockup de Diseño',
       statusLabel: 'Estado',
       statusOpen: 'Activo',
+      statusInDev: 'En desarrollo',
       statusClosed: 'Cerrado',
       noMatchTitle: 'No hay proyectos que coincidan con los criterios seleccionados.',
       clearFiltersBtn: 'Limpiar todos los filtros',
@@ -604,7 +636,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       subtitle:
         'Ya sea que tengas una idea de producto ambiciosa, una oportunidad de ingeniería o necesites un desarrollador full-stack dedicado, mi bandeja de entrada está abierta.',
       specializationLabel: 'Especialización',
-      specializationRole: 'Desarrollador FullStack-JS',
+      specializationRole: 'FullStack',
       emailTitle: 'Correo Electrónico',
       phoneTitle: 'Teléfono Directo',
       locationTitle: 'Ubicación',
@@ -612,6 +644,10 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       cvTitle: 'Curriculum Vitae',
       cvDesc: 'Descarga el currículum profesional completo en formato PDF',
       cvBtn: 'Descargar CV (PDF)',
+      resumeFullStack: 'CV FullStack (PDF) ⚡',
+      resumeFullStackDesc: 'React • Node.js • PostgreSQL',
+      resumeFrontend: 'CV Front-End (PDF) 🎨',
+      resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Redes Sociales',
       formTitle: 'Enviar Mensaje Directo',
       formSubtitle:

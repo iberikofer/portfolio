@@ -38,14 +38,21 @@ export const WaveDivider: React.FC = () => {
 
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = rect.width;
       height = rect.height;
       cx = width * 0.5;
       cy = height * 0.5;
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const newWidth = Math.round(width * dpr);
+      const newHeight = Math.round(height * dpr);
+
+      // Only resize buffer if dimensions actually changed to avoid wiping GPU texture on mount
+      if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
 
       numPoints = Math.ceil(width / step) + 1;
       if (numPoints > topYArr.length) {
@@ -134,19 +141,27 @@ export const WaveDivider: React.FC = () => {
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let startTime: number | null = prefersReducedMotion ? 0 : null;
+    let lastTime: number | null = null;
+    let elapsed = prefersReducedMotion ? 100 : 0;
 
     const render = (now: number) => {
       animationFrameId = requestAnimationFrame(render);
       if (!isVisible || width <= 0 || height <= 0) return;
 
-      if (startTime === null) {
-        startTime = now;
+      if (lastTime === null) {
+        lastTime = now;
+        return; // Skip first tick to establish stable delta baseline
+      }
+
+      // Clamp delta time to max 33ms to smoothly absorb initial page hydration & image decode spikes
+      const dt = Math.min((now - lastTime) * 0.001, 0.033);
+      lastTime = now;
+
+      if (!prefersReducedMotion) {
+        elapsed += dt;
       }
 
       ctx.clearRect(0, 0, width, height);
-
-      const elapsed = prefersReducedMotion ? 100 : (now - startTime) * 0.001;
       const isMobile = width < 900;
 
       // Phase 1 (Desktop only, >= 900px): Left and Right ends travel symmetrically towards the center
