@@ -130,6 +130,8 @@
   border: 1px solid rgba(119, 137, 171, 0.2);
   border-radius: 10px;
   box-shadow: $shadow-bevel;
+  transform: translateZ(0);
+  will-change: transform;
   transition:
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     background-color 0.35s ease,
@@ -149,6 +151,8 @@
     mask-composite: exclude;
     pointer-events: none;
     z-index: 10;
+    contain: paint;
+    transform: translateZ(0);
   }
 
   .borderBeamLight {
@@ -218,10 +222,10 @@
   }
 
   &.open {
-    transform: none;
+    transform: translateY(-2px);
 
     &:hover {
-      transform: none;
+      transform: translateY(-2px);
     }
   }
 }
@@ -288,7 +292,7 @@
   }
 
   &:active {
-    transform: scale(0.99);
+    transform: scale(0.996);
   }
 
   &:focus-visible {
@@ -351,6 +355,7 @@
 .resumeMenuCollapse {
   display: grid;
   grid-template-rows: 0fr;
+  will-change: grid-template-rows, opacity;
   transition:
     grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.28s ease;

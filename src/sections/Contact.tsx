@@ -189,6 +189,13 @@ const resumeBtnRef = useRef<HTMLButtonElement>(null);
     if (!anim) return;
 
     const targetRate = isHoveredOrFocused || isResumeOpen ? 2.6 : 1.0;
+
+    // Guard: If playbackRate is already at targetRate, do not touch it!
+    // Touching playbackRate marks compositor pending in Blink, which causes a micro-stutter/freeze on click.
+    if (Math.abs(anim.playbackRate - targetRate) < 0.01) {
+      return;
+    }
+
     let rafId: number;
 
     const ramp = () => {
@@ -198,7 +205,9 @@ const resumeBtnRef = useRef<HTMLButtonElement>(null);
         anim.playbackRate = current + diff * 0.16;
         rafId = requestAnimationFrame(ramp);
       } else {
-        anim.playbackRate = targetRate;
+        if (anim.playbackRate !== targetRate) {
+          anim.playbackRate = targetRate;
+        }
       }
     };
 

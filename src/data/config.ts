@@ -13,6 +13,7 @@ import agentTomImg from '../assets/agentTOM.png';
 import lethalLabyrinthsImg from '../assets/lethalLabyrinths.png';
 import tornadoGymImg from '../assets/tornadoGYM.png';
 import healthHubImg from '../assets/healthHub.png';
+import devDialogueImg from '../assets/devDialogue.jpg';
 import type { StaticImageData } from 'next/image';
 
 export type ImageSource = string | StaticImageData;
@@ -225,8 +226,8 @@ export const DATA: AppData = {
       title: 'Glyanec',
       photo: glyanecImg,
       description:
-        'Responsive landing page built with vanilla HTML, CSS, and minimal JS. Features custom mobile layouts and interactive animations based on a Figma design.',
-      tags: ['HTML', 'CSS', 'JS'],
+        'Responsive landing page built with HTML, CSS, and TypeScript. Features custom mobile layouts and interactive animations based on a Figma design.',
+      tags: ['HTML', 'CSS', 'TS'],
       link: 'https://github.com/iberikofer/Glyanec',
       mockup: 'https://www.figma.com/file/UBkIfuekqFDAJBdq44UzVS',
       pages: 'https://iberikofer.github.io/Glyanec',
@@ -237,6 +238,7 @@ export const DATA: AppData = {
       title: 'Dev Dialogue',
       isTeam: true,
       category: 'fullstack',
+      photo: devDialogueImg,
       description:
         'An interactive interview simulation platform crafted to prepare next-generation software engineers for technical, behavioral, and English interviews.',
       tags: [
