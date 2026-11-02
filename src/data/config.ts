@@ -213,8 +213,8 @@ export const DATA: AppData = {
       title: 'Web Studio',
       photo: webStudioImg,
       description:
-        'My first website - modern and fully responsive multi-page website for a digital web studio, crafted with semantic HTML5, CSS3, and JavaScript.',
-      tags: ['HTML', 'CSS', 'JS'],
+        'My first website - modern and fully responsive multi-page website for a digital web studio, crafted with semantic HTML5, CSS3, and TypeScript.',
+      tags: ['HTML', 'CSS', 'TS'],
       link: 'https://github.com/iberikofer/Web-Studio',
       mockup:
         'https://www.figma.com/file/B1m2uk25m1eAgroESAuM2g/Web-Studio-(Version-3.0)?type=design&node-id=297046-1554&mode=design&t=0qnasU7mLt3RfBg9-0',

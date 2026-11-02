@@ -127,10 +127,10 @@ const getInitialFilterState = (): {
   scope: ScopeCategory;
   chips: TechChip[];
   mode: 'any' | 'all';
-  tag: string | null;
+  tags: string[];
 } => {
   if (typeof window === 'undefined') {
-    return { scope: 'all', chips: [], mode: 'any', tag: null };
+    return { scope: 'all', chips: [], mode: 'any', tags: [] };
   }
 
   try {
@@ -138,10 +138,11 @@ const getInitialFilterState = (): {
     const hasScopeParam = searchParams.has('scope');
     const hasTagsParam = searchParams.has('tags');
     const hasModeParam = searchParams.has('mode');
+    const hasTagParam = searchParams.has('tag');
 
     // If ANY filter parameter is present in the URL query string, the URL has absolute priority.
     // Explicitly missing filter parameters in the URL mean "no filter" (do NOT resurrect from localStorage).
-    if (hasScopeParam || hasTagsParam || hasModeParam) {
+    if (hasScopeParam || hasTagsParam || hasModeParam || hasTagParam) {
       const scopeParam = searchParams.get('scope');
       const tagsParam = searchParams.get('tags');
       const modeParam = searchParams.get('mode');
@@ -162,9 +163,14 @@ const getInitialFilterState = (): {
         modeParam === 'all' || modeParam === 'any' ? modeParam : 'any';
 
       const tagParam = searchParams.get('tag');
-      const tag = tagParam ? tagParam.trim().toUpperCase() : null;
+      const tags: string[] = tagParam
+        ? tagParam
+            .split(',')
+            .map((t) => t.trim().toUpperCase())
+            .filter(Boolean)
+        : [];
 
-      return { scope, chips, mode, tag };
+      return { scope, chips, mode, tags };
     }
 
     // If the URL has NO filter parameters at all, we do NOT restore stale filters from localStorage,
@@ -173,13 +179,13 @@ const getInitialFilterState = (): {
     // Ignore storage/URL errors
   }
 
-  return { scope: 'all', chips: [], mode: 'any', tag: null };
+  return { scope: 'all', chips: [], mode: 'any', tags: [] };
 };
 
 const getSavedScope = (): ScopeCategory => getInitialFilterState().scope;
 const getSavedChips = (): TechChip[] => getInitialFilterState().chips;
 const getSavedMode = (): 'any' | 'all' => getInitialFilterState().mode;
-const getSavedTag = (): string | null => getInitialFilterState().tag;
+const getSavedTags = (): string[] => getInitialFilterState().tags;
 
 const hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
@@ -230,7 +236,7 @@ const Projects: React.FC = () => {
   const [activeScope, setActiveScope] = useState<ScopeCategory>('all');
   const [selectedChips, setSelectedChips] = useState<TechChip[]>([]);
   const [matchMode, setMatchMode] = useState<'any' | 'all'>('any');
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeTags, setActiveTags] = useState<string[]>([]);
 
   const [scopeIndicator, setScopeIndicator] = useState<{
     x: number;
@@ -250,7 +256,12 @@ const Projects: React.FC = () => {
   const scopeBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const syncFilterState = useCallback(
-    (scope: ScopeCategory, chips: TechChip[], mode: 'any' | 'all', tag?: string | null) => {
+    (
+      scope: ScopeCategory,
+      chips: TechChip[],
+      mode: 'any' | 'all',
+      tags?: string[],
+    ) => {
       if (typeof window === 'undefined') return;
       try {
         localStorage.setItem(SCOPE_STORAGE_KEY, scope);
@@ -270,15 +281,17 @@ const Projects: React.FC = () => {
           url.searchParams.delete('tags');
         }
 
-        if (chips.length > 1 && mode === 'all') {
+        const effectiveTags = tags !== undefined ? tags : activeTags;
+        const totalFilters = chips.length + effectiveTags.length;
+
+        if (totalFilters > 1 && mode === 'all') {
           url.searchParams.set('mode', 'all');
         } else {
           url.searchParams.delete('mode');
         }
 
-        const effectiveTag = tag !== undefined ? tag : activeTag;
-        if (effectiveTag) {
-          url.searchParams.set('tag', effectiveTag.toLowerCase());
+        if (effectiveTags.length > 0) {
+          url.searchParams.set('tag', effectiveTags.map((t) => t.toLowerCase()).join(','));
         } else {
           url.searchParams.delete('tag');
         }
@@ -292,7 +305,7 @@ const Projects: React.FC = () => {
         // Ignore storage/history errors
       }
     },
-    [],
+    [activeTags],
   );
 
   const updateScopeIndicator = useCallback((scope?: ScopeCategory) => {
@@ -313,7 +326,7 @@ const Projects: React.FC = () => {
     activeScopeRef.current = id;
     setActiveScope(id);
     updateScopeIndicator(id);
-    syncFilterState(id, selectedChips, matchMode, activeTag);
+    syncFilterState(id, selectedChips, matchMode, activeTags);
   };
 
   const handleChipToggle = (chip: TechChip) => {
@@ -323,27 +336,30 @@ const Projects: React.FC = () => {
       ? [...selectedChips, chip]
       : selectedChips.filter((c) => c !== chip);
     setSelectedChips(next);
-    syncFilterState(activeScope, next, matchMode, activeTag);
+    syncFilterState(activeScope, next, matchMode, activeTags);
   };
 
   const handleCardTagClick = (tag: string) => {
     const norm = tag.toUpperCase();
-    const next = activeTag === norm ? null : norm;
-    setActiveTag(next);
-    trackEvent('filter_tag_toggle', { tag: norm, active: Boolean(next) });
+    const isSelected = activeTags.includes(norm);
+    const next = isSelected
+      ? activeTags.filter((t) => t !== norm)
+      : [...activeTags, norm];
+    setActiveTags(next);
+    trackEvent('filter_tag_toggle', { tag: norm, active: !isSelected });
     syncFilterState(activeScope, selectedChips, matchMode, next);
   };
 
   const handleClearChips = () => {
     trackEvent('filter_reset');
     setSelectedChips([]);
-    setActiveTag(null);
-    syncFilterState(activeScope, [], matchMode, null);
+    setActiveTags([]);
+    syncFilterState(activeScope, [], matchMode, []);
   };
 
   const handleModeChange = (mode: 'any' | 'all') => {
     setMatchMode(mode);
-    syncFilterState(activeScope, selectedChips, mode, activeTag);
+    syncFilterState(activeScope, selectedChips, mode, activeTags);
   };
 
   // Sync state if user clicks Back / Forward in browser history
@@ -352,12 +368,12 @@ const Projects: React.FC = () => {
       const scope = getSavedScope();
       const chips = getSavedChips();
       const mode = getSavedMode();
-      const tag = getSavedTag();
+      const tags = getSavedTags();
       activeScopeRef.current = scope;
       setActiveScope(scope);
       setSelectedChips(chips);
       setMatchMode(mode);
-      setActiveTag(tag);
+      setActiveTags(tags);
       updateScopeIndicator(scope);
     };
     window.addEventListener('popstate', handlePopState);
@@ -376,13 +392,13 @@ const Projects: React.FC = () => {
       setActiveScope(initial.scope);
       setSelectedChips(initial.chips);
       setMatchMode(initial.mode);
-      setActiveTag(initial.tag);
+      setActiveTags(initial.tags);
       updateScopeIndicator(initial.scope);
 
       // If URL has no filter query params, sync/clean localStorage so stale filters never persist
       if (typeof window !== 'undefined') {
         const searchParams = new URLSearchParams(window.location.search);
-        if (!searchParams.has('scope') && !searchParams.has('tags') && !searchParams.has('mode')) {
+        if (!searchParams.has('scope') && !searchParams.has('tags') && !searchParams.has('mode') && !searchParams.has('tag')) {
           try {
             localStorage.removeItem(SCOPE_STORAGE_KEY);
             localStorage.removeItem(CHIPS_STORAGE_KEY);
@@ -470,6 +486,9 @@ const Projects: React.FC = () => {
   }, [activeScope]);
 
   const filteredProjects = useMemo(() => {
+    const hasChips = selectedChips.length > 0;
+    const hasTags = activeTags.length > 0;
+
     return DATA.projects.filter((project) => {
       const tagsUpper = project.tags.map((t) => t.toUpperCase());
       const isTeam = Boolean(project.isTeam || tagsUpper.includes('TEAM'));
@@ -478,51 +497,54 @@ const Projects: React.FC = () => {
       if (activeScope === 'team' && !isTeam) return false;
       if (activeScope === 'solo' && isTeam) return false;
 
-      // 2. Exact specific tag filter (Approach 1)
-      if (activeTag && !tagsUpper.includes(activeTag)) {
-        return false;
-      }
+      // If no chips and no tags selected, pass scope
+      if (!hasChips && !hasTags) return true;
 
-      // 3. Multi-tag Chips filter
-      if (selectedChips.length === 0) return true;
+      const matchesAnyChip = hasChips && selectedChips.some((chip) => matchesChip(project, chip));
+      const matchesAllChips = !hasChips || selectedChips.every((chip) => matchesChip(project, chip));
+
+      const matchesAnyTag = hasTags && activeTags.some((tag) => tagsUpper.includes(tag));
+      const matchesAllTags = !hasTags || activeTags.every((tag) => tagsUpper.includes(tag));
 
       if (matchMode === 'any') {
-        // Match ANY selected chip (OR)
-        return selectedChips.some((chip) => matchesChip(project, chip));
+        // Match ANY selected filter (OR)
+        return matchesAnyChip || matchesAnyTag;
       } else {
-        // Match ALL selected chips (AND)
-        return selectedChips.every((chip) => matchesChip(project, chip));
+        // Match ALL selected filters (AND)
+        return matchesAllChips && matchesAllTags;
       }
     });
-  }, [activeScope, selectedChips, matchMode, activeTag]);
+  }, [activeScope, selectedChips, matchMode, activeTags]);
 
-  const hasActiveChips = selectedChips.length > 0 || Boolean(activeTag);
+  const totalActiveFilters = selectedChips.length + activeTags.length;
+  const hasActiveFilters = totalActiveFilters > 0;
+
   const [cachedActionInfo, setCachedActionInfo] = useState({
-    chipsCount: selectedChips.length,
+    filtersCount: totalActiveFilters,
     filteredCount: filteredProjects.length,
     mode: matchMode,
   });
 
   if (
-    selectedChips.length > 0 &&
-    (cachedActionInfo.chipsCount !== selectedChips.length ||
+    hasActiveFilters &&
+    (cachedActionInfo.filtersCount !== totalActiveFilters ||
       cachedActionInfo.filteredCount !== filteredProjects.length ||
       cachedActionInfo.mode !== matchMode)
   ) {
     setCachedActionInfo({
-      chipsCount: selectedChips.length,
+      filtersCount: totalActiveFilters,
       filteredCount: filteredProjects.length,
       mode: matchMode,
     });
   }
 
-  const displayedChipsCount = hasActiveChips
-    ? selectedChips.length
-    : cachedActionInfo.chipsCount;
-  const displayedFilteredCount = hasActiveChips
+  const displayedFiltersCount = hasActiveFilters
+    ? totalActiveFilters
+    : cachedActionInfo.filtersCount;
+  const displayedFilteredCount = hasActiveFilters
     ? filteredProjects.length
     : cachedActionInfo.filteredCount;
-  const displayedMatchMode = hasActiveChips
+  const displayedMatchMode = hasActiveFilters
     ? matchMode
     : cachedActionInfo.mode;
 
@@ -638,20 +660,36 @@ const Projects: React.FC = () => {
           {/* Row 3: Action Bar (smooth accordion expand/collapse) */}
           <div
             className={`${styles.actionBarWrapper} ${
-              hasActiveChips ? styles.actionBarVisible : ''
+              hasActiveFilters ? styles.actionBarVisible : ''
             }`}
-            aria-hidden={!hasActiveChips}
+            aria-hidden={!hasActiveFilters}
           >
             <div className={styles.actionBarInner}>
               <div className={`${styles.deckRow} ${styles.deckRowAction}`}>
                 <span className={styles.activeChipsInfo}>
-                  
                   <span className={styles.resultCount}>
                     {displayedFilteredCount} {t.projects.projectsWord}
                   </span>
                 </span>
 
-                {displayedChipsCount > 1 && (
+                {activeTags.length > 0 && (
+                  <div className={styles.activeTagsList}>
+                    {activeTags.map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        className={styles.activeTagBadge}
+                        onClick={() => handleCardTagClick(tag)}
+                        title={`Remove tag: ${tag}`}
+                      >
+                        <span>{tag}</span>
+                        <span className={styles.activeTagClose} aria-hidden="true">✕</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {displayedFiltersCount > 1 && (
                   <div
                     className={styles.modeToggle}
                     role="radiogroup"
@@ -659,7 +697,7 @@ const Projects: React.FC = () => {
                   >
                     <button
                       type="button"
-                      tabIndex={hasActiveChips ? 0 : -1}
+                      tabIndex={hasActiveFilters ? 0 : -1}
                       className={`${styles.modeBtn} ${
                         displayedMatchMode === 'any' ? styles.activeMode : ''
                       }`}
@@ -670,7 +708,7 @@ const Projects: React.FC = () => {
                     </button>
                     <button
                       type="button"
-                      tabIndex={hasActiveChips ? 0 : -1}
+                      tabIndex={hasActiveFilters ? 0 : -1}
                       className={`${styles.modeBtn} ${
                         displayedMatchMode === 'all' ? styles.activeMode : ''
                       }`}
@@ -684,7 +722,7 @@ const Projects: React.FC = () => {
 
                 <button
                   type="button"
-                  tabIndex={hasActiveChips ? 0 : -1}
+                  tabIndex={hasActiveFilters ? 0 : -1}
                   onClick={handleClearChips}
                   className={styles.clearAllBtn}
                   title="Clear all selected tags"
@@ -970,7 +1008,7 @@ const Projects: React.FC = () => {
 
               <div className={styles.tags}>
                 {project.tags.map((tag) => {
-                  const isTagActive = activeTag === tag.toUpperCase();
+                  const isTagActive = activeTags.includes(tag.toUpperCase());
 
                   return (
                     <button

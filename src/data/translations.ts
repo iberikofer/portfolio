@@ -1,4 +1,4 @@
-export type Language = 'en' | 'uk' | 'es';
+﻿export type Language = 'en' | 'uk' | 'es';
 
 export interface TranslationData {
   meta: {
@@ -223,7 +223,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         4: 'Full-stack car rental service with custom filter queries, responsive catalog pagination, catalog filtering, and rental modal booking.',
         5: 'React phonebook application with user authentication, Redux state management, and contact filtering.',
         6: 'RESTful API for a phonebook service built with Node.js, Express, MongoDB, JWT auth, avatar uploads, and email verification.',
-        7: 'My first website - modern and fully responsive multi-page website for a digital web studio, crafted with semantic HTML5, CSS3, and JavaScript.',
+        7: 'My first website - modern and fully responsive multi-page website for a digital web studio, crafted with semantic HTML5, CSS3, and TypeScript.',
         8: 'Responsive landing page built with vanilla HTML, CSS, and minimal JS. Features custom mobile layouts and interactive animations based on a Figma design.',
         10: 'An interactive interview simulation platform crafted to prepare next-generation software engineers for technical, behavioral, and English interviews.',
         11: 'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
@@ -405,7 +405,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         4: 'Full-stack сервіс оренди автомобілів з фільтрацією, пагінацією каталогу та модальним бронюванням авто.',
         5: 'Додаток телефонної книги на React з аутентифікацією користувачів, Redux та фільтрацією контактів.',
         6: 'RESTful API для телефонної книги на Node.js, Express, MongoDB з JWT-аутентифікацією, завантаженням аватарів та верифікацією email.',
-        7: 'Мій перший сайт — сучасний адаптивний багатосторінковий сайт веб-студії на семантичному HTML5, CSS3 та JavaScript.',
+        7: 'Мій перший сайт — сучасний адаптивний багатосторінковий сайт веб-студії на семантичному HTML5, CSS3 та TypeScript.',
         8: 'Адаптивний лендінг на чистому HTML, CSS та JavaScript. Мобільна версія та інтерактивні анімації за дизайном Figma.',
         10: 'Інтерактивна платформа симуляції співбесід для підготовки інженерів до технічних, поведінкових та англомовних інтервʼю.',
         11: 'Інтерактивний командний веб-додаток для пошуку та читання книг з категоріями, пагінацією списку покупок та модальними вікнами.',
@@ -587,7 +587,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         4: 'Servicio full-stack de alquiler de coches con filtros personalizados, catálogo responsivo paginado y modal para reservar vehículos.',
         5: 'Aplicación de agenda telefónica en React con autenticación de usuarios, gestión de estado con Redux y filtrado de contactos.',
         6: 'API RESTful para servicio de libreta de contactos construida con Node.js, Express, MongoDB, autenticación JWT, subida de avatares y verificación de correo.',
-        7: 'Mi primer sitio web: página web moderna y totalmente responsiva de varias páginas para un estudio digital, creada con HTML5 semántico, CSS3 y JavaScript.',
+        7: 'Mi primer sitio web: página web moderna y totalmente responsiva de varias páginas para un estudio digital, creada con HTML5 semántico, CSS3 y TypeScript.',
         8: 'Página de aterrizaje responsiva construida con HTML puro, CSS y JavaScript mínimo. Incluye layouts móviles a medida y animaciones interactivas basadas en Figma.',
         10: 'Plataforma de simulación interactiva de entrevistas diseñada para preparar a la próxima generación de ingenieros en entrevistas técnicas, conductuales y en inglés.',
         11: 'Aplicación colaborativa de descubrimiento de libros y lectura electrónica creada en equipo. Incluye categorías de libros, lista de compras con paginación y vista modal de detalles.',

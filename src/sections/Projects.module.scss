@@ -1,4 +1,4 @@
-@use '../styles/variables' as *;
+﻿@use '../styles/variables' as *;
 
 .projects {
   padding: 80px 0 100px;
@@ -377,6 +377,48 @@
   }
 }
 
+.activeTagsList {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.activeTagBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(155, 255, 0, 0.12);
+  border: 1px solid rgba(155, 255, 0, 0.35);
+  border-radius: 4px;
+  color: $accent-lime;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all $duration-micro $ease-out-expo;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 107, 107, 0.15);
+    border-color: rgba(255, 107, 107, 0.4);
+    color: #ff6b6b;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 1px;
+  }
+
+  .activeTagClose {
+    font-size: 0.65rem;
+    opacity: 0.75;
+  }
+}
+
 .modeToggle {
   display: inline-flex;
   align-items: center;
@@ -602,7 +644,8 @@
   }
 
   &:hover,
-  &:focus-within {
+  &:focus-visible,
+  &:has(:focus-visible) {
     transform: translateY(-4px);
     border-color: rgba(155, 255, 0, 0.4);
     box-shadow:
@@ -940,11 +983,17 @@
   user-drag: none;
   transition: all $duration-micro $ease-out-expo;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: $accent-lime;
     border-color: rgba(155, 255, 0, 0.45);
     background: rgba(155, 255, 0, 0.1);
     transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 1px;
   }
 
   &.tagActive {
