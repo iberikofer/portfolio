@@ -1,4 +1,4 @@
-﻿export type Language = 'en' | 'uk' | 'es';
+export type Language = 'en' | 'uk' | 'es';
 
 export interface TranslationData {
   meta: {
@@ -60,6 +60,8 @@ export interface TranslationData {
     statusOpen: string;
     statusInDev: string;
     statusClosed: string;
+    statusFilterActiveTooltip: string;
+    statusFilterInactiveTooltip: string;
     noMatchTitle: string;
     clearFiltersBtn: string;
     githubCardTitle: string;
@@ -209,6 +211,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       statusOpen: 'Active',
       statusInDev: 'In Development',
       statusClosed: 'Closed',
+      statusFilterActiveTooltip: 'Filter active — click to remove',
+      statusFilterInactiveTooltip: 'Click to filter by this status',
       noMatchTitle: 'No projects match the selected criteria.',
       clearFiltersBtn: 'Clear all filters',
       githubCardTitle: 'Explore More Repositories',
@@ -387,6 +391,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       statusOpen: 'Активний',
       statusInDev: 'В розробці',
       statusClosed: 'Закритий',
+      statusFilterActiveTooltip: 'Фільтр активний — натисніть, щоб зняти',
+      statusFilterInactiveTooltip: 'Натисніть для фільтрації за цим статусом',
       noMatchTitle: 'Не знайдено проєктів за обраними критеріями.',
       clearFiltersBtn: 'Очистити всі фільтри',
       githubCardTitle: 'Переглянути більше репозиторіїв',
@@ -569,6 +575,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       statusOpen: 'Activo',
       statusInDev: 'En desarrollo',
       statusClosed: 'Cerrado',
+      statusFilterActiveTooltip: 'Filtro activo — haz clic para quitar',
+      statusFilterInactiveTooltip: 'Haz clic para filtrar por este estado',
       noMatchTitle:
         'No hay proyectos que coincidan con los criterios seleccionados.',
       clearFiltersBtn: 'Limpiar todos los filtros',

@@ -237,6 +237,9 @@ const Projects: React.FC = () => {
   const [selectedChips, setSelectedChips] = useState<TechChip[]>([]);
   const [matchMode, setMatchMode] = useState<'any' | 'all'>('any');
   const [activeTags, setActiveTags] = useState<string[]>([]);
+  const [activeStatusFilter, setActiveStatusFilter] = useState<
+    Project['status'] | null
+  >(null);
 
   const [scopeIndicator, setScopeIndicator] = useState<{
     x: number;
@@ -350,10 +353,19 @@ const Projects: React.FC = () => {
     syncFilterState(activeScope, selectedChips, matchMode, next);
   };
 
+  const handleStatusToggle = (status: Project['status']) => {
+    setActiveStatusFilter((prev) => {
+      const next = prev === status ? null : status;
+      trackEvent('filter_status_toggle', { status, active: next !== null });
+      return next;
+    });
+  };
+
   const handleClearChips = () => {
     trackEvent('filter_reset');
     setSelectedChips([]);
     setActiveTags([]);
+    setActiveStatusFilter(null);
     syncFilterState(activeScope, [], matchMode, []);
   };
 
@@ -490,6 +502,11 @@ const Projects: React.FC = () => {
     const hasTags = activeTags.length > 0;
 
     return DATA.projects.filter((project) => {
+      // Direct status filter from clicking card status badge
+      if (activeStatusFilter && project.status !== activeStatusFilter) {
+        return false;
+      }
+
       const tagsUpper = project.tags.map((t) => t.toUpperCase());
       const isTeam = Boolean(project.isTeam || tagsUpper.includes('TEAM'));
 
@@ -514,7 +531,7 @@ const Projects: React.FC = () => {
         return matchesAllChips && matchesAllTags;
       }
     });
-  }, [activeScope, selectedChips, matchMode, activeTags]);
+  }, [activeScope, selectedChips, matchMode, activeTags, activeStatusFilter]);
 
   const totalActiveFilters = selectedChips.length + activeTags.length;
   const hasActiveFilters = totalActiveFilters > 0;
@@ -794,6 +811,17 @@ const Projects: React.FC = () => {
       <div className={styles.grid}>
         {filteredProjects.map((project: Project, idx) => {
           const isTeam = Boolean(project.isTeam || project.tags.map((t) => t.toUpperCase()).includes('TEAM'));
+          const isStatusActive = activeStatusFilter === project.status;
+          const statusLabel =
+            project.status === 'Closed'
+              ? t.projects.statusClosed
+              : project.status === 'In Development'
+                ? t.projects.statusInDev
+                : t.projects.statusOpen;
+          const statusTooltip = isStatusActive
+            ? `${statusLabel} (${t.projects.statusFilterActiveTooltip})`
+            : `${statusLabel} (${t.projects.statusFilterInactiveTooltip})`;
+
           return (
           <article
             key={project.id}
@@ -938,19 +966,42 @@ const Projects: React.FC = () => {
               )}
 
               {/* Status Pill on Card */}
-              {project.status === 'Closed' ? (
-                <div className={styles.cardStatusPill}>
-                  <span className={styles.statusClosed}>{t.projects.statusClosed}</span>
-                </div>
-              ) : project.status === 'In Development' ? (
-                <div className={styles.cardStatusPill}>
-                  <span className={styles.statusInDev}>{t.projects.statusInDev}</span>
-                </div>
-              ) : project.status === 'Open' ? (
-                <div className={styles.cardStatusPill}>
-                  <span className={styles.statusOpen}>{t.projects.statusOpen}</span>
-                </div>
-              ) : null}
+              {project.status && (
+                <button
+                  type="button"
+                  className={`${styles.cardStatusPill} ${
+                    isStatusActive ? styles.statusFilterActive : ''
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleStatusToggle(project.status);
+                  }}
+                  aria-pressed={isStatusActive}
+                  aria-label={statusTooltip}
+                  title={statusTooltip}
+                >
+                  <span
+                    className={
+                      project.status === 'Closed'
+                        ? styles.statusClosed
+                        : project.status === 'In Development'
+                          ? styles.statusInDev
+                          : styles.statusOpen
+                    }
+                  >
+                    {statusLabel}
+                    {isStatusActive && (
+                      <span
+                        className={styles.statusClearIcon}
+                        aria-hidden="true"
+                      >
+                        ✕
+                      </span>
+                    )}
+                  </span>
+                </button>
+              )}
             </div>
 
             {/* Project Content */}

@@ -1,4 +1,4 @@
-﻿@use '../styles/variables' as *;
+@use '../styles/variables' as *;
 
 .projects {
   padding: 80px 0 100px;
@@ -775,8 +775,54 @@
   top: 12px;
   right: 12px;
   z-index: 2;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  border-radius: 999px;
+  font: inherit;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform $duration-micro $ease-out-expo;
 
-  span {
+  &:hover {
+    transform: translateY(-1px);
+
+    .statusOpen {
+      border-color: rgba(155, 255, 0, 0.9);
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 12px rgba(155, 255, 0, 0.35);
+    }
+
+    .statusInDev {
+      border-color: rgba(245, 158, 11, 0.9);
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .statusClosed {
+      border-color: rgba(119, 137, 171, 0.8);
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 10px rgba(119, 137, 171, 0.25);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+
+  > span {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -791,9 +837,13 @@
     box-shadow:
       0 4px 14px rgba(0, 0, 0, 0.65),
       0 0 0 1px rgba(0, 0, 0, 0.5);
+    user-select: none;
     transition:
       transform $duration-micro $ease-out-expo,
-      box-shadow $duration-micro $ease-out-expo;
+      box-shadow $duration-micro $ease-out-expo,
+      background-color $duration-micro $ease-out-expo,
+      border-color $duration-micro $ease-out-expo,
+      color $duration-micro $ease-out-expo;
   }
 
   .statusOpen {
@@ -841,6 +891,79 @@
       border-radius: 50%;
       background: $accent-slate;
     }
+  }
+
+  &.statusFilterActive {
+    .statusOpen {
+      background: rgba(155, 255, 0, 0.18);
+      border-color: $accent-lime;
+      color: #ffffff;
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 14px rgba(155, 255, 0, 0.45);
+
+      &::before {
+        box-shadow: 0 0 8px $accent-lime;
+        animation: statusDotPulse 2s infinite ease-in-out;
+      }
+    }
+
+    .statusInDev {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: #fbbf24;
+      color: #ffffff;
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 14px rgba(245, 158, 11, 0.45);
+
+      &::before {
+        box-shadow: 0 0 8px #f59e0b;
+        animation: statusDotPulse 2s infinite ease-in-out;
+      }
+    }
+
+    .statusClosed {
+      background: rgba(119, 137, 171, 0.25);
+      border-color: #b0c2db;
+      color: #ffffff;
+      box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.7),
+        0 0 12px rgba(119, 137, 171, 0.35);
+    }
+  }
+}
+
+@keyframes statusDotPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+.statusClearIcon {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.55rem;
+  line-height: 1;
+  font-weight: 700;
+  transition:
+    transform $duration-micro $ease-out-expo,
+    background-color $duration-micro $ease-out-expo;
+
+  .cardStatusPill:hover & {
+    transform: rotate(90deg) scale(1.15);
+    background: rgba(255, 255, 255, 0.35);
   }
 }
 

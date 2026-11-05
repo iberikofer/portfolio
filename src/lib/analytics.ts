@@ -5,6 +5,7 @@ export type AnalyticsEvent =
   | 'toggle_language'
   | 'filter_scope_change'
   | 'filter_tag_toggle'
+  | 'filter_status_toggle'
   | 'filter_reset'
   | 'view_project_source'
   | 'view_project_demo'
