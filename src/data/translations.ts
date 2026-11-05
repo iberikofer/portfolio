@@ -55,6 +55,7 @@ export interface TranslationData {
     liveDemo: string;
     sourceCode: string;
     designMockup: string;
+    docs: string;
     statusLabel: string;
     statusOpen: string;
     statusInDev: string;
@@ -203,6 +204,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       liveDemo: 'Live Demo',
       sourceCode: 'Source Code',
       designMockup: 'Design Mockup',
+      docs: 'Documentation',
       statusLabel: 'Status',
       statusOpen: 'Active',
       statusInDev: 'In Development',
@@ -218,7 +220,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       switchModeBtn: 'Switch to "Any (OR)" match',
       descriptions: {
         1: 'Full-stack Quiz Builder platform to create custom quizzes with various question types, interactive dashboard, and question inspection.',
-        2: 'A modern, responsive movie discovery platform built with React, Vite, and Tailwind CSS. Explore trending films, search thousands of titles via TMDB, and watch high-quality trailers.',
+        2: 'A modern, responsive movie discovery platform built with Next.js, React, and CSS Modules. Explore trending films, search thousands of titles via TMDB, manage personal watchlists, and watch official trailers.',
         3: 'Image search engine powered by the Pixabay API, featuring infinite scroll pagination, image lightbox modals, and keyword searching.',
         4: 'Full-stack car rental service with custom filter queries, responsive catalog pagination, catalog filtering, and rental modal booking.',
         5: 'React phonebook application with user authentication, Redux state management, and contact filtering.',
@@ -253,8 +255,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       goitDesc:
         'Full-Stack Web Development Bootcamp (React, Node.js, TypeScript, REST APIs).',
       collegeName: 'Vinnytsia Trade and Economics College',
-      collegeDesc:
-        'Associate Degree in Tourism and Hospitality Management.',
+      collegeDesc: 'Associate Degree in Tourism and Hospitality Management.',
       lyceumName: 'Humanities Lyceum of Vinnytsia №1',
       lyceumDesc: 'Advanced studies in English and German languages.',
       greetings: 'Greetings!',
@@ -286,8 +287,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Social Profiles',
       formTitle: 'Send a Direct Message',
-      formSubtitle:
-        'I respond promptly to inquiries and project propositions.',
+      formSubtitle: 'I respond promptly to inquiries and project propositions.',
       nameLabel: 'Your Name',
       emailLabel: 'Your Email',
       subjectLabel: 'Subject',
@@ -299,18 +299,15 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       btnValidation: 'Please Complete Fields',
       btnCooldown: 'Wait {time}',
       btnRateLimited: 'Limit: 1 msg / 5 min',
-      statusSuccess:
-        'Message sent successfully! I will be in touch soon.',
-      statusValidationRequired:
-        'Please enter both your name and message.',
+      statusSuccess: 'Message sent successfully! I will be in touch soon.',
+      statusValidationRequired: 'Please enter both your name and message.',
       statusValidationEmail:
         'Please provide a valid email format (e.g. yourname@domain.com).',
       statusTimeout:
         'Network timeout: Email service took too long to respond. Please reach me directly via email or Telegram.',
       statusIssue:
         'Delivery issue with email service. Please reach me directly via email or Telegram.',
-      statusRateLimited:
-        'Please wait {time} before sending another message.',
+      statusRateLimited: 'Please wait {time} before sending another message.',
       cooldownBadge:
         'Submission limit: 1 message per 5 min (available in {time})',
       draftRestored: 'Draft restored',
@@ -385,6 +382,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       liveDemo: 'Демо онлайн',
       sourceCode: 'Вихідний код',
       designMockup: 'Макет дизайну',
+      docs: 'Документація',
       statusLabel: 'Статус',
       statusOpen: 'Активний',
       statusInDev: 'В розробці',
@@ -400,7 +398,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       switchModeBtn: 'Перемкнути на пошук "Будь-який (OR)"',
       descriptions: {
         1: 'Full-stack платформа Quiz Builder для створення кастомних квізів з різними типами запитань, інтерактивним дашбордом та режимом детального перегляду.',
-        2: 'Сучасна адаптивна веб-платформа для пошуку фільмів на React, Vite та Tailwind CSS. Трендові кінострічки, пошук тисяч фільмів через TMDB та перегляд трейлерів.',
+        2: 'Сучасна адаптивна веб-платформа для пошуку фільмів на Next.js, React та CSS Modules. Трендові кінострічки, пошук тисяч фільмів через TMDB, збереження у список та перегляд трейлерів.',
         3: 'Пошуковик зображень на основі Pixabay API з нескінченним скролом, модальним переглядом lightbox та пошуком за ключовими словами.',
         4: 'Full-stack сервіс оренди автомобілів з фільтрацією, пагінацією каталогу та модальним бронюванням авто.',
         5: 'Додаток телефонної книги на React з аутентифікацією користувачів, Redux та фільтрацією контактів.',
@@ -467,9 +465,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resumeFrontend: 'Front-End Резюме (PDF) 🎨',
       resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Соціальні мережі',
-      formTitle: 'Надіслати пряме повідомлення',
-      formSubtitle:
-        'Швидко відповідаю на запити та пропозиції щодо проєктів.',
+      formTitle: 'Надішліть пряме повідомлення',
+      formSubtitle: 'Швидко відповідаю на запити та пропозиції щодо проєктів.',
       nameLabel: "Ваше ім'я",
       emailLabel: 'Ваш Email',
       subjectLabel: 'Тема',
@@ -567,11 +564,13 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       liveDemo: 'Demo en Vivo',
       sourceCode: 'Código Fuente',
       designMockup: 'Mockup de Diseño',
+      docs: 'Documentación',
       statusLabel: 'Estado',
       statusOpen: 'Activo',
       statusInDev: 'En desarrollo',
       statusClosed: 'Cerrado',
-      noMatchTitle: 'No hay proyectos que coincidan con los criterios seleccionados.',
+      noMatchTitle:
+        'No hay proyectos que coincidan con los criterios seleccionados.',
       clearFiltersBtn: 'Limpiar todos los filtros',
       githubCardTitle: 'Explora Más Repositorios',
       githubCardDesc:
@@ -582,7 +581,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       switchModeBtn: 'Cambiar al modo "Cualquiera (OR)"',
       descriptions: {
         1: 'Plataforma full-stack Quiz Builder para crear cuestionarios personalizados con varios tipos de preguntas, panel interactivo y vista de inspección.',
-        2: 'Moderna plataforma responsiva de descubrimiento de películas construida con React, Vite y Tailwind CSS. Explora películas en tendencia, busca miles de títulos vía TMDB y reproduce tráileres de alta calidad.',
+        2: 'Moderna plataforma responsiva de descubrimiento de películas construida con Next.js, React y CSS Modules. Explora películas en tendencia, busca miles de títulos vía TMDB, gestiona favoritos y reproduce tráileres de alta calidad.',
         3: 'Buscador de imágenes impulsado por la API de Pixabay, con paginación infinita, ventanas modales lightbox y búsqueda por palabras clave.',
         4: 'Servicio full-stack de alquiler de coches con filtros personalizados, catálogo responsivo paginado y modal para reservar vehículos.',
         5: 'Aplicación de agenda telefónica en React con autenticación de usuarios, gestión de estado con Redux y filtrado de contactos.',
@@ -617,8 +616,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       goitDesc:
         'Bootcamp de Desarrollo Web Full-Stack (React, Node.js, TypeScript, REST APIs).',
       collegeName: 'Colegio de Comercio y Economía de Vinnytsia',
-      collegeDesc:
-        'Grado Asociado en Gestión de Turismo y Hostelería.',
+      collegeDesc: 'Grado Asociado en Gestión de Turismo y Hostelería.',
       lyceumName: 'Liceo de Humanidades №1 de Vinnytsia',
       lyceumDesc: 'Estudios avanzados de idiomas inglés y alemán.',
       greetings: '¡Hola!',
@@ -649,7 +647,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       resumeFrontend: 'CV Front-End (PDF) 🎨',
       resumeFrontendDesc: 'React • TypeScript • Next.js',
       socialsTitle: 'Redes Sociales',
-      formTitle: 'Enviar Mensaje Directo',
+      formTitle: 'Envía un Mensaje Directo',
       formSubtitle:
         'Respondo rápidamente a consultas y propuestas de proyectos.',
       nameLabel: 'Tu Nombre',

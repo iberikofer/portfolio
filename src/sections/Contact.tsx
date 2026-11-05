@@ -746,7 +746,7 @@ const resumeBtnRef = useRef<HTMLButtonElement>(null);
             >
               <div className={styles.resumeMenu} role="menu">
                 <a
-                  href="resume.pdf"
+                  href="/Yaroslav_Sych_Fullstack_Developer.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.resumeMenuItem}
@@ -786,7 +786,7 @@ const resumeBtnRef = useRef<HTMLButtonElement>(null);
                 </a>
 
                 <a
-                  href="resume-frontend.pdf"
+                  href="/Yaroslav_Sych_Frontend_Developer.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.resumeMenuItem}

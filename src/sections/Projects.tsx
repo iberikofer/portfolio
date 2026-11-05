@@ -187,7 +187,7 @@ const getSavedChips = (): TechChip[] => getInitialFilterState().chips;
 const getSavedMode = (): 'any' | 'all' => getInitialFilterState().mode;
 const getSavedTags = (): string[] => getInitialFilterState().tags;
 
-const hasLiveDemo = (project: Project): boolean => {
+const _hasLiveDemo = (project: Project): boolean => {
   if (project.status === 'Closed') return false;
   if (!project.pages) return false;
   if (project.pages.includes('#readme')) return false;
@@ -1120,7 +1120,7 @@ const Projects: React.FC = () => {
                     draggable={false}
                     title={
                       project.pages.includes('#readme')
-                        ? 'View Documentation'
+                        ? t.projects.docs
                         : 'Open Live Website'
                     }
                     onClick={() =>
@@ -1148,7 +1148,7 @@ const Projects: React.FC = () => {
                     </svg>
                     <span>
                       {project.pages.includes('#readme')
-                        ? 'Docs'
+                        ? t.projects.docs
                         : t.projects.liveDemo}
                     </span>
                   </a>

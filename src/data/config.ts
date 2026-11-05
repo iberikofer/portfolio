@@ -106,6 +106,7 @@ export const DATA: AppData = {
         'NEXT.JS',
         'REACT',
         'TS',
+        'PWA',
         'TAILWIND',
         'NODE.JS',
         'EXPRESS',
@@ -123,15 +124,14 @@ export const DATA: AppData = {
       title: 'Movie finder',
       photo: movieFinder,
       description:
-        'A dynamic React web application for discovering movies, searching titles, and viewing detailed cast and reviews via TMDB API.',
+        'A high-performance Next.js web application for discovering movies, searching titles, managing watchlists, and viewing detailed cast and reviews via TMDB API.',
       tags: [
+        'NEXT.JS',
         'REACT',
         'TS',
+        'PWA',
         'REST API',
         'FETCH',
-        'VITE',
-        'REACT ROUTER',
-        'PWA',
         'CSS MODULES',
       ],
       link: 'https://github.com/iberikofer/movie-finder',
@@ -148,6 +148,7 @@ export const DATA: AppData = {
       tags: [
         'REACT',
         'TS',
+        'PWA',
         'REDUX',
         'MUI',
         'REST API',
@@ -168,6 +169,7 @@ export const DATA: AppData = {
       tags: [
         'REACT',
         'TS',
+        'PWA',
         'REST API',
         'AXIOS',
         'REACT ROUTER',
@@ -199,6 +201,7 @@ export const DATA: AppData = {
       tags: [
         'NODE.JS',
         'TS',
+        'PWA',
         'EXPRESS',
         'MONGODB',
         'JWT',
@@ -247,6 +250,7 @@ export const DATA: AppData = {
         'LLM',
         'NEXT.JS',
         'TS',
+        'PWA',
         '.NET',
         'POSTGRESQL',
       ],
