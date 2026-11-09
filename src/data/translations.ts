@@ -151,7 +151,7 @@ export interface TranslationData {
 export const TRANSLATIONS: Record<Language, TranslationData> = {
   en: {
     meta: {
-      title: 'Yaroslav Sych',
+      title: 'Yaroslav Sych - Portfolio',
       description:
         'Portfolio of Yaroslav Sych — Fullstack JavaScript/TypeScript Developer specializing in React, Node.js, and modern high-craft web applications.',
     },
@@ -331,7 +331,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
   },
   uk: {
     meta: {
-      title: 'Ярослав Сич',
+      title: 'Ярослав Сич - Портфоліо',
       description:
         'Портфоліо Ярослава Сича — Fullstack розробника на React, Node.js та сучасних веб-технологіях.',
     },
@@ -515,7 +515,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
   },
   es: {
     meta: {
-      title: 'Yaroslav Sych',
+      title: 'Yaroslav Sych - Portafolio',
       description:
         'Portafolio de Yaroslav Sych — Desarrollador Fullstack JavaScript/TypeScript especializado en React, Node.js y aplicaciones web modernas.',
     },
