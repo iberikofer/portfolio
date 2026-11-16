@@ -106,7 +106,6 @@ export const DATA: AppData = {
         'NEXT.JS',
         'REACT',
         'TS',
-        'PWA',
         'TAILWIND',
         'NODE.JS',
         'EXPRESS',
@@ -148,7 +147,6 @@ export const DATA: AppData = {
       tags: [
         'REACT',
         'TS',
-        'PWA',
         'REDUX',
         'MUI',
         'REST API',
@@ -169,7 +167,6 @@ export const DATA: AppData = {
       tags: [
         'REACT',
         'TS',
-        'PWA',
         'REST API',
         'AXIOS',
         'REACT ROUTER',
@@ -201,7 +198,6 @@ export const DATA: AppData = {
       tags: [
         'NODE.JS',
         'TS',
-        'PWA',
         'EXPRESS',
         'MONGODB',
         'JWT',
@@ -250,7 +246,6 @@ export const DATA: AppData = {
         'LLM',
         'NEXT.JS',
         'TS',
-        'PWA',
         '.NET',
         'POSTGRESQL',
       ],
@@ -270,7 +265,6 @@ export const DATA: AppData = {
         'JS',
         'HTML',
         'SCSS',
-        'FIREBASE',
         'REST API',
         'AXIOS',
         'SWIPER',

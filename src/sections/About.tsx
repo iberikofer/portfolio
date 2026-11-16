@@ -65,34 +65,43 @@ const About: React.FC = () => {
               {t.about.skillsHeading}
             </h3>
             <div className={styles.skillsGrid}>
-              {Object.entries(DATA.skills).map(([category, items]) => (
-                <div key={category} className={styles.skillCard}>
-                  <div className={styles.skillCardHeader}>
-                    <span className={styles.skillCategoryIcon}>
-                      {categoryIcons[category] || (
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <polyline points="16 18 22 12 16 6" />
-                          <polyline points="8 6 2 12 8 18" />
-                        </svg>
-                      )}
-                    </span>
-                    <h4 className={styles.skillTitle}>{category}</h4>
+              {Object.entries(DATA.skills).map(([category, items]) => {
+                const categoryTitle =
+                  t.about.categories?.[category as keyof typeof t.about.categories] || category;
+                const categoryItems =
+                  category === 'languages' && t.about.languages
+                    ? t.about.languages
+                    : items;
+
+                return (
+                  <div key={category} className={styles.skillCard}>
+                    <div className={styles.skillCardHeader}>
+                      <span className={styles.skillCategoryIcon}>
+                        {categoryIcons[category] || (
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                          </svg>
+                        )}
+                      </span>
+                      <h4 className={styles.skillTitle}>{categoryTitle}</h4>
+                    </div>
+                    <ul className={styles.skillList}>
+                      {categoryItems.map((item) => (
+                        <li key={item} className={styles.skillItem}>
+                          <span className={styles.bulletDot} />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul className={styles.skillList}>
-                    {items.map((item) => (
-                      <li key={item} className={styles.skillItem}>
-                        <span className={styles.bulletDot} />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -153,7 +162,30 @@ const About: React.FC = () => {
                 <div className={styles.item}>
                   <div className={styles.itemHeader}>
                     <span className={styles.date}>2022 — 2024</span>
-                    <span className={styles.statusPillAlt}>{t.about.statusCertified}</span>
+                    <a
+                      href="/Yaroslav_Sych_Fullstack_GOIT_Certificate.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.statusPillAlt}
+                      title={t.about.certificateTitle}
+                      aria-label={`${t.about.statusCertified} - ${t.about.certificateTitle}`}
+                    >
+                      <span>{t.about.statusCertified}</span>
+                      <svg
+                        className={styles.certDownloadIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                    </a>
                   </div>
                   <h4>
                     <a

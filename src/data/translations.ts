@@ -93,6 +93,14 @@ export interface TranslationData {
     bioSub: string;
     academicArchive: string;
     archiveDesc: string;
+    certificateTitle: string;
+    categories: {
+      frontend: string;
+      backend: string;
+      other: string;
+      languages: string;
+    };
+    languages: string[];
   };
   contact: {
     pill: string;
@@ -254,7 +262,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       vntuName: 'Vinnytsia National Technical University',
       vntuDesc:
         'Bachelor’s in Software Engineering — focus on data structures, algorithms, and modern computing.',
-      vntuDate: '2025 — Present (Exp. 2029)',
+      vntuDate: '2025 — Present (Expected 2029)',
       goitName: 'GoIT Academy',
       goitDesc:
         'Full-Stack Web Development Bootcamp (React, Node.js, TypeScript, REST APIs).',
@@ -270,6 +278,19 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       academicArchive: 'Academic Archive',
       archiveDesc:
         'A curated repository of university coursework, lab assignments, and computational projects across C++, Java, Python, and JavaScript — documenting my academic progression across diverse programming paradigms.',
+      certificateTitle: 'View Certificate (PDF)',
+      categories: {
+        frontend: 'frontend',
+        backend: 'backend',
+        other: 'other',
+        languages: 'languages',
+      },
+      languages: [
+        'English (B2)',
+        'Ukrainian (Native)',
+        'Russian (Fluent)',
+        'Spanish (A1)',
+      ],
     },
     contact: {
       pill: 'Open to opportunities',
@@ -434,7 +455,7 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       vntuName: 'Вінницький національний технічний університет',
       vntuDesc:
         'Бакалавр інженерії програмного забезпечення — структури даних, алгоритми та сучасні обчислення.',
-      vntuDate: '2025 — Зараз (очік. 2029)',
+      vntuDate: '2025 — Зараз (очікується 2029)',
       goitName: 'GoIT Academy',
       goitDesc:
         'Full-Stack Web Development Bootcamp (React, Node.js, TypeScript, REST APIs).',
@@ -451,6 +472,19 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       academicArchive: 'Академічний архів',
       archiveDesc:
         'Зібрання університетських курсових, лабораторних робіт та обчислювальних проєктів на C++, Java, Python та JavaScript — демонстрація академічного прогресу в різних парадигмах програмування.',
+      certificateTitle: 'Переглянути сертифікат (PDF)',
+      categories: {
+        frontend: 'frontend',
+        backend: 'backend',
+        other: 'інше',
+        languages: 'мови',
+      },
+      languages: [
+        'Англійська (B2)',
+        'Українська (Рідна)',
+        'Російська (Вільно)',
+        'Іспанська (A1)',
+      ],
     },
     contact: {
       pill: 'Відкритий до співпраці',
@@ -635,6 +669,19 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
       academicArchive: 'Archivo Académico',
       archiveDesc:
         'Un repositorio de trabajos universitarios, prácticas de laboratorio y proyectos computacionales en C++, Java, Python y JavaScript, documentando mi progreso académico a través de diversos paradigmas de programación.',
+      certificateTitle: 'Ver Certificado (PDF)',
+      categories: {
+        frontend: 'frontend',
+        backend: 'backend',
+        other: 'otros',
+        languages: 'idiomas',
+      },
+      languages: [
+        'Inglés (B2)',
+        'Ucraniano (Nativo)',
+        'Ruso (Fluido)',
+        'Español (A1)',
+      ],
     },
     contact: {
       pill: 'Disponible para oportunidades',

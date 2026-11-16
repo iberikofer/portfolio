@@ -512,18 +512,54 @@
   font-weight: 600;
   padding: 1px 6px;
   border-radius: 999px;
-  background: rgba(155, 255, 0, 0.12);
-  border: 1px solid rgba(155, 255, 0, 0.3);
-  color: $accent-lime;
-}
-
-.statusPillAlt {
-  font-family: $font-mono;
-  font-size: 0.62rem;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 999px;
   background: rgba(119, 137, 171, 0.12);
   border: 1px solid rgba(119, 137, 171, 0.3);
   color: #c5d3ea;
+}
+
+.statusPillAlt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: $font-mono;
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(155, 255, 0, 0.12);
+  border: 1px solid rgba(155, 255, 0, 0.3);
+  color: $accent-lime;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color $duration-micro $ease-out-expo,
+    border-color $duration-micro $ease-out-expo,
+    color $duration-micro $ease-out-expo,
+    transform $duration-micro $ease-out-expo,
+    box-shadow $duration-micro $ease-out-expo;
+
+  &:hover {
+    background: rgba(155, 255, 0, 0.2);
+    border-color: rgba(155, 255, 0, 0.55);
+    color: $accent-lime;
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 12px rgba(155, 255, 0, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $accent-lime;
+    outline-offset: 2px;
+  }
+}
+
+.certDownloadIcon {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  transition: stroke $duration-micro $ease-out-expo;
 }
