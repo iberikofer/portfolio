@@ -248,6 +248,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         16: 'Inspired by Lethal Company — interactive route optimization and scrap-gathering simulator built with C++20, SFML, and Dear ImGui. Implements A*, Dijkstra, BFS, TSP 2-Opt heuristic, Dynamic Programming knapsack solver, and procedural BSP maze generation.',
         17: 'Gamified object-oriented software system modeling fitness gym facilities, athletes, and equipment. Architected with strict OOP principles, UML state machines, and interactive Java simulation mechanics.',
         18: 'A custom smart automation script for Windows 10/11 that dynamically manages background apps, Bluetooth, and OS visual performance based on the active power source (AC vs Battery).',
+        19: 'Full-stack task management application for organizing daily workflows, featuring intuitive status tracking, server-side search and pagination, and secure authentication.',
+        20: 'Full-stack peer-to-peer book exchange platform featuring real-time catalog discovery, book swap requests, reader profiles, email notifications, and an admin moderation console.',
       },
     },
     about: {
@@ -441,6 +443,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         16: 'Інтерактивний симулятор оптимізації маршрутів і збору луту за мотивами гри Lethal Company, створений на C++20, SFML та Dear ImGui. Алгоритми A*, Dijkstra, BFS, евристика TSP 2-Opt, DP рюкзак та процедурна BSP-генерація лабіринтів.',
         17: 'Гейміфікована обʼєктно-орієнтована система моделювання фітнес-залу, спортсменів та інвентарю на Java за принципами ООП, UML-діаграмами станів та симуляційними механіками.',
         18: 'Кастомний скрипт автоматизації для Windows 10/11, що динамічно оптимізує фонові програми, Bluetooth та візуальні ефекти системи залежно від джерела живлення (мережа чи батарея).',
+        19: 'Full-stack таск-менеджер для організації щоденних справ і робочих процесів зі зручним трекінгом статусів, живим пошуком, серверною пагінацією та захищеною автентифікацією.',
+        20: 'Full-stack платформа для peer-to-peer обміну книгами з каталогом, живим пошуком, запитами на обмін, профілями читачів, email-сповіщеннями та адмін-панеллю модерації.',
       },
     },
     about: {
@@ -639,6 +643,8 @@ export const TRANSLATIONS: Record<Language, TranslationData> = {
         16: 'Inspirado en Lethal Company: simulador interactivo de optimización de rutas y recolección de chatarra desarrollado con C++20, SFML y Dear ImGui. Implementa algoritmos A*, Dijkstra, BFS, heurística TSP 2-Opt, DP mochila y generación procedural de laberintos BSP.',
         17: 'Sistema de software orientado a objetos gamificado que modela gimnasios, atletas y equipamiento en Java bajo estrictos principios de POO, diagramas de estado UML y mecánicas interactivas de simulación.',
         18: 'Script de automatización inteligente para Windows 10/11 que gestiona dinámicamente aplicaciones en segundo plano, Bluetooth y efectos visuales según la fuente de energía (CA o batería).',
+        19: 'Aplicación full-stack de gestión de tareas para organizar flujos diarios, con seguimiento intuitivo de estados, búsqueda en vivo, paginación en el servidor y autenticación segura.',
+        20: 'Plataforma full-stack de intercambio de libros peer-to-peer con catálogo en tiempo real, solicitudes de intercambio, perfiles de lectores, notificaciones por correo y panel de moderación de administración.',
       },
     },
     about: {

@@ -119,6 +119,50 @@ export const DATA: AppData = {
       status: 'Open',
     },
     {
+      id: 19,
+      title: 'TODO App',
+      category: 'fullstack',
+      description:
+        'Full-stack task management application for organizing daily workflows, featuring intuitive status tracking, server-side search and pagination, and secure authentication.',
+      tags: [
+        'NEXT.JS',
+        'REACT',
+        'TS',
+        'TAILWIND',
+        'NODE.JS',
+        'EXPRESS',
+        'POSTGRESQL',
+        'PRISMA',
+        'REST API',
+        'JWT',
+      ],
+      link: 'https://github.com/iberikofer/todo-fullstack-app',
+      pages: 'https://github.com/iberikofer/todo-fullstack-app#readme',
+      status: 'In Development',
+    },
+    {
+      id: 20,
+      title: 'ShelfTrade',
+      category: 'fullstack',
+      description:
+        'Full-stack peer-to-peer book exchange platform featuring real-time catalog discovery, book swap requests, reader profiles, email notifications, and an admin moderation console.',
+      tags: [
+        'NEXT.JS',
+        'REACT',
+        'TS',
+        'TAILWIND',
+        'NODE.JS',
+        'EXPRESS',
+        'POSTGRESQL',
+        'PRISMA',
+        'REST API',
+        'JWT',
+      ],
+      link: 'https://github.com/iberikofer/shelftrade',
+      pages: 'https://github.com/iberikofer/shelftrade#readme',
+      status: 'In Development',
+    },
+    {
       id: 2,
       title: 'Movie finder',
       photo: movieFinder,
@@ -195,14 +239,7 @@ export const DATA: AppData = {
       photo: nodePhonebookImg,
       description:
         'RESTful API for a phonebook service built with Node.js, Express, MongoDB, JWT auth, avatar uploads, and email verification.',
-      tags: [
-        'NODE.JS',
-        'TS',
-        'EXPRESS',
-        'MONGODB',
-        'JWT',
-        'REST API',
-      ],
+      tags: ['NODE.JS', 'TS', 'EXPRESS', 'MONGODB', 'JWT', 'REST API'],
       link: 'https://github.com/iberikofer/node-phonebook',
       status: 'Open',
       objectPosition: 'center',
@@ -241,14 +278,7 @@ export const DATA: AppData = {
       photo: devDialogueImg,
       description:
         'An interactive interview simulation platform crafted to prepare next-generation software engineers for technical, behavioral, and English interviews.',
-      tags: [
-        'AI',
-        'LLM',
-        'NEXT.JS',
-        'TS',
-        '.NET',
-        'POSTGRESQL',
-      ],
+      tags: ['AI', 'LLM', 'NEXT.JS', 'TS', '.NET', 'POSTGRESQL'],
       link: 'https://github.com/iberikofer/dev-dialogue',
       pages: 'https://dev-dialogue-web.onrender.com/',
       status: 'In Development',
@@ -261,14 +291,7 @@ export const DATA: AppData = {
       photo: bookshelfImg,
       description:
         'Interactive book discovery and e-reading web application built collaboratively in a team. Features book categories, shopping list pagination, and modal inspection views.',
-      tags: [
-        'JS',
-        'HTML',
-        'SCSS',
-        'REST API',
-        'AXIOS',
-        'SWIPER',
-      ],
+      tags: ['JS', 'HTML', 'SCSS', 'REST API', 'AXIOS', 'SWIPER'],
       link: 'https://github.com/lezver/project-new_skill',
       pages: 'https://iberikofer.github.io/bookshelf-page',
       status: 'Open',
@@ -345,7 +368,7 @@ export const DATA: AppData = {
       link: 'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp#readme',
       pages:
         'https://github.com/iberikofer/academic-archive/tree/main/course-projects/DSA-cpp/docs#readme',
-      status: 'In Development',
+      status: 'Open',
       objectPosition: 'center',
     },
     {
@@ -372,3 +395,4 @@ export const DATA: AppData = {
     },
   ],
 };
+

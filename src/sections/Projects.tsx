@@ -943,6 +943,42 @@ const Projects: React.FC = () => {
                         Team Project
                       </span>
                     </>
+                  ) : project.id === 20 ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        Peer-to-Peer Book Exchange
+                      </span>
+                    </>
+                  ) : project.category === 'fullstack' ? (
+                    <>
+                      <svg
+                        className={styles.placeholderIcon}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="m9 12 2 2 4-4" />
+                      </svg>
+                      <span className={styles.placeholderText}>
+                        Full-Stack Task App
+                      </span>
+                    </>
                   ) : (
                     <>
                       <svg

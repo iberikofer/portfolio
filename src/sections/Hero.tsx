@@ -331,7 +331,7 @@ const Hero: React.FC = () => {
             {/* Quick Metrics Bar */}
             <div className={`${styles.metricsBar} ${styles.animateFadeIn}`}>
               <div className={styles.metricItem}>
-                <span className={styles.metricVal}>17+</span>
+                <span className={styles.metricVal}>{DATA.projects.length}+</span>
                 <span className={styles.metricLab}>{t.hero.metricProjects}</span>
               </div>
               <div className={styles.metricDivider} />
